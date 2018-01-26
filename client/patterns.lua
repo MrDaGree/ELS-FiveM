@@ -228,6 +228,23 @@ function getNumberOfSecondaryPatterns()
 	return count
 end
 
+function runEnvirementLight(k, extra)
+	Citizen.CreateThread(function()
+		local vehN = checkCarHash(k)
+
+		if(els_Vehicles[vehN].extras[extra].env_light) then
+	        local boneIndex = GetEntityBoneIndexByName(k, "extra_" .. extra)
+	        local coords = GetWorldPositionOfEntityBone(k, boneIndex)
+			
+			for i=1,5 do
+				--DrawLightWithRangeAndShadow(coords.x + els_Vehicles[vehN].extras[extra].env_pos.x, coords.y + els_Vehicles[vehN].extras[extra].env_pos.y, coords.z + els_Vehicles[vehN].extras[extra].env_pos.z, els_Vehicles[vehN].extras[extra].env_color.r, els_Vehicles[vehN].extras[extra].env_color.g, els_Vehicles[vehN].extras[extra].env_color.b, 50.0, 0.26, 1.0)
+				DrawLightWithRange(coords.x + els_Vehicles[vehN].extras[extra].env_pos.x, coords.y + els_Vehicles[vehN].extras[extra].env_pos.y, coords.z + els_Vehicles[vehN].extras[extra].env_pos.z, els_Vehicles[vehN].extras[extra].env_color.r, els_Vehicles[vehN].extras[extra].env_color.g, els_Vehicles[vehN].extras[extra].env_color.b, 50.0, 0.2)
+				Wait(2)
+			end
+	    end
+	end)
+end
+
 local stageThreeAllow = 1
 function runPatternStageThree(k, pattern, cb) 
 	Citizen.CreateThread(function()
@@ -252,6 +269,9 @@ function runPatternStageThree(k, pattern, cb)
 					for i=1,12 do
 						if els_patterns[pattern].primary.stages[count][i] ~= nil then
 							setExtraState(k, i, els_patterns[pattern].primary.stages[count][i])
+							if els_patterns[pattern].primary.stages[count][i] == 0 then
+								runEnvirementLight(k, i)
+							end
 						end
 					end
 
@@ -298,6 +318,9 @@ function runPatternStageTwo(k, pattern, cb)
 					for i=1,12 do
 						if els_patterns[pattern].secondary.stages[count][i] ~= nil then
 							setExtraState(k, i, els_patterns[pattern].secondary.stages[count][i])
+							if els_patterns[pattern].secondary.stages[count][i] == 0 then
+								runEnvirementLight(k, i)
+							end
 						end
 					end
 

@@ -1510,22 +1510,22 @@ Citizen.CreateThread(function()
                                         end
                                     end
                                 end
-                                if(els_Vehicles[vehN].extras[i].env_light) then
-                                    if(IsVehicleExtraTurnedOn(k, i)) then
-                                        local boneIndex = GetEntityBoneIndexByName(k, "extra_" .. i)
-                                        local coords = GetWorldPositionOfEntityBone(k, boneIndex)
+                                -- if(els_Vehicles[vehN].extras[i].env_light) then
+                                --     if(IsVehicleExtraTurnedOn(k, i)) then
+                                --         local boneIndex = GetEntityBoneIndexByName(k, "extra_" .. i)
+                                --         local coords = GetWorldPositionOfEntityBone(k, boneIndex)
 
-                                        if(doesVehicleHaveTrafficAdvisor(k)) then
-                                            if (i == 7 or i == 8 or i == 9) then
-                                                DrawLightWithRange(coords.x + els_Vehicles[vehN].extras[i].env_pos.x, coords.y + els_Vehicles[vehN].extras[i].env_pos.y, coords.z + els_Vehicles[vehN].extras[i].env_pos.z, els_Vehicles[vehN].extras[i].env_color.r, els_Vehicles[vehN].extras[i].env_color.g, els_Vehicles[vehN].extras[i].env_color.b, 50.0, 0.02)
-                                            else
-                                                DrawLightWithRange(coords.x + els_Vehicles[vehN].extras[i].env_pos.x, coords.y + els_Vehicles[vehN].extras[i].env_pos.y, coords.z + els_Vehicles[vehN].extras[i].env_pos.z, els_Vehicles[vehN].extras[i].env_color.r, els_Vehicles[vehN].extras[i].env_color.g, els_Vehicles[vehN].extras[i].env_color.b, 50.0, 0.3)
-                                            end
-                                        else
-                                            DrawLightWithRange(coords.x + els_Vehicles[vehN].extras[i].env_pos.x, coords.y + els_Vehicles[vehN].extras[i].env_pos.y, coords.z + els_Vehicles[vehN].extras[i].env_pos.z, els_Vehicles[vehN].extras[i].env_color.r, els_Vehicles[vehN].extras[i].env_color.g, els_Vehicles[vehN].extras[i].env_color.b, 50.0, 0.3)
-                                        end
-                                    end
-                                end
+                                --         if(doesVehicleHaveTrafficAdvisor(k)) then
+                                --             if (i == 7 or i == 8 or i == 9) then
+                                --                 DrawLightWithRange(coords.x + els_Vehicles[vehN].extras[i].env_pos.x, coords.y + els_Vehicles[vehN].extras[i].env_pos.y, coords.z + els_Vehicles[vehN].extras[i].env_pos.z, els_Vehicles[vehN].extras[i].env_color.r, els_Vehicles[vehN].extras[i].env_color.g, els_Vehicles[vehN].extras[i].env_color.b, 50.0, 0.02)
+                                --             else
+                                --                 DrawLightWithRange(coords.x + els_Vehicles[vehN].extras[i].env_pos.x, coords.y + els_Vehicles[vehN].extras[i].env_pos.y, coords.z + els_Vehicles[vehN].extras[i].env_pos.z, els_Vehicles[vehN].extras[i].env_color.r, els_Vehicles[vehN].extras[i].env_color.g, els_Vehicles[vehN].extras[i].env_color.b, 50.0, 0.3)
+                                --             end
+                                --         else
+                                --             DrawLightWithRange(coords.x + els_Vehicles[vehN].extras[i].env_pos.x, coords.y + els_Vehicles[vehN].extras[i].env_pos.y, coords.z + els_Vehicles[vehN].extras[i].env_pos.z, els_Vehicles[vehN].extras[i].env_color.r, els_Vehicles[vehN].extras[i].env_color.g, els_Vehicles[vehN].extras[i].env_color.b, 50.0, 0.3)
+                                --         end
+                                --     end
+                                -- end
                             end
                         end
                     end

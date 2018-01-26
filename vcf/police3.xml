@@ -41,7 +41,7 @@
 	<ACORONAS>
 		<Headlights DfltPattern="3" ColorL="white" ColorR="white" />
 		<TailLights DfltPattern="6" ColorL="red" ColorR="red" />
-		<IndicatorsF DfltPattern=0" ColorL="white" ColorR="white" />
+		<IndicatorsF DfltPattern="0" ColorL="white" ColorR="white" />
 		<IndicatorsB DfltPattern="0" ColorL="red" ColorR="red" />
 		<ReverseLights DfltPattern="0" ColorL="white" ColorR="white" />
 	</ACORONAS>
