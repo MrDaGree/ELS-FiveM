@@ -563,101 +563,14 @@ Citizen.CreateThread(function()
                     DisableControlAction(0, keyboard.siren.dual_two, true)
                     DisableControlAction(0, keyboard.siren.dual_three, true)
 
-                    if IsDisabledControlJustReleased(0, keyboard.pattern.primary) then
-                        if playButtonPressSounds then
-                            PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-                        end
-                        local primMax = getNumberOfPrimaryPatterns()
-                        local primMin = 1
-                        local temp = lightPatternPrim
-
-                        temp = temp + 1
-
-                        if(temp > primMax) then
-                            temp = primMin
-                        end
-
-                        lightPatternPrim = temp
-                        changePrimaryPattern(lightPatternPrim)
-                    end
-                    if IsDisabledControlPressed(0, keyboard.modifyKey) and IsDisabledControlJustReleased(0, keyboard.pattern.primary) then
-                        if playButtonPressSounds then
-                            PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-                        end
-                        local primMax = getNumberOfPrimaryPatterns()
-                        local primMin = 1
-                        local temp = lightPatternPrim
-
-                        temp = temp - 1
-
-                        if(temp < primMin) then
-                            temp = primMax
-                        end
-
-                        lightPatternPrim = temp
-                        changePrimaryPattern(lightPatternPrim)
-                    end
-
-                    if IsDisabledControlJustReleased(0, keyboard.pattern.secondary) then
-                        if playButtonPressSounds then
-                            PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-                        end
-                        local primMax = getNumberOfSecondaryPatterns()
-                        local primMin = 1
-                        local temp = lightPatternSec
-
-                        temp = temp + 1
-
-                        if(temp > primMax) then
-                            temp = primMin
-                        end
-
-                        lightPatternSec = temp
-                        changeSecondaryPattern(lightPatternSec)
-                    end
-                    if IsDisabledControlPressed(0, keyboard.modifyKey) and IsDisabledControlJustReleased(0, keyboard.pattern.secondary) then
-                        if playButtonPressSounds then
-                            PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-                        end
-                        local primMax = getNumberOfSecondaryPatterns()
-                        local primMin = 1
-                        local temp = lightPatternSec
-
-                        temp = temp - 1
-
-                        if(temp < primMin) then
-                            temp = primMax
-                        end
-
-                        lightPatternSec = temp
-                        changeSecondaryPattern(lightPatternSec)
-                    end
-
-                    if (doesVehicleHaveTrafficAdvisor(GetVehiclePedIsUsing(GetPlayerPed(-1)))) then
-                        if IsDisabledControlJustReleased(0, keyboard.pattern.advisor) then
+                    if IsDisabledControlPressed(0, keyboard.modifyKey) then
+                        if IsDisabledControlPressed(0, keyboard.modifyKey) and IsDisabledControlJustReleased(0, keyboard.pattern.primary) then
                             if playButtonPressSounds then
                                 PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
                             end
-                            local primMax = 6
+                            local primMax = getNumberOfPrimaryPatterns()
                             local primMin = 1
-                            local temp = advisorPatternSelectedIndex
-
-                            temp = temp + 1
-
-                            if(temp > primMax) then
-                                temp = primMin
-                            end
-
-                            advisorPatternSelectedIndex = temp
-                            changeAdvisorPattern(advisorPatternSelectedIndex)
-                        end
-                        if IsDisabledControlPressed(0, keyboard.modifyKey) and IsDisabledControlJustReleased(0, keyboard.pattern.advisor) then
-                            if playButtonPressSounds then
-                                PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-                            end
-                            local primMax = 6
-                            local primMin = 1
-                            local temp = advisorPatternSelectedIndex
+                            local temp = lightPatternPrim
 
                             temp = temp - 1
 
@@ -665,8 +578,102 @@ Citizen.CreateThread(function()
                                 temp = primMax
                             end
 
-                            advisorPatternSelectedIndex = temp
-                            changeAdvisorPattern(advisorPatternSelectedIndex)
+                            lightPatternPrim = temp
+                            changePrimaryPattern(lightPatternPrim)
+                        end
+
+                        if IsDisabledControlPressed(0, keyboard.modifyKey) and IsDisabledControlJustReleased(0, keyboard.pattern.secondary) then
+                            if playButtonPressSounds then
+                                PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+                            end
+                            local primMax = getNumberOfSecondaryPatterns()
+                            local primMin = 1
+                            local temp = lightPatternSec
+
+                            temp = temp - 1
+
+                            if(temp < primMin) then
+                                temp = primMax
+                            end
+
+                            lightPatternSec = temp
+                            changeSecondaryPattern(lightPatternSec)
+                        end
+                    else
+                        if IsDisabledControlJustReleased(0, keyboard.pattern.primary) then
+                            if playButtonPressSounds then
+                                PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+                            end
+                            local primMax = getNumberOfPrimaryPatterns()
+                            local primMin = 1
+                            local temp = lightPatternPrim
+
+                            temp = temp + 1
+
+                            if(temp > primMax) then
+                                temp = primMin
+                            end
+
+                            lightPatternPrim = temp
+                            changePrimaryPattern(lightPatternPrim)
+                        end
+
+                        if IsDisabledControlJustReleased(0, keyboard.pattern.secondary) then
+                            if playButtonPressSounds then
+                                PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+                            end
+                            local primMax = getNumberOfSecondaryPatterns()
+                            local primMin = 1
+                            local temp = lightPatternSec
+
+                            temp = temp + 1
+
+                            if(temp > primMax) then
+                                temp = primMin
+                            end
+
+                            lightPatternSec = temp
+                            changeSecondaryPattern(lightPatternSec)
+                        end
+                    end
+
+                    if (doesVehicleHaveTrafficAdvisor(GetVehiclePedIsUsing(GetPlayerPed(-1)))) then
+                        if IsDisabledControlPressed(0, keyboard.modifyKey) then
+                            if IsDisabledControlPressed(0, keyboard.modifyKey) and IsDisabledControlJustReleased(0, keyboard.pattern.advisor) then
+                                if playButtonPressSounds then
+                                    PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+                                end
+                                local primMax = 6
+                                local primMin = 1
+                                local temp = advisorPatternSelectedIndex
+
+                                temp = temp - 1
+
+                                if(temp < primMin) then
+                                    temp = primMax
+                                end
+
+                                advisorPatternSelectedIndex = temp
+                                changeAdvisorPattern(advisorPatternSelectedIndex)
+                            end
+                        else
+                            if IsDisabledControlJustReleased(0, keyboard.pattern.advisor) then
+                                if playButtonPressSounds then
+                                    PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+                                end
+                                local primMax = 6
+                                local primMin = 1
+                                local temp = advisorPatternSelectedIndex
+
+                                temp = temp + 1
+
+                                if(temp > primMax) then
+                                    temp = primMin
+                                end
+
+                                advisorPatternSelectedIndex = temp
+                                changeAdvisorPattern(advisorPatternSelectedIndex)
+                            end
                         end
                     end
 
