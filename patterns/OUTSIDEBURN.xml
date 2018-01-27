@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pattern>
+	<PRIMARY speed="70">
+        <State01 Extra1="true" Extra2="true" Extra3="false" Extra4="true"/>
+        <State02 Extra1="true" Extra2="false" Extra3="false" Extra4="true"/>
+        <State03 Extra1="true" Extra2="true" Extra3="false" Extra4="true"/>
+        <State04 Extra1="true" Extra2="false" Extra3="false" Extra4="true"/>
+        <State05 Extra1="true" Extra2="true" Extra3="false" Extra4="true" Speed="150"/>
+        
+        <State06 Extra1="true" Extra2="false" Extra3="false" Extra4="true" Speed="70"/>
+        
+        <State07 Extra1="true" Extra2="false" Extra3="true" Extra4="true"/>
+        <State08 Extra1="true" Extra2="false" Extra3="false" Extra4="true"/>
+        <State09 Extra1="true" Extra2="false" Extra3="true" Extra4="true"/>
+        <State10 Extra1="true" Extra2="false" Extra3="false" Extra4="true"/>
+        <State11 Extra1="true" Extra2="false" Extra3="true" Extra4="true" Speed="150"/>
+        
+        <State12 Extra1="true" Extra2="false" Extra3="false" Extra4="true" Speed="70"/>
+        
+        <State13 Extra1="true" Extra2="true" Extra3="false" Extra4="true"/>
+    </PRIMARY>
+</pattern>

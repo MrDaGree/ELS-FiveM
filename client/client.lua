@@ -402,8 +402,10 @@ end
 
 function doesVehicleHaveTrafficAdvisor(veh)
     if (not IsEntityDead(veh) and DoesEntityExist(veh)) then 
-        if els_Vehicles[checkCarHash(veh)] ~= nil then
-            return els_Vehicles[checkCarHash(veh)].advisor
+        for k,v in pairs(modelsWithTrafficAdvisor) do
+            if GetEntityModel(veh) == GetHashKey(v) then
+                return true
+            end
         end
     end
 end
@@ -835,7 +837,9 @@ Citizen.CreateThread(function()
                             if newStage == -1 then
                                 newStage = 3
                             end
+
                             changeLightStage(newStage, advisorPatternSelectedIndex, lightPatternPrim, lightPatternSec)
+
                             if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
                                 if(newStage == 3) then
                                     SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
@@ -872,7 +876,9 @@ Citizen.CreateThread(function()
                             if newStage == 4 then
                                 newStage = 0
                             end
+
                             changeLightStage(newStage, advisorPatternSelectedIndex, lightPatternPrim, lightPatternSec)
+
                             if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
                                 if(newStage == 3) then
                                     SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
@@ -911,7 +917,9 @@ Citizen.CreateThread(function()
                             if newStage == -1 then
                                 newStage = 3
                             end
+
                             changeLightStage(newStage, advisorPatternSelectedIndex, lightPatternPrim, lightPatternSec)
+
                             if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
                                 if(newStage == 3) then
                                     SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
@@ -948,7 +956,9 @@ Citizen.CreateThread(function()
                             if newStage == 4 then
                                 newStage = 0
                             end
+
                             changeLightStage(newStage, advisorPatternSelectedIndex, lightPatternPrim, lightPatternSec)
+
                             if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
                                 if(newStage == 3) then
                                     SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
@@ -995,7 +1005,9 @@ Citizen.CreateThread(function()
                             if newStage == -1 then
                                 newStage = 3
                             end
+
                             changeLightStage(newStage, advisorPatternSelectedIndex, lightPatternPrim, lightPatternSec)
+
                             if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
                                 if(newStage == 3) then
                                     SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
@@ -1032,7 +1044,9 @@ Citizen.CreateThread(function()
                             if newStage == 4 then
                                 newStage = 0
                             end
+
                             changeLightStage(newStage, advisorPatternSelectedIndex, lightPatternPrim, lightPatternSec)
+
                             if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
                                 if(newStage == 3) then
                                     SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
@@ -1071,7 +1085,9 @@ Citizen.CreateThread(function()
                             if newStage == -1 then
                                 newStage = 3
                             end
+
                             changeLightStage(newStage, advisorPatternSelectedIndex, lightPatternPrim, lightPatternSec)
+
                             if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
                                 if(newStage == 3) then
                                     SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
@@ -1108,7 +1124,9 @@ Citizen.CreateThread(function()
                             if newStage == 4 then
                                 newStage = 0
                             end
+
                             changeLightStage(newStage, advisorPatternSelectedIndex, lightPatternPrim, lightPatternSec)
+
                             if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
                                 if(newStage == 3) then
                                     SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
@@ -1510,22 +1528,6 @@ Citizen.CreateThread(function()
                                         end
                                     end
                                 end
-                                -- if(els_Vehicles[vehN].extras[i].env_light) then
-                                --     if(IsVehicleExtraTurnedOn(k, i)) then
-                                --         local boneIndex = GetEntityBoneIndexByName(k, "extra_" .. i)
-                                --         local coords = GetWorldPositionOfEntityBone(k, boneIndex)
-
-                                --         if(doesVehicleHaveTrafficAdvisor(k)) then
-                                --             if (i == 7 or i == 8 or i == 9) then
-                                --                 DrawLightWithRange(coords.x + els_Vehicles[vehN].extras[i].env_pos.x, coords.y + els_Vehicles[vehN].extras[i].env_pos.y, coords.z + els_Vehicles[vehN].extras[i].env_pos.z, els_Vehicles[vehN].extras[i].env_color.r, els_Vehicles[vehN].extras[i].env_color.g, els_Vehicles[vehN].extras[i].env_color.b, 50.0, 0.02)
-                                --             else
-                                --                 DrawLightWithRange(coords.x + els_Vehicles[vehN].extras[i].env_pos.x, coords.y + els_Vehicles[vehN].extras[i].env_pos.y, coords.z + els_Vehicles[vehN].extras[i].env_pos.z, els_Vehicles[vehN].extras[i].env_color.r, els_Vehicles[vehN].extras[i].env_color.g, els_Vehicles[vehN].extras[i].env_color.b, 50.0, 0.3)
-                                --             end
-                                --         else
-                                --             DrawLightWithRange(coords.x + els_Vehicles[vehN].extras[i].env_pos.x, coords.y + els_Vehicles[vehN].extras[i].env_pos.y, coords.z + els_Vehicles[vehN].extras[i].env_pos.z, els_Vehicles[vehN].extras[i].env_color.r, els_Vehicles[vehN].extras[i].env_color.g, els_Vehicles[vehN].extras[i].env_color.b, 50.0, 0.3)
-                                --         end
-                                --     end
-                                -- end
                             end
                         end
                     end
@@ -1588,11 +1590,13 @@ end)
 
 
 Citizen.CreateThread(function()
-    local isReady = true
+
+    local vehIsReady = {}
 
     while true do
         for k,v in pairs(elsVehs) do
             local elsVehicle = k
+            
             if (v ~= nil or DoesEntityExist(k)) then
                 if (v.stage == 0) then
                     setExtraState(elsVehicle, 1, 1)
@@ -1609,14 +1613,20 @@ Citizen.CreateThread(function()
                     -- setExtraState(elsVehicle, 12, 1)
                 elseif(v.stage == 2) then
                     if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
-                        if isReady then
-                            runPatternStageTwo(k, v.secPattern, function(cb) isReady = cb end)
+                        if(vehIsReady[k] == nil) then
+                            vehIsReady[k] = true
+                        end
+                        if vehIsReady[k] then
+                            runPatternStageTwo(k, v.secPattern, function(cb) vehIsReady[k] = cb end)
                         end
                     end
                 elseif(v.stage == 3) then
                     if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
-                        if isReady then
-                            runPatternStageTwo(k, v.secPattern, function(cb) isReady = cb end)
+                        if(vehIsReady[k] == nil) then
+                            vehIsReady[k] = true
+                        end
+                        if vehIsReady[k] then
+                            runPatternStageTwo(k, v.secPattern, function(cb) vehIsReady[k] = cb end)
                         end
                     end
                 end
@@ -1627,15 +1637,18 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-    local isReady = true
+    local vehIsReady = {}
 
     while true do
         for k,v in pairs(elsVehs) do
             if (v ~= nil or DoesEntityExist(k)) then
                 if (v.stage == 3) then
                     if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
-                        if isReady then
-                            runPatternStageThree(k, v.primPattern, function(cb) isReady = cb end)
+                        if(vehIsReady[k] == nil) then
+                            vehIsReady[k] = true
+                        end
+                        if vehIsReady[k] then
+                            runPatternStageThree(k, v.primPattern, function(cb) vehIsReady[k] = cb end)
                         end
                     end
                 end

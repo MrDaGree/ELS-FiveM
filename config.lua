@@ -14,6 +14,12 @@ pattern_files = {
 	"LEFTSWEEP.xml",
 	"RIGHTSWEEP.xml",
 	"FAST.xml",
+	"OUTSIDEBURN.xml",
+	"COMPLEX.xml"
+}
+
+modelsWithTrafficAdvisor = {
+	
 }
 
 modelsWithFireSiren =
