@@ -300,6 +300,7 @@ local stageTwoAllow = 1
 function runPatternStageTwo(k, pattern, cb) 
 	Citizen.CreateThread(function()
 		if (not IsEntityDead(k) and DoesEntityExist(k)) then
+
 			local max = 0
 			local count = 1
 

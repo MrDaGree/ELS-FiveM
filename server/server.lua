@@ -1,6 +1,17 @@
 vehicleInfoTable = {}
 patternInfoTable = {}
 
+_VERSION = "1.1.1"
+
+PerformHttpRequest("https://git.mrdagree.com/mrdagree/ELS-FiveM/raw/development/VERSION.md", function(err, response, headers)
+	print("\nCurrent version: " .. _VERSION)
+	print("Updater version: " .. response .. "\n")
+	
+	if response ~= _VERSION then
+		print("\nVersion mismatch, you may be using a different recommended version. Please update.\n")
+	end
+end, "GET", "", {})
+
 local function processXml(el)
     local v = {}
     local text

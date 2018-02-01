@@ -57,6 +57,8 @@ AddEventHandler("els:changeLightStage_c", function(sender, stage, advisor, prim,
                 elsVehs[vehNetID].secPattern = sec
                 elsVehs[vehNetID].advisorPattern = advisor
             end
+
+            SetVehicleAutoRepairDisabled(vehNetID, true)
         end
     end
 end)
@@ -533,7 +535,7 @@ Citizen.CreateThread(function()
         if vehInTable(els_Vehicles, checkCarHash(GetVehiclePedIsUsing(GetPlayerPed(-1)))) then
             if (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), -1) == GetPlayerPed(-1)) or
                 (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), 0) == GetPlayerPed(-1)) then
-                
+
                 if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
                     DisableControlAction(0, shared.horn, true)
                 end
@@ -1501,7 +1503,6 @@ Citizen.CreateThread(function()
         if vehInTable(els_Vehicles, checkCarHash(GetVehiclePedIsIn(GetPlayerPed(-1, true)))) then
             if getVehicleLightStage(GetVehiclePedIsIn(GetPlayerPed(-1, true))) ~= 0 then
                 SetVehicleEngineOn(GetVehiclePedIsIn(GetPlayerPed(-1, true)), true, true, false)
-                SetVehicleAutoRepairDisabled(GetVehiclePedIsIn(GetPlayerPed(-1, true)), true)
             end
         end
 
@@ -1621,6 +1622,7 @@ Citizen.CreateThread(function()
                     -- setExtraState(elsVehicle, 12, 1)
                 elseif(v.stage == 2) then
                     if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
+
                         if(vehIsReady[k] == nil) then
                             vehIsReady[k] = true
                         end
@@ -1630,6 +1632,7 @@ Citizen.CreateThread(function()
                     end
                 elseif(v.stage == 3) then
                     if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
+
                         if(vehIsReady[k] == nil) then
                             vehIsReady[k] = true
                         end
