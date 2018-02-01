@@ -18,6 +18,7 @@ lightPatternSec = 1
 
 local guiEnabled = true
 local lastVeh = nil
+local lastVehDmgReset = false
 local elsVehs = {}
 
 local m_siren_state = {}
@@ -536,6 +537,18 @@ Citizen.CreateThread(function()
             if (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), -1) == GetPlayerPed(-1)) or
                 (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), 0) == GetPlayerPed(-1)) then
 
+                if (lastVeh == GetVehiclePedIsUsing(GetPlayerPed(-1))) then
+                    if (GetVehicleEngineHealth(GetVehiclePedIsUsing(GetPlayerPed(-1))) ~= 1000.0) then
+                        SetVehicleEngineHealth(GetVehiclePedIsUsing(GetPlayerPed(-1)), 1000.0)
+                        SetVehicleEngineOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), true, true, false)
+                    end
+                end
+
+
+                Draw("Engine: " .. GetVehicleEngineHealth(GetVehiclePedIsUsing(GetPlayerPed(-1))), 0, 0, 0, 255, 0.5, 0.5, 0.25, 0.25, 1, true, 0)
+                Draw("Petrol: " .. GetVehiclePetrolTankHealth(GetVehiclePedIsUsing(GetPlayerPed(-1))), 0, 0, 0, 255, 0.5, 0.55, 0.25, 0.25, 1, true, 0)
+                Draw("Body: " .. GetVehicleBodyHealth(GetVehiclePedIsUsing(GetPlayerPed(-1))), 0, 0, 0, 255, 0.5, 0.6, 0.25, 0.25, 1, true, 0)
+
                 if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
                     DisableControlAction(0, shared.horn, true)
                 end
@@ -829,8 +842,6 @@ Citizen.CreateThread(function()
                             end
                             local vehNetID = GetVehiclePedIsUsing(GetPlayerPed(-1))
 
-                            lastVeh = GetVehiclePedIsUsing(GetPlayerPed(-1))
-
                             local newStage = 3
 
                             if(elsVehs[vehNetID] ~= nil and elsVehs[vehNetID].stage ~= nil) then
@@ -867,8 +878,6 @@ Citizen.CreateThread(function()
                                 PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
                             end
                             local vehNetID = GetVehiclePedIsUsing(GetPlayerPed(-1))
-
-                            lastVeh = GetVehiclePedIsUsing(GetPlayerPed(-1))
 
                             local newStage = 1
 
@@ -909,8 +918,6 @@ Citizen.CreateThread(function()
                             end
                             local vehNetID = GetVehiclePedIsUsing(GetPlayerPed(-1))
 
-                            lastVeh = GetVehiclePedIsUsing(GetPlayerPed(-1))
-
                             local newStage = 3
 
                             if(elsVehs[vehNetID] ~= nil and elsVehs[vehNetID].stage ~= nil) then
@@ -947,8 +954,6 @@ Citizen.CreateThread(function()
                                 PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
                             end
                             local vehNetID = GetVehiclePedIsUsing(GetPlayerPed(-1))
-
-                            lastVeh = GetVehiclePedIsUsing(GetPlayerPed(-1))
 
                             local newStage = 1
 
@@ -997,8 +1002,6 @@ Citizen.CreateThread(function()
                             end
                             local vehNetID = GetVehiclePedIsUsing(GetPlayerPed(-1))
 
-                            lastVeh = GetVehiclePedIsUsing(GetPlayerPed(-1))
-
                             local newStage = 3
 
                             if(elsVehs[vehNetID] ~= nil and elsVehs[vehNetID].stage ~= nil) then
@@ -1035,8 +1038,6 @@ Citizen.CreateThread(function()
                                 PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
                             end
                             local vehNetID = GetVehiclePedIsUsing(GetPlayerPed(-1))
-
-                            lastVeh = GetVehiclePedIsUsing(GetPlayerPed(-1))
 
                             local newStage = 1
 
@@ -1077,8 +1078,6 @@ Citizen.CreateThread(function()
                             end
                             local vehNetID = GetVehiclePedIsUsing(GetPlayerPed(-1))
 
-                            lastVeh = GetVehiclePedIsUsing(GetPlayerPed(-1))
-
                             local newStage = 3
 
                             if(elsVehs[vehNetID] ~= nil and elsVehs[vehNetID].stage ~= nil) then
@@ -1115,8 +1114,6 @@ Citizen.CreateThread(function()
                                 PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
                             end
                             local vehNetID = GetVehiclePedIsUsing(GetPlayerPed(-1))
-
-                            lastVeh = GetVehiclePedIsUsing(GetPlayerPed(-1))
 
                             local newStage = 1
 
@@ -1298,6 +1295,8 @@ Citizen.CreateThread(function()
                     end
                 end
             end
+        else
+            lastVeh = GetVehiclePedIsIn(GetPlayerPed(-1), true)
         end
 
         Citizen.Wait(0)
@@ -1599,7 +1598,6 @@ end)
 
 
 Citizen.CreateThread(function()
-
     local vehIsReady = {}
 
     while true do
