@@ -1,7 +1,7 @@
 vehicleInfoTable = {}
 patternInfoTable = {}
 
-_VERSION = "1.0.5"
+_VERSION = "1.1.1"
 
 PerformHttpRequest("https://git.mrdagree.com/mrdagree/ELS-FiveM/raw/development/VERSION.md", function(err, response, headers)
 	print("\nCurrent version: " .. _VERSION)
