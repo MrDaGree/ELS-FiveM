@@ -1501,6 +1501,7 @@ Citizen.CreateThread(function()
         if vehInTable(els_Vehicles, checkCarHash(GetVehiclePedIsIn(GetPlayerPed(-1, true)))) then
             if getVehicleLightStage(GetVehiclePedIsIn(GetPlayerPed(-1, true))) ~= 0 then
                 SetVehicleEngineOn(GetVehiclePedIsIn(GetPlayerPed(-1, true)), true, true, false)
+                SetVehicleAutoRepairDisabled(GetVehiclePedIsIn(GetPlayerPed(-1, true)), true)
             end
         end
 

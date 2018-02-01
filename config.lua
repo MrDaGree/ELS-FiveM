@@ -43,6 +43,7 @@ vehicleStageThreeAdvisor = {
 
 
 vehicleSyncDistance = 150
+envirementLightBrightness = 0.2
 
 shared = {
 	horn = 86,
