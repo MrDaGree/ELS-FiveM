@@ -544,11 +544,6 @@ Citizen.CreateThread(function()
                     end
                 end
 
-
-                Draw("Engine: " .. GetVehicleEngineHealth(GetVehiclePedIsUsing(GetPlayerPed(-1))), 0, 0, 0, 255, 0.5, 0.5, 0.25, 0.25, 1, true, 0)
-                Draw("Petrol: " .. GetVehiclePetrolTankHealth(GetVehiclePedIsUsing(GetPlayerPed(-1))), 0, 0, 0, 255, 0.5, 0.55, 0.25, 0.25, 1, true, 0)
-                Draw("Body: " .. GetVehicleBodyHealth(GetVehiclePedIsUsing(GetPlayerPed(-1))), 0, 0, 0, 255, 0.5, 0.6, 0.25, 0.25, 1, true, 0)
-
                 if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
                     DisableControlAction(0, shared.horn, true)
                 end
