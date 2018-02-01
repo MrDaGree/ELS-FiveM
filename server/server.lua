@@ -1,14 +1,14 @@
 vehicleInfoTable = {}
 patternInfoTable = {}
 
-_VERSION = "1.1.1"
+_VERSION = "1.0.5"
 
 PerformHttpRequest("https://git.mrdagree.com/mrdagree/ELS-FiveM/raw/development/VERSION.md", function(err, response, headers)
 	print("\nCurrent version: " .. _VERSION)
 	print("Updater version: " .. response .. "\n")
 	
 	if response ~= _VERSION then
-		print("\nVersion mismatch, you may be using a different recommended version. Please update.\n")
+		print("\nVersion mismatch, you may be using a different version than recommended. Please update.\n")
 	end
 end, "GET", "", {})
 
