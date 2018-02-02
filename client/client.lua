@@ -59,7 +59,7 @@ AddEventHandler("els:changeLightStage_c", function(sender, stage, advisor, prim,
                 elsVehs[vehNetID].advisorPattern = advisor
             end
 
-            SetVehicleAutoRepairDisabled(vehNetID, true)
+            
         end
     end
 end)
@@ -396,7 +396,6 @@ function setExtraState(veh, extra, state)
             if(els_Vehicles[checkCarHash(veh)].extras[extra].enabled) then
                 if DoesExtraExist(veh, extra) then
                     SetVehicleExtra(veh, extra, state)
-                    SetVehicleBodyHealth(veh, vehicleHealthBefore)
                 end
             end
         end
@@ -536,13 +535,6 @@ Citizen.CreateThread(function()
         if vehInTable(els_Vehicles, checkCarHash(GetVehiclePedIsUsing(GetPlayerPed(-1)))) then
             if (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), -1) == GetPlayerPed(-1)) or
                 (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), 0) == GetPlayerPed(-1)) then
-
-                if (lastVeh == GetVehiclePedIsUsing(GetPlayerPed(-1))) then
-                    if (GetVehicleEngineHealth(GetVehiclePedIsUsing(GetPlayerPed(-1))) ~= 1000.0) then
-                        SetVehicleEngineHealth(GetVehiclePedIsUsing(GetPlayerPed(-1)), 1000.0)
-                        SetVehicleEngineOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), true, true, false)
-                    end
-                end
 
                 if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
                     DisableControlAction(0, shared.horn, true)

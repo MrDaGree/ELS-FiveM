@@ -6,6 +6,9 @@ function trafficAdvisor(elsVehicle, stage, pattern)
 			if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
 				if (doesVehicleHaveTrafficAdvisor(elsVehicle)) then
 			        if(stage == 1 or stage == 2 or (canUseAdvisorStageThree(elsVehicle) and stage == 3)) then
+
+			        	SetVehicleAutoRepairDisabled(elsVehicle, true)
+
 			            if stage == 1 then
 			                setExtraState(elsVehicle, 5, 1)
 			                setExtraState(elsVehicle, 6, 1)
@@ -251,6 +254,8 @@ function runPatternStageThree(k, pattern, cb)
 	Citizen.CreateThread(function()
 		if (not IsEntityDead(k) and DoesEntityExist(k)) then
 
+			SetVehicleAutoRepairDisabled(k, true)
+
 			local max = 0
 			local count = 1
 
@@ -300,6 +305,8 @@ local stageTwoAllow = 1
 function runPatternStageTwo(k, pattern, cb) 
 	Citizen.CreateThread(function()
 		if (not IsEntityDead(k) and DoesEntityExist(k)) then
+
+			SetVehicleAutoRepairDisabled(k, true)
 
 			local max = 0
 			local count = 1
