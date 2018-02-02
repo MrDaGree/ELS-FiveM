@@ -13,7 +13,8 @@ advisorPattern = {"Right to left", "Left to Right", "Center out"}
 advisorPatternSelectedIndex = 1
 advisorPatternIndex = 1
 
-lightPatternPrim = 1
+lightPatternPrim = 0
+lightPatternsPrim = 1
 lightPatternSec = 1
 
 local guiEnabled = true
@@ -35,6 +36,10 @@ RegisterNetEvent("els:updateElsVehicles")
 AddEventHandler("els:updateElsVehicles", function(vehicles, patterns)
     els_Vehicles = vehicles
     els_patterns = patterns
+
+    lightPatternPrim = 1
+    lightPatternSec = 1
+    advisorPatternSelectedIndex = 1
 end)
 
 RegisterNetEvent("els:changeLightStage_c")
@@ -571,7 +576,7 @@ Citizen.CreateThread(function()
                                 PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
                             end
                             local primMax = getNumberOfPrimaryPatterns()
-                            local primMin = 1
+                            local primMin = 0
                             local temp = lightPatternPrim
 
                             temp = temp - 1
@@ -581,7 +586,9 @@ Citizen.CreateThread(function()
                             end
 
                             lightPatternPrim = temp
-                            changePrimaryPattern(lightPatternPrim)
+
+                            if temp ~= 0 then lightPatternsPrim = temp end
+                            changePrimaryPattern(lightPatternsPrim)
                         end
 
                         if IsDisabledControlPressed(0, keyboard.modifyKey) and IsDisabledControlJustReleased(0, keyboard.pattern.secondary) then
@@ -607,7 +614,7 @@ Citizen.CreateThread(function()
                                 PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
                             end
                             local primMax = getNumberOfPrimaryPatterns()
-                            local primMin = 1
+                            local primMin = 0
                             local temp = lightPatternPrim
 
                             temp = temp + 1
@@ -617,7 +624,8 @@ Citizen.CreateThread(function()
                             end
 
                             lightPatternPrim = temp
-                            changePrimaryPattern(lightPatternPrim)
+                            if temp ~= 0 then lightPatternsPrim = temp end
+                            changePrimaryPattern(lightPatternsPrim)
                         end
 
                         if IsDisabledControlJustReleased(0, keyboard.pattern.secondary) then
@@ -1530,6 +1538,23 @@ Citizen.CreateThread(function()
             end
         end
         Wait(4)
+    end
+end)
+
+Citizen.CreateThread(function()
+    while true do
+        if vehInTable(els_Vehicles, checkCarHash(GetVehiclePedIsUsing(GetPlayerPed(-1)))) then
+            if (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), -1) == GetPlayerPed(-1)) or
+                (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), 0) == GetPlayerPed(-1)) then
+                if lightPatternPrim == 0 then
+                    lightPatternsPrim = math.random (1, getNumberOfPrimaryPatterns())
+                    Citizen.Trace(lightPatternsPrim)
+                    changePrimaryPattern(lightPatternsPrim)
+                end
+            end
+        end
+
+        Wait(10000)
     end
 end)
 

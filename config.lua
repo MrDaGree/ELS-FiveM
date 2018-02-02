@@ -4,18 +4,17 @@ vcf_files = {
 	"POLICE3.xml",
 	"POLICE4.xml",
 	"PRANGER.xml",
-	"SHERIFF2.xml"
+	"SHERIFF2.xml",
+	"AMBULANCE.xml"
 }
 
 pattern_files = {
 	"WIGWAG.xml",
-	"WIGWAG2.xml",
 	"WIGWAG3.xml",
-	"LEFTSWEEP.xml",
-	"RIGHTSWEEP.xml",
 	"FAST.xml",
-	"OUTSIDEBURN.xml",
-	"COMPLEX.xml"
+	"COMPLEX.xml",
+	"BACKFOURTH.xml",
+	"BACKFOURTH2.xml"
 }
 
 modelsWithTrafficAdvisor = {

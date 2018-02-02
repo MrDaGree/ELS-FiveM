@@ -264,7 +264,9 @@ function runPatternStageThree(k, pattern, cb)
 			end
 
 			local lastSpeed = els_patterns[pattern].primary.speed
-			local rate = math.floor(fps / (fps * 60 / lastSpeed))
+			local rate = fps / (fps * 60 / lastSpeed)
+
+			if (rate < 1) then rate = Ceil(rate) else rate = Floor(rate) end
 
 			if (rate == stageThreeAllow) then
 				stageThreeAllow = 1
@@ -316,7 +318,9 @@ function runPatternStageTwo(k, pattern, cb)
 			end
 
 			local lastSpeed = els_patterns[pattern].secondary.speed
-			local rate = math.floor(fps / (fps * 60 / lastSpeed))
+			local rate = fps / (fps * 60 / lastSpeed)
+
+			if (rate < 1) then rate = Ceil(rate) else rate = Floor(rate) end
 
 			if (rate == stageTwoAllow) then
 				stageTwoAllow = 1
