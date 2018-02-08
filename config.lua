@@ -1,4 +1,5 @@
-canaryClient = false
+
+canaryClient = true
 
 vcf_files = {
 	"POLICE.xml",
@@ -7,7 +8,8 @@ vcf_files = {
 	"POLICE4.xml",
 	"PRANGER.xml",
 	"SHERIFF2.xml",
-	"AMBULANCE.xml"
+	"AMBULANCE.xml",
+	"FBI2.xml"
 }
 
 pattern_files = {
@@ -16,11 +18,12 @@ pattern_files = {
 	"FAST.xml",
 	"COMPLEX.xml",
 	"BACKFOURTH.xml",
-	"BACKFOURTH2.xml"
+	"BACKFOURTH2.xml",
+	"T_ADVIS_RIGHT_LEFT.xml"
 }
 
 modelsWithTrafficAdvisor = {
-	
+	"FBI2"
 }
 
 modelsWithFireSiren =

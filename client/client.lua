@@ -665,7 +665,9 @@ Citizen.CreateThread(function()
                                 if playButtonPressSounds then
                                     PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
                                 end
-                                local primMax = 6
+                                
+                                local primMax = getNumberOfAdvisorPatterns()
+
                                 local primMin = 1
                                 local temp = advisorPatternSelectedIndex
 
@@ -683,7 +685,8 @@ Citizen.CreateThread(function()
                                 if playButtonPressSounds then
                                     PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
                                 end
-                                local primMax = 6
+                                local primMax = getNumberOfAdvisorPatterns()
+
                                 local primMin = 1
                                 local temp = advisorPatternSelectedIndex
 
@@ -1542,6 +1545,12 @@ Citizen.CreateThread(function()
                                             DrawSpotLightWithShadow(coords.x, coords.y, coords.z + 0.2, rotX, rotY, rotZ, 255, 255, 255, 75.0, 2.0, 10.0, 20.0, 0.0, true)
                                         end
                                     end
+
+                                    if doesVehicleHaveTrafficAdvisor(k) then
+                                        if (i ~= 7 and i ~= 8 and i ~= 9) then
+                                            runEnvirementLightWithBrightness(k, i, 0.01)
+                                        end
+                                    end
                                 end
                             end
                         end
@@ -1574,14 +1583,28 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
+    local vehIsReady = {}
+
     while true do
         for k,v in pairs(elsVehs) do
-            local elsVehicle = k
             if (v ~= nil or DoesEntityExist(k)) then
-                trafficAdvisor(elsVehicle, v.stage, v.advisorPattern)
+                if doesVehicleHaveTrafficAdvisor(k) then
+                    if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
+                        if canaryClient then
+                            SetVehicleAutoRepairDisabled(elsVehicle, true)
+                        end
+
+                        if(vehIsReady[k] == nil) then
+                            vehIsReady[k] = true
+                        end
+                        if vehIsReady[k] then
+                            runPatternAdvisor(k, v.stage, v.advisorPattern, function(cb) vehIsReady[k] = cb end)
+                        end
+                    end
+                end
             end
         end
-        Wait(1800)
+        Wait(0)
     end
 end)
 

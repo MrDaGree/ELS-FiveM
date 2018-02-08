@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pattern>
+    <ADVISOR speed="400">
+        <State01 Extra7="false" Extra8="false" Extra9="true"/>
+        <State02 Extra7="false" Extra8="true" Extra9="true"/>
+        <State03 Extra7="true" Extra8="true" Extra9="true" Speed="500"/>
+        <State04 Extra7="false" Extra8="false" Extra9="false"/>
+    </ADVISOR>
+</pattern>
