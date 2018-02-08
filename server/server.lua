@@ -1,7 +1,7 @@
 vehicleInfoTable = {}
 patternInfoTable = {}
 
-_VERSION = "1.1.2a"
+_VERSION = "1.1.2"
 local updateAvailable = false
 
 PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/development/VERSION', function(Error, NewestVersion, Header)
@@ -64,6 +64,21 @@ AddEventHandler('els:update', function()
 		print('This is already the newest version! [' .. _VERSION .. ']')
 	end
 end)
+
+function stringsplit(input, seperator)
+	if seperator == nil then
+		seperator = '%s'
+	end
+	
+	local t={} ; i=1
+	
+	for str in string.gmatch(input, '([^'..seperator..']+)') do
+		t[i] = str
+		i = i + 1
+	end
+	
+	return t
+end
 
 local function processXml(el)
     local v = {}
