@@ -7,7 +7,9 @@ function trafficAdvisor(elsVehicle, stage, pattern)
 				if (doesVehicleHaveTrafficAdvisor(elsVehicle)) then
 			        if(stage == 1 or stage == 2 or (canUseAdvisorStageThree(elsVehicle) and stage == 3)) then
 
-			        	SetVehicleAutoRepairDisabled(elsVehicle, true)
+			        	if canaryClient then
+			        		SetVehicleAutoRepairDisabled(elsVehicle, true)
+			        	end
 
 			            if stage == 1 then
 			                setExtraState(elsVehicle, 5, 1)
@@ -254,7 +256,9 @@ function runPatternStageThree(k, pattern, cb)
 	Citizen.CreateThread(function()
 		if (not IsEntityDead(k) and DoesEntityExist(k)) then
 
-			SetVehicleAutoRepairDisabled(k, true)
+			if canaryClient then
+        		SetVehicleAutoRepairDisabled(elsVehicle, true)
+        	end
 
 			local max = 0
 			local count = 1
@@ -308,7 +312,9 @@ function runPatternStageTwo(k, pattern, cb)
 	Citizen.CreateThread(function()
 		if (not IsEntityDead(k) and DoesEntityExist(k)) then
 
-			SetVehicleAutoRepairDisabled(k, true)
+			if canaryClient then
+        		SetVehicleAutoRepairDisabled(elsVehicle, true)
+        	end
 
 			local max = 0
 			local count = 1

@@ -50,6 +50,9 @@ AddEventHandler("els:changeLightStage_c", function(sender, stage, advisor, prim,
         if IsPedInAnyVehicle(ped_s, false) then
 
             local vehNetID = GetVehiclePedIsUsing(ped_s)
+            if canaryClient then
+                SetVehicleAutoRepairDisabled(elsVehicle, true)
+            end
 
             if elsVehs[vehNetID] ~= nil then
                 elsVehs[vehNetID].stage = stage
@@ -77,6 +80,9 @@ AddEventHandler("els:changeAdvisorPattern_c", function(sender, pat)
         if IsPedInAnyVehicle(ped_s, false) then
 
             local vehNetID = GetVehiclePedIsUsing(ped_s)
+            if canaryClient then
+                SetVehicleAutoRepairDisabled(elsVehicle, true)
+            end
 
             if elsVehs[vehNetID] ~= nil then
                 elsVehs[vehNetID].advisorPattern = pat
@@ -96,6 +102,9 @@ AddEventHandler("els:changeSecondaryPattern_c", function(sender, pat)
         if IsPedInAnyVehicle(ped_s, false) then
 
             local vehNetID = GetVehiclePedIsUsing(ped_s)
+            if canaryClient then
+                SetVehicleAutoRepairDisabled(elsVehicle, true)
+            end
 
             if elsVehs[vehNetID] ~= nil then
                 elsVehs[vehNetID].secPattern = pat
@@ -115,6 +124,9 @@ AddEventHandler("els:changePrimaryPattern_c", function(sender, pat)
         if IsPedInAnyVehicle(ped_s, false) then
 
             local vehNetID = GetVehiclePedIsUsing(ped_s)
+            if canaryClient then
+                SetVehicleAutoRepairDisabled(elsVehicle, true)
+            end
 
             if elsVehs[vehNetID] ~= nil then
                 elsVehs[vehNetID].primPattern = pat
@@ -1547,9 +1559,12 @@ Citizen.CreateThread(function()
             if (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), -1) == GetPlayerPed(-1)) or
                 (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), 0) == GetPlayerPed(-1)) then
                 if lightPatternPrim == 0 then
-                    lightPatternsPrim = math.random (1, getNumberOfPrimaryPatterns())
-                    Citizen.Trace(lightPatternsPrim)
-                    changePrimaryPattern(lightPatternsPrim)
+                    if lightPatternsPrim ~= nil then
+                        lightPatternsPrim = math.random (1, getNumberOfPrimaryPatterns())
+                        changePrimaryPattern(lightPatternsPrim)
+                    else
+                        changePrimaryPattern(1)
+                    end
                 end
             end
         end
@@ -1632,6 +1647,9 @@ Citizen.CreateThread(function()
                     -- setExtraState(elsVehicle, 12, 1)
                 elseif(v.stage == 2) then
                     if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
+                        if canaryClient then
+                            SetVehicleAutoRepairDisabled(elsVehicle, true)
+                        end
 
                         if(vehIsReady[k] == nil) then
                             vehIsReady[k] = true
@@ -1642,6 +1660,9 @@ Citizen.CreateThread(function()
                     end
                 elseif(v.stage == 3) then
                     if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
+                        if canaryClient then
+                            SetVehicleAutoRepairDisabled(elsVehicle, true)
+                        end
 
                         if(vehIsReady[k] == nil) then
                             vehIsReady[k] = true
@@ -1665,6 +1686,10 @@ Citizen.CreateThread(function()
             if (v ~= nil or DoesEntityExist(k)) then
                 if (v.stage == 3) then
                     if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
+                        if canaryClient then
+                            SetVehicleAutoRepairDisabled(elsVehicle, true)
+                        end
+
                         if(vehIsReady[k] == nil) then
                             vehIsReady[k] = true
                         end

@@ -1,3 +1,5 @@
+canaryClient = false
+
 vcf_files = {
 	"POLICE.xml",
 	"POLICE2.xml",
