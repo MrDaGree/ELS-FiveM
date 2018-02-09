@@ -588,7 +588,7 @@ Citizen.CreateThread(function()
                                 PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
                             end
                             local primMax = getNumberOfPrimaryPatterns()
-                            local primMin = 0
+                            local primMin = 1
                             local temp = lightPatternPrim
 
                             temp = temp - 1
@@ -626,7 +626,7 @@ Citizen.CreateThread(function()
                                 PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
                             end
                             local primMax = getNumberOfPrimaryPatterns()
-                            local primMin = 0
+                            local primMin = 1
                             local temp = lightPatternPrim
 
                             temp = temp + 1
@@ -1562,25 +1562,25 @@ Citizen.CreateThread(function()
     end
 end)
 
-Citizen.CreateThread(function()
-    while true do
-        if vehInTable(els_Vehicles, checkCarHash(GetVehiclePedIsUsing(GetPlayerPed(-1)))) then
-            if (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), -1) == GetPlayerPed(-1)) or
-                (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), 0) == GetPlayerPed(-1)) then
-                if lightPatternPrim == 0 then
-                    if lightPatternsPrim ~= nil then
-                        lightPatternsPrim = math.random (1, getNumberOfPrimaryPatterns())
-                        changePrimaryPattern(lightPatternsPrim)
-                    else
-                        changePrimaryPattern(1)
-                    end
-                end
-            end
-        end
+-- Citizen.CreateThread(function()
+--     while true do
+--         if vehInTable(els_Vehicles, checkCarHash(GetVehiclePedIsUsing(GetPlayerPed(-1)))) then
+--             if (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), -1) == GetPlayerPed(-1)) or
+--                 (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), 0) == GetPlayerPed(-1)) then
+--                 if lightPatternPrim == 0 then
+--                     if lightPatternsPrim ~= nil then
+--                         lightPatternsPrim = math.random (1, getNumberOfPrimaryPatterns())
+--                         changePrimaryPattern(lightPatternsPrim)
+--                     else
+--                         changePrimaryPattern(1)
+--                     end
+--                 end
+--             end
+--         end
 
-        Wait(10000)
-    end
-end)
+--         Wait(10000)
+--     end
+-- end)
 
 Citizen.CreateThread(function()
     local vehIsReady = {}

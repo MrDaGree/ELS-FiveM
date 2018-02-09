@@ -2,8 +2,8 @@ els_patterns = {}
 
 function getNumberOfPrimaryPatterns()
 	local count = 0
-	for k,v in pairs(els_patterns) do
-		if (v.primary ~= nil) then
+	for k,v in pairs(els_patterns.primarys) do
+		if (v ~= nil) then
 			count = count + 1
 		end
 	end
@@ -13,8 +13,8 @@ end
 
 function getNumberOfSecondaryPatterns()
 	local count = 0
-	for k,v in pairs(els_patterns) do
-		if (v.secondary ~= nil) then
+	for k,v in pairs(els_patterns.secondarys) do
+		if (v ~= nil) then
 			count = count + 1
 		end
 	end
@@ -24,8 +24,8 @@ end
 
 function getNumberOfAdvisorPatterns()
 	local count = 0
-	for k,v in pairs(els_patterns) do
-		if (v.advisor ~= nil) then
+	for k,v in pairs(els_patterns.advisors) do
+		if (v ~= nil) then
 			count = count + 1
 		end
 	end
