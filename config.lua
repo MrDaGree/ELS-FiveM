@@ -19,7 +19,8 @@ pattern_files = {
 	"COMPLEX.xml",
 	"BACKFOURTH.xml",
 	"BACKFOURTH2.xml",
-	"T_ADVIS_RIGHT_LEFT.xml"
+	"T_ADVIS_RIGHT_LEFT.xml",
+	"T_ADVIS_LEFT_RIGHT.xml"
 }
 
 modelsWithTrafficAdvisor = {

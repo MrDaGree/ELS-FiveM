@@ -51,7 +51,7 @@ AddEventHandler("els:changeLightStage_c", function(sender, stage, advisor, prim,
 
             local vehNetID = GetVehiclePedIsUsing(ped_s)
             if canaryClient then
-                SetVehicleAutoRepairDisabled(elsVehicle, true)
+                SetVehicleAutoRepairDisabled(vehNetID, true)
             end
 
             if elsVehs[vehNetID] ~= nil then
@@ -81,7 +81,7 @@ AddEventHandler("els:changeAdvisorPattern_c", function(sender, pat)
 
             local vehNetID = GetVehiclePedIsUsing(ped_s)
             if canaryClient then
-                SetVehicleAutoRepairDisabled(elsVehicle, true)
+                SetVehicleAutoRepairDisabled(vehNetID, true)
             end
 
             if elsVehs[vehNetID] ~= nil then
@@ -103,7 +103,7 @@ AddEventHandler("els:changeSecondaryPattern_c", function(sender, pat)
 
             local vehNetID = GetVehiclePedIsUsing(ped_s)
             if canaryClient then
-                SetVehicleAutoRepairDisabled(elsVehicle, true)
+                SetVehicleAutoRepairDisabled(vehNetID, true)
             end
 
             if elsVehs[vehNetID] ~= nil then
@@ -125,7 +125,7 @@ AddEventHandler("els:changePrimaryPattern_c", function(sender, pat)
 
             local vehNetID = GetVehiclePedIsUsing(ped_s)
             if canaryClient then
-                SetVehicleAutoRepairDisabled(elsVehicle, true)
+                SetVehicleAutoRepairDisabled(vehNetID, true)
             end
 
             if elsVehs[vehNetID] ~= nil then
@@ -1591,7 +1591,7 @@ Citizen.CreateThread(function()
                 if doesVehicleHaveTrafficAdvisor(k) then
                     if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
                         if canaryClient then
-                            SetVehicleAutoRepairDisabled(elsVehicle, true)
+                            SetVehicleAutoRepairDisabled(k, true)
                         end
 
                         if(vehIsReady[k] == nil) then
@@ -1671,7 +1671,7 @@ Citizen.CreateThread(function()
                 elseif(v.stage == 2) then
                     if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
                         if canaryClient then
-                            SetVehicleAutoRepairDisabled(elsVehicle, true)
+                            SetVehicleAutoRepairDisabled(k, true)
                         end
 
                         if(vehIsReady[k] == nil) then
@@ -1684,7 +1684,7 @@ Citizen.CreateThread(function()
                 elseif(v.stage == 3) then
                     if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
                         if canaryClient then
-                            SetVehicleAutoRepairDisabled(elsVehicle, true)
+                            SetVehicleAutoRepairDisabled(k, true)
                         end
 
                         if(vehIsReady[k] == nil) then
@@ -1710,7 +1710,7 @@ Citizen.CreateThread(function()
                 if (v.stage == 3) then
                     if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
                         if canaryClient then
-                            SetVehicleAutoRepairDisabled(elsVehicle, true)
+                            SetVehicleAutoRepairDisabled(k, true)
                         end
 
                         if(vehIsReady[k] == nil) then
