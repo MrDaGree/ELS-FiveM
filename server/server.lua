@@ -1,7 +1,7 @@
 vehicleInfoTable = {}
 patternInfoTable = {}
 
-_VERSION = "1.1.2f"
+_VERSION = "1.1.2e"
 local updateAvailable = false
 
 PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/development/VERSION', function(Error, NewestVersion, Header)
@@ -42,19 +42,6 @@ RegisterCommand("els", function(source, args, rawCommand)
 		end
 	end
 end, true)
-
--- AddEventHandler('rconCommand', function(cmd, args)
---     if cmd:lower() == 'els' then
--- 		if #args == 1 then
--- 			if args[1]:lower() == 'update' then
--- 				TriggerEvent("els:update")
--- 			end
--- 		else
--- 			print('Argument count mismatch (Passed: ' .. #args .. ', Wanted: 1)')
--- 		end
--- 		CancelEvent()
--- 	end
--- end)
 
 function stringsplit(input, seperator)
 	if seperator == nil then
