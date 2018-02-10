@@ -24,14 +24,15 @@ PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/develop
 			print('CHANGES: \n' .. Changes)
 		else
 			UpdateAvailable = false
-			print('\n       All good! You are you to date.')
+			print('\n       All good! You are all up to date.')
 			print('-------------------------------------------------')
 		end
 	end)
 end)
 
-AddEventHandler('rconCommand', function(cmd, args)
-    if cmd:lower() == 'els' then
+RegisterCommand("els", function(source, args, rawCommand)
+
+	if string.sub(rawCommand, 1, 3):lower() == "els" then
 		if #args == 1 then
 			if args[1]:lower() == 'update' then
 				TriggerEvent("els:update")
@@ -39,9 +40,21 @@ AddEventHandler('rconCommand', function(cmd, args)
 		else
 			print('Argument count mismatch (Passed: ' .. #args .. ', Wanted: 1)')
 		end
-		CancelEvent()
 	end
-end)
+end, true)
+
+-- AddEventHandler('rconCommand', function(cmd, args)
+--     if cmd:lower() == 'els' then
+-- 		if #args == 1 then
+-- 			if args[1]:lower() == 'update' then
+-- 				TriggerEvent("els:update")
+-- 			end
+-- 		else
+-- 			print('Argument count mismatch (Passed: ' .. #args .. ', Wanted: 1)')
+-- 		end
+-- 		CancelEvent()
+-- 	end
+-- end)
 
 function stringsplit(input, seperator)
 	if seperator == nil then
