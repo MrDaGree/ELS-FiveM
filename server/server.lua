@@ -10,7 +10,7 @@ end
 
 PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/VERSION', function(Error, NewestVersion, Header)
 	PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/CHANGES', function(Error, Changes, Header)
-		print("\n---------- ELS (' .. build .. ' Build) by MrDaGree ----------")
+		print("\n---------- ELS (" .. build .. " Build) by MrDaGree ----------")
 		print('           Current Version: ' .. _VERSION)
 		print('           Newest Version: ' .. NewestVersion)
 		print('')
