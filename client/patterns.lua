@@ -1,4 +1,5 @@
 els_patterns = {}
+canaryClient = true
 
 function getNumberOfPrimaryPatterns()
 	local count = 0

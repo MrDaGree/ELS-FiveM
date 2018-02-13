@@ -1,6 +1,3 @@
-
-canaryClient = true
-
 vcf_files = {
 	"POLICE.xml",
 	"POLICE2.xml",
@@ -21,7 +18,8 @@ pattern_files = {
 	"BACKFOURTH2.xml",
 	"T_ADVIS_RIGHT_LEFT.xml",
 	"T_ADVIS_LEFT_RIGHT.xml",
-	"T_ADVIS_BACKFOURTH.xml"
+	"T_ADVIS_BACKFOURTH.xml",
+	"WIGWAG5.xml"
 }
 
 modelsWithTrafficAdvisor = {
@@ -50,6 +48,8 @@ vehicleStageThreeAdvisor = {
 
 vehicleSyncDistance = 150
 envirementLightBrightness = 0.2
+
+build = "master"
 
 shared = {
 	horn = 86,

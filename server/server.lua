@@ -1,18 +1,22 @@
 vehicleInfoTable = {}
 patternInfoTable = {}
 
-_VERSION = "1.1.2e"
+_VERSION = "1.1.3"
 local updateAvailable = false
 
-PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/development/VERSION', function(Error, NewestVersion, Header)
-	PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/development/CHANGES', function(Error, Changes, Header)
-		print("\n---------- ELS (Dev Build) by MrDaGree ----------")
+if build == nil then
+	build = "master"
+end
+
+PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/VERSION', function(Error, NewestVersion, Header)
+	PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/CHANGES', function(Error, Changes, Header)
+		print("\n---------- ELS (' .. build .. ' Build) by MrDaGree ----------")
 		print('           Current Version: ' .. _VERSION)
 		print('           Newest Version: ' .. NewestVersion)
 		print('')
 		if _VERSION ~= NewestVersion then
 			print('---------- Outdated ----------\n')
-			PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/development/PERVIOUSVERSION', function(Error, PreviousVersion, Header)
+			PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/PERVIOUSVERSION', function(Error, PreviousVersion, Header)
 				if _VERSION == PreviousVersion then
 					UpdateAvailable = true
 				end
@@ -28,6 +32,28 @@ PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/develop
 			print('-------------------------------------------------')
 		end
 	end)
+end)
+
+RegisterServerEvent('els:update')
+AddEventHandler('els:update', function()
+	if UpdateAvailable then
+		PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/CHANGEDFILES', function(Error, Content, Header)
+			ContentSplitted = stringsplit(Content, '\n')
+			for k, Line in ipairs(ContentSplitted) do
+				local PreviousContent = ''
+				if Line:find('-add') then
+					Line = Line:gsub('-add')
+					PreviousContent = LoadResourceFile(GetCurrentResourceName(), Line) .. '\n'
+				end
+				PerformHttpRequest('http://git.mrdagree.com/mrdagree/ELS-FiveM/raw/' .. build .. '/' .. Line, function(Error, NewContent, Header)
+					SaveResourceFile(GetCurrentResourceName(), Line, PreviousContent .. NewContent, -1)
+				end)
+			end
+		end)
+		print('Update finished! Enter "restart ' .. GetCurrentResourceName() .. '" now!')
+	else
+		print('This is already the newest version! [' .. _VERSION .. ']')
+	end
 end)
 
 RegisterCommand("els", function(source, args, rawCommand)
@@ -57,28 +83,6 @@ function stringsplit(input, seperator)
 	
 	return t
 end
-
-RegisterServerEvent('els:update')
-AddEventHandler('els:update', function()
-	if UpdateAvailable then
-		PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/development/CHANGEDFILES', function(Error, Content, Header)
-			ContentSplitted = stringsplit(Content, '\n')
-			for k, Line in ipairs(ContentSplitted) do
-				local PreviousContent = ''
-				if Line:find('-add') then
-					Line = Line:gsub('-add')
-					PreviousContent = LoadResourceFile(GetCurrentResourceName(), Line) .. '\n'
-				end
-				PerformHttpRequest('http://git.mrdagree.com/mrdagree/ELS-FiveM/raw/development/' .. Line, function(Error, NewContent, Header)
-					SaveResourceFile(GetCurrentResourceName(), Line, PreviousContent .. NewContent, -1)
-				end)
-			end
-		end)
-		print('Update finished! Enter "restart ' .. GetCurrentResourceName() .. '" now!')
-	else
-		print('This is already the newest version! [' .. _VERSION .. ']')
-	end
-end)
 
 local function processXml(el)
     local v = {}

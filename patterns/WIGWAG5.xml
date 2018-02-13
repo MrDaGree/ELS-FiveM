@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pattern author="Kryptonic">
+	<PRIMARY speed="150">
+        <State01 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false"/>
+        <State02 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true"/>
+        <State03 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="145"/>
+		<State04 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="145"/>
+		<State05 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed=" 140"/>
+        <State06 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed=" 140"/>
+        <State07 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="135"/>
+		<State08 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="135"/>
+		<State09 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="130"/>
+		<State10 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="130"/>
+		<State11 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="125"/>
+		<State12 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="125"/>
+		<State13 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="120"/>
+		<State14 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="120"/>
+		<State15 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="115"/>
+		<State16 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="115"/>
+		<State17 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="110"/>
+		<State18 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="110"/>
+		<State19 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="100"/>
+		<State20 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="100"/>
+		<State21 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="95"/>
+		<State22 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="95"/>
+		<State23 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="90"/>
+		<State24 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="90"/>
+		<State25 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="85"/>
+		<State26 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="85"/>
+		<State27 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="80"/>
+		<State28 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="80"/>
+		<State29 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="75"/>
+		<State30 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="75"/>
+		<State31 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="70"/>
+		<State32 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="70"/>
+		<State33 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="65"/>
+		<State34 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="65"/>
+		<State35 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="60"/>
+		<State36 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="60"/>
+		<State37 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="55"/>
+		<State38 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="55"/>
+		<State39 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="50"/>
+		<State40 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="50"/>
+		<State41 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="45" />
+		<State42 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="45" />
+		<State43 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="40" />
+		<State44 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="40" />
+		<State45 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="40" />
+		<State46 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="40" />
+		<State47 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="45" />
+		<State48 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="45" />
+		<State49 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="50" />
+        <State50 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="50" />
+        <State51 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="55" />
+		<State52 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="55" />
+		<State53 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="60" />
+		<State54 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="60" />
+		<State55 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="65" />
+		<State56 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="65" />
+		<State57 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="70" />
+		<State58 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="70" />
+		<State59 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="75" />
+		<State60 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="75" />
+		<State61 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="80" />
+		<State62 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="80" />
+		<State63 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="85" />
+		<State64 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="85" />
+		<State65 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="90" />
+		<State66 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="90" />
+		<State67 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="95" />
+		<State68 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="95" />
+		<State69 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="100" />
+		<State70 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="100" />
+		<State71 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="105" />
+		<State72 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="105" />
+		<State73 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="110" />
+		<State74 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="110" />
+		<State75 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="115" />
+		<State76 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="115" />
+		<State77 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="120" />
+		<State78 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="120" />
+		<State79 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="125" />
+		<State80 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="125" />
+		<State81 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="130" />
+		<State82 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="130" />
+		<State83 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="135" />
+		<State84 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="135" />
+		<State85 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="140" />
+		<State86 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="140" />
+		<State87 Extra1="true" Extra2="true" Extra3="false" Extra4="false" Extra5="true" Extra6="false" Speed="145" />
+		<State88 Extra1="false" Extra2="false" Extra3="true" Extra4="true" Extra5="false" Extra6="true" Speed="145" />
+		<State89 Extra1="false" Extra2="false" Extra3="false" Extra4="false" Extra5="false" Extra6="false" Speed="150"/>
+    </PRIMARY>
+</pattern>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pattern>
+	<PRIMARY speed="120">
+        <State01 Extra1="false" Extra2="false" Extra3="false" Extra4="false" Extra5="false" Extra6="false" Extra7="false" Extra9="false"/>
+    </PRIMARY>
+    <SECONDARY speed="150">
+        <State01 Extra1="false" Extra2="false" Extra3="false" Extra4="false" Extra5="false" Extra6="false" Extra7="false" Extra9="false"/>
+    </SECONDARY>
+    <ADVISOR speed="200">
+        <State01 Extra1="false" Extra2="false" Extra3="false" Extra4="false" Extra5="false" Extra6="false" Extra7="false" Extra9="false"/>
+    </ADVISOR>
+</pattern>
