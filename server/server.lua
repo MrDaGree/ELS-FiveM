@@ -1,13 +1,13 @@
 vehicleInfoTable = {}
 patternInfoTable = {}
 
-_VERSION = "1.1.3e"
+_VERSION = "1.1.3f"
 local updateAvailable = false
 
 if build == nil then
 	PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/master/VERSION', function(Error, NewestVersion, Header)
 		PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/master/CHANGES', function(Error, Changes, Header)
-			print("\n---------- ELS (" .. build .. " Build) by MrDaGree ----------")
+			print("\n---------- ELS (master Build) by MrDaGree ----------")
 			print('           Current Version: ' .. _VERSION)
 			print('           Newest Version: ' .. NewestVersion)
 			print('')
