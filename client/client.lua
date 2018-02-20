@@ -388,7 +388,7 @@ end
 
 
 function canUseAdvisorStageThree(car)
-    if car then
+    if (not IsEntityDead(car) and DoesEntityExist(car)) then 
         for k,v in pairs(vehicleStageThreeAdvisor) do
             if GetEntityModel(car) == GetHashKey(v) then
                 return true
@@ -1493,18 +1493,19 @@ Citizen.CreateThread(function()
 
     while true do
         for k,v in pairs(elsVehs) do
+            if not DoesEntityExist(k) then
+                vehIsReady[k] = true
+            end
             if (v ~= nil or DoesEntityExist(k)) then
                 if doesVehicleHaveTrafficAdvisor(k) then
                     if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
-                        if canaryClient then
-                            SetVehicleAutoRepairDisabled(k, true)
-                        end
 
                         if(vehIsReady[k] == nil) then
                             vehIsReady[k] = true
                         end
                         if vehIsReady[k] then
                             runPatternAdvisor(k, v.stage, v.advisorPattern, function(cb) vehIsReady[k] = cb end)
+                            Citizen.Trace(v.stage)
                         end
                     end
                 end
@@ -1559,7 +1560,9 @@ Citizen.CreateThread(function()
     while true do
         for k,v in pairs(elsVehs) do
             local elsVehicle = k
-            
+            if not DoesEntityExist(k) then
+                vehIsReady[k] = true
+            end
             if (v ~= nil or DoesEntityExist(k)) then
                 if (v.stage == 0) then
                     setExtraState(elsVehicle, 1, 1)
@@ -1576,9 +1579,6 @@ Citizen.CreateThread(function()
                     -- setExtraState(elsVehicle, 12, 1)
                 elseif(v.stage == 2) then
                     if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
-                        if canaryClient then
-                            SetVehicleAutoRepairDisabled(k, true)
-                        end
 
                         if(vehIsReady[k] == nil) then
                             vehIsReady[k] = true
@@ -1612,12 +1612,12 @@ Citizen.CreateThread(function()
 
     while true do
         for k,v in pairs(elsVehs) do
+            if not DoesEntityExist(k) then
+                vehIsReady[k] = true
+            end
             if (v ~= nil or DoesEntityExist(k)) then
                 if (v.stage == 3) then
                     if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
-                        if canaryClient then
-                            SetVehicleAutoRepairDisabled(k, true)
-                        end
 
                         if(vehIsReady[k] == nil) then
                             vehIsReady[k] = true

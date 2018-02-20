@@ -41,7 +41,7 @@ modelsWithAmbWarnSiren =
 stagethreewithsiren = false
 playButtonPressSounds = true
 vehicleStageThreeAdvisor = {
-    "FBI3",
+    "FBI2",
 }
 
 

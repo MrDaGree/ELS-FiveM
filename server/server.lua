@@ -1,7 +1,7 @@
 vehicleInfoTable = {}
 patternInfoTable = {}
 
-_VERSION = "1.1.3a"
+_VERSION = "1.1.3b"
 local updateAvailable = false
 
 if build == nil then
@@ -29,6 +29,7 @@ PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. bu
 		else
 			UpdateAvailable = false
 			print('\n       All good! You are all up to date.')
+			print('\nThis change is was made while listening to Nova by Ahrix')
 			print('-------------------------------------------------')
 		end
 	end)

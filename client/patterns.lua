@@ -74,11 +74,8 @@ local advisorAllow = 1
 function runPatternAdvisor(k, stage, pattern, cb) 
 	Citizen.CreateThread(function()
 		if (not IsEntityDead(k) and DoesEntityExist(k)) then
-			if (stage == 1 or stage == 2 or (canUseAdvisorStageThree(elsVehicle) and stage == 3)) then
-
-				if canaryClient then
-	        		SetVehicleAutoRepairDisabled(elsVehicle, true)
-	        	end
+			if (canUseAdvisorStageThree(k) or (stage == 1 or stage == 2)) then
+	        	SetVehicleAutoRepairDisabled(k, true)
 
 				local max = 0
 				local count = 1
@@ -129,10 +126,7 @@ local stageThreeAllow = 1
 function runPatternStageThree(k, pattern, cb) 
 	Citizen.CreateThread(function()
 		if (not IsEntityDead(k) and DoesEntityExist(k)) then
-
-			if canaryClient then
-        		SetVehicleAutoRepairDisabled(elsVehicle, true)
-        	end
+        	SetVehicleAutoRepairDisabled(k, true)
 
 			local max = 0
 			local count = 1
@@ -186,10 +180,7 @@ local stageTwoAllow = 1
 function runPatternStageTwo(k, pattern, cb) 
 	Citizen.CreateThread(function()
 		if (not IsEntityDead(k) and DoesEntityExist(k)) then
-
-			if canaryClient then
-        		SetVehicleAutoRepairDisabled(elsVehicle, true)
-        	end
+        	SetVehicleAutoRepairDisabled(k, true)
 
 			local max = 0
 			local count = 1
@@ -213,7 +204,6 @@ function runPatternStageTwo(k, pattern, cb)
 					for i=1,12 do
 						if doesVehicleHaveTrafficAdvisor(k) then
 							if (i ~= 7 and i ~= 8 and i ~= 9) then
-								Citizen.Trace(i)
 								if els_patterns.secondarys[pattern].stages[count][i] ~= nil then
 									setExtraState(k, i, els_patterns.secondarys[pattern].stages[count][i])
 									if els_patterns.secondarys[pattern].stages[count][i] == 0 then
