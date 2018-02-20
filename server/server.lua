@@ -492,6 +492,11 @@ AddEventHandler("els:changeLightStage_s", function(state, advisor, prim, sec)
 	TriggerClientEvent("els:changeLightStage_c", -1, source, state, advisor, prim, sec)
 end)
 
+RegisterServerEvent("els:changePartState_s")
+AddEventHandler("els:changePartState_s", function(part, state)
+	TriggerClientEvent("els:changePartState_c", -1, source, part, state)
+end)
+
 RegisterServerEvent("els:changeAdvisorPattern_s")
 AddEventHandler("els:changeAdvisorPattern_s", function(pat)
 	TriggerClientEvent("els:changeAdvisorPattern_c", -1, source, pat)

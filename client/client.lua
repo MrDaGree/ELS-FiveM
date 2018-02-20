@@ -50,24 +50,64 @@ AddEventHandler("els:changeLightStage_c", function(sender, stage, advisor, prim,
         if IsPedInAnyVehicle(ped_s, false) then
 
             local vehNetID = GetVehiclePedIsUsing(ped_s)
-            if canaryClient then
-                SetVehicleAutoRepairDisabled(vehNetID, true)
-            end
 
             if elsVehs[vehNetID] ~= nil then
                 elsVehs[vehNetID].stage = stage
+                if (stage == 1) then
+                    elsVehs[vehNetID].advisor = true
+                elseif (stage == 2) then
+                    elsVehs[vehNetID].secondary = true
+                elseif (stage == 3) then
+                    elsVehs[vehNetID].primary = true
+                else
+                    elsVehs[vehNetID].advisor = false
+                    elsVehs[vehNetID].secondary = false
+                    elsVehs[vehNetID].primary = false
+                end
                 elsVehs[vehNetID].primPattern = prim
                 elsVehs[vehNetID].secPattern = sec
                 elsVehs[vehNetID].advisorPattern = advisor
             else
                 elsVehs[vehNetID] = {}
                 elsVehs[vehNetID].stage = stage
+                if (stage == 1) then
+                    elsVehs[vehNetID].advisor = true
+                elseif (stage == 2) then
+                    elsVehs[vehNetID].secondary = true
+                elseif (stage == 3) then
+                    elsVehs[vehNetID].primary = true
+                else
+                    elsVehs[vehNetID].advisor = false
+                    elsVehs[vehNetID].secondary = false
+                    elsVehs[vehNetID].primary = false
+                end
                 elsVehs[vehNetID].primPattern = prim
                 elsVehs[vehNetID].secPattern = sec
                 elsVehs[vehNetID].advisorPattern = advisor
             end
 
             
+        end
+    end
+end)
+
+RegisterNetEvent("els:changePartState_c")
+AddEventHandler("els:changePartState_c", function(sender, part, newstate)
+    local player_s = GetPlayerFromServerId(sender)
+    local ped_s = GetPlayerPed(player_s)
+    if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
+        if IsPedInAnyVehicle(ped_s, false) then
+            local vehNetID = GetVehiclePedIsUsing(ped_s)
+
+            if elsVehs[vehNetID] == nil then
+                elsVehs[vehNetID] = {}
+                elsVehs[vehNetID].stage = 0
+                elsVehs[vehNetID].primPattern = 1
+                elsVehs[vehNetID].secPattern = 1
+                elsVehs[vehNetID].advisorPattern = 1
+            end
+
+            elsVehs[vehNetID][part] = newstate
         end
     end
 end)
@@ -80,9 +120,6 @@ AddEventHandler("els:changeAdvisorPattern_c", function(sender, pat)
         if IsPedInAnyVehicle(ped_s, false) then
 
             local vehNetID = GetVehiclePedIsUsing(ped_s)
-            if canaryClient then
-                SetVehicleAutoRepairDisabled(vehNetID, true)
-            end
 
             if elsVehs[vehNetID] ~= nil then
                 elsVehs[vehNetID].advisorPattern = pat
@@ -102,9 +139,6 @@ AddEventHandler("els:changeSecondaryPattern_c", function(sender, pat)
         if IsPedInAnyVehicle(ped_s, false) then
 
             local vehNetID = GetVehiclePedIsUsing(ped_s)
-            if canaryClient then
-                SetVehicleAutoRepairDisabled(vehNetID, true)
-            end
 
             if elsVehs[vehNetID] ~= nil then
                 elsVehs[vehNetID].secPattern = pat
@@ -124,9 +158,6 @@ AddEventHandler("els:changePrimaryPattern_c", function(sender, pat)
         if IsPedInAnyVehicle(ped_s, false) then
 
             local vehNetID = GetVehiclePedIsUsing(ped_s)
-            if canaryClient then
-                SetVehicleAutoRepairDisabled(vehNetID, true)
-            end
 
             if elsVehs[vehNetID] ~= nil then
                 elsVehs[vehNetID].primPattern = pat
@@ -537,6 +568,10 @@ function changePrimaryPatternMath(way)
         temp = primMax
     end
 
+    if(temp > primMax) then
+        temp = primMin
+    end
+
     lightPatternPrim = temp
 
     if temp ~= 0 then lightPatternsPrim = temp end
@@ -557,6 +592,10 @@ function changeSecondaryPatternMath(way)
         temp = primMin
     end
 
+    if(temp < primMin) then
+        temp = primMax
+    end
+
     lightPatternSec = temp
     changeSecondaryPattern(lightPatternSec)
 end
@@ -575,6 +614,10 @@ function changeAdvisorPatternMath(way)
 
     if(temp < primMin) then
         temp = primMax
+    end
+
+    if(temp > primMax) then
+        temp = primMin
     end
 
     advisorPatternSelectedIndex = temp
@@ -728,6 +771,39 @@ Citizen.CreateThread(function()
                     DisableControlAction(0, keyboard.siren.dual_one, true)
                     DisableControlAction(0, keyboard.siren.dual_two, true)
                     DisableControlAction(0, keyboard.siren.dual_three, true)
+
+                    DisableControlAction(0, 311, true)
+                    DisableControlAction(0, 7, true)
+
+                    if IsDisabledControlJustPressed(0, 311) then
+                        if playButtonPressSounds then
+                            PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+                        end
+                        if elsVehs[GetVehiclePedIsUsing(GetPlayerPed(-1))] ~= nil then
+                            if elsVehs[GetVehiclePedIsUsing(GetPlayerPed(-1))].primary then
+                                TriggerServerEvent("els:changePartState_s", "primary", false)
+                            else
+                                TriggerServerEvent("els:changePartState_s", "primary", true)
+                            end
+                        else
+                            TriggerServerEvent("els:changePartState_s", "primary", true)
+                        end
+                    end
+
+                    if IsDisabledControlJustPressed(0, 7) then
+                        if playButtonPressSounds then
+                            PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+                        end
+                        if elsVehs[GetVehiclePedIsUsing(GetPlayerPed(-1))] ~= nil then
+                            if elsVehs[GetVehiclePedIsUsing(GetPlayerPed(-1))].secondary then
+                                TriggerServerEvent("els:changePartState_s", "secondary", false)
+                            else
+                                TriggerServerEvent("els:changePartState_s", "secondary", true)
+                            end
+                        else
+                            TriggerServerEvent("els:changePartState_s", "secondary", true)
+                        end
+                    end
 
                     if IsDisabledControlPressed(0, keyboard.modifyKey) then
                         if IsDisabledControlPressed(0, keyboard.modifyKey) and IsDisabledControlJustReleased(0, keyboard.pattern.primary) then
@@ -1468,26 +1544,6 @@ Citizen.CreateThread(function()
     end
 end)
 
--- Citizen.CreateThread(function()
---     while true do
---         if vehInTable(els_Vehicles, checkCarHash(GetVehiclePedIsUsing(GetPlayerPed(-1)))) then
---             if (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), -1) == GetPlayerPed(-1)) or
---                 (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), 0) == GetPlayerPed(-1)) then
---                 if lightPatternPrim == 0 then
---                     if lightPatternsPrim ~= nil then
---                         lightPatternsPrim = math.random (1, getNumberOfPrimaryPatterns())
---                         changePrimaryPattern(lightPatternsPrim)
---                     else
---                         changePrimaryPattern(1)
---                     end
---                 end
---             end
---         end
-
---         Wait(10000)
---     end
--- end)
-
 Citizen.CreateThread(function()
     local vehIsReady = {}
 
@@ -1498,15 +1554,20 @@ Citizen.CreateThread(function()
             end
             if (v ~= nil or DoesEntityExist(k)) then
                 if doesVehicleHaveTrafficAdvisor(k) then
-                    if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
+                    if v.advisor then
+                        if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
 
-                        if(vehIsReady[k] == nil) then
-                            vehIsReady[k] = true
+                            if(vehIsReady[k] == nil) then
+                                vehIsReady[k] = true
+                            end
+                            if vehIsReady[k] then
+                                runPatternAdvisor(k, v.advisorPattern, function(cb) vehIsReady[k] = cb end)
+                            end
                         end
-                        if vehIsReady[k] then
-                            runPatternAdvisor(k, v.stage, v.advisorPattern, function(cb) vehIsReady[k] = cb end)
-                            Citizen.Trace(v.stage)
-                        end
+                    else
+                        setExtraState(elsVehicle, 7, 1)
+                        setExtraState(elsVehicle, 8, 1)
+                        setExtraState(elsVehicle, 9, 1)
                     end
                 end
             end
@@ -1514,45 +1575,6 @@ Citizen.CreateThread(function()
         Wait(0)
     end
 end)
-
-Citizen.CreateThread(function()
-
-    while true do
-        for k,v in pairs(elsVehs) do
-            local elsVehicle = k
-            if (v ~= nil or DoesEntityExist(k)) then
-                if (v.stage == 0) then
-                    setExtraState(elsVehicle, 1, 1)
-                    setExtraState(elsVehicle, 2, 1)
-                    setExtraState(elsVehicle, 3, 1)
-                    setExtraState(elsVehicle, 4, 1)
-                    setExtraState(elsVehicle, 5, 1)
-                    setExtraState(elsVehicle, 6, 1)
-                    setExtraState(elsVehicle, 7, 1)
-                    setExtraState(elsVehicle, 8, 1)
-                    setExtraState(elsVehicle, 9, 1)
-                    -- setExtraState(elsVehicle, 10, 1)
-                    -- setExtraState(elsVehicle, 11, 1)
-                    -- setExtraState(elsVehicle, 12, 1)
-                elseif (v.stage == 1) then
-                    setExtraState(elsVehicle, 1, 1)
-                    setExtraState(elsVehicle, 2, 1)
-                    setExtraState(elsVehicle, 3, 1)
-                    setExtraState(elsVehicle, 4, 1)
-                    setExtraState(elsVehicle, 5, 1)
-                    setExtraState(elsVehicle, 6, 1)
-                elseif (v.stage == 2) then
-                    setExtraState(elsVehicle, 1, 1)
-                    setExtraState(elsVehicle, 2, 1)
-                    setExtraState(elsVehicle, 3, 1)
-                    setExtraState(elsVehicle, 4, 1)
-                end
-            end
-        end
-        Wait(0)
-    end
-end)
-
 
 Citizen.CreateThread(function()
     local vehIsReady = {}
@@ -1564,20 +1586,7 @@ Citizen.CreateThread(function()
                 vehIsReady[k] = true
             end
             if (v ~= nil or DoesEntityExist(k)) then
-                if (v.stage == 0) then
-                    setExtraState(elsVehicle, 1, 1)
-                    setExtraState(elsVehicle, 2, 1)
-                    setExtraState(elsVehicle, 3, 1)
-                    setExtraState(elsVehicle, 4, 1)
-                    setExtraState(elsVehicle, 5, 1)
-                    setExtraState(elsVehicle, 6, 1)
-                    setExtraState(elsVehicle, 7, 1)
-                    setExtraState(elsVehicle, 8, 1)
-                    setExtraState(elsVehicle, 9, 1)
-                    -- setExtraState(elsVehicle, 10, 1)
-                    -- setExtraState(elsVehicle, 11, 1)
-                    -- setExtraState(elsVehicle, 12, 1)
-                elseif(v.stage == 2) then
+                if(v.secondary) then
                     if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
 
                         if(vehIsReady[k] == nil) then
@@ -1587,18 +1596,13 @@ Citizen.CreateThread(function()
                             runPatternStageTwo(k, v.secPattern, function(cb) vehIsReady[k] = cb end)
                         end
                     end
-                elseif(v.stage == 3) then
-                    if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
-                        if canaryClient then
-                            SetVehicleAutoRepairDisabled(k, true)
-                        end
-
-                        if(vehIsReady[k] == nil) then
-                            vehIsReady[k] = true
-                        end
-                        if vehIsReady[k] then
-                            runPatternStageTwo(k, v.secPattern, function(cb) vehIsReady[k] = cb end)
-                        end
+                else
+                    setExtraState(elsVehicle, 5, 1)
+                    setExtraState(elsVehicle, 6, 1)
+                    if not doesVehicleHaveTrafficAdvisor(k) and not v.advisor then
+                        setExtraState(elsVehicle, 7, 1)
+                        setExtraState(elsVehicle, 8, 1)
+                        setExtraState(elsVehicle, 9, 1)
                     end
                 end
             end
@@ -1616,7 +1620,7 @@ Citizen.CreateThread(function()
                 vehIsReady[k] = true
             end
             if (v ~= nil or DoesEntityExist(k)) then
-                if (v.stage == 3) then
+                if (v.primary) then
                     if (GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
 
                         if(vehIsReady[k] == nil) then
@@ -1626,6 +1630,11 @@ Citizen.CreateThread(function()
                             runPatternStageThree(k, v.primPattern, function(cb) vehIsReady[k] = cb end)
                         end
                     end
+                else
+                    setExtraState(k, 1, 1)
+                    setExtraState(k, 2, 1)
+                    setExtraState(k, 3, 1)
+                    setExtraState(k, 4, 1)
                 end
             end
         end

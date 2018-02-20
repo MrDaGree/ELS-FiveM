@@ -71,9 +71,9 @@ keyboard = {
 		dual_three = 161,
 	},
 	pattern = {
-		primary = 246,
-		secondary = 303,
-		advisor = 182,
+		primary = 82,
+		secondary = 81,
+		advisor = 70,
 	},
 }
 

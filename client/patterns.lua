@@ -71,52 +71,50 @@ function runEnvirementLight(k, extra)
 end
 
 local advisorAllow = 1
-function runPatternAdvisor(k, stage, pattern, cb) 
+function runPatternAdvisor(k, pattern, cb) 
 	Citizen.CreateThread(function()
 		if (not IsEntityDead(k) and DoesEntityExist(k)) then
-			if (canUseAdvisorStageThree(k) or (stage == 1 or stage == 2)) then
-	        	SetVehicleAutoRepairDisabled(k, true)
+        	SetVehicleAutoRepairDisabled(k, true)
 
-				local max = 0
-				local count = 1
+			local max = 0
+			local count = 1
 
-				for k,v in pairs(els_patterns.advisors[pattern].stages) do
-					max = max + 1
-				end
+			for k,v in pairs(els_patterns.advisors[pattern].stages) do
+				max = max + 1
+			end
 
-				local lastSpeed = els_patterns.advisors[pattern].speed
-				local rate = fps / (fps * 60 / lastSpeed)
+			local lastSpeed = els_patterns.advisors[pattern].speed
+			local rate = fps / (fps * 60 / lastSpeed)
 
-				if (rate < 1) then rate = Ceil(rate) else rate = Floor(rate) end
+			if (rate < 1) then rate = Ceil(rate) else rate = Floor(rate) end
 
-				if (rate == advisorAllow) then
-					advisorAllow = 1
+			if (rate == advisorAllow) then
+				advisorAllow = 1
 
-					cb(false)
-					while count <= max do
+				cb(false)
+				while count <= max do
 
-						for i=1,12 do
-							if els_patterns.advisors[pattern].stages[count][i] ~= nil then
-								setExtraState(k, i, els_patterns.advisors[pattern].stages[count][i])
-							end
+					for i=1,12 do
+						if els_patterns.advisors[pattern].stages[count][i] ~= nil then
+							setExtraState(k, i, els_patterns.advisors[pattern].stages[count][i])
 						end
-
-						if els_patterns.advisors[pattern].stages[count].speed ~= nil then
-							lastSpeed = els_patterns.advisors[pattern].stages[count].speed
-						end
-						
-						if(count == max) then break end
-
-						Wait(lastSpeed)
-						count = count + 1
 					end
 
-					cb(true)
-				elseif (advisorAllow > rate) then
-					advisorAllow = 1
-				else
-					advisorAllow = advisorAllow + 1
+					if els_patterns.advisors[pattern].stages[count].speed ~= nil then
+						lastSpeed = els_patterns.advisors[pattern].stages[count].speed
+					end
+					
+					if(count == max) then break end
+
+					Wait(lastSpeed)
+					count = count + 1
 				end
+
+				cb(true)
+			elseif (advisorAllow > rate) then
+				advisorAllow = 1
+			else
+				advisorAllow = advisorAllow + 1
 			end
 		end
 	end)
