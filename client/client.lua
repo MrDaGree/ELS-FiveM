@@ -55,9 +55,19 @@ AddEventHandler("els:changeLightStage_c", function(sender, stage, advisor, prim,
                 elsVehs[vehNetID].stage = stage
                 if (stage == 1) then
                     elsVehs[vehNetID].advisor = true
+                    elsVehs[vehNetID].secondary = false
                 elseif (stage == 2) then
+                    elsVehs[vehNetID].advisor = true
                     elsVehs[vehNetID].secondary = true
+                    elsVehs[vehNetID].primary = false
                 elseif (stage == 3) then
+                    if (doesVehicleHaveTrafficAdvisor(GetVehiclePedIsUsing(GetPlayerPed(-1)))) then
+                        if canUseAdvisorStageThree(vehNetID) then
+                            elsVehs[vehNetID].advisor = true
+                        end
+                    end
+
+                    elsVehs[vehNetID].secondary = true
                     elsVehs[vehNetID].primary = true
                 else
                     elsVehs[vehNetID].advisor = false
@@ -72,9 +82,19 @@ AddEventHandler("els:changeLightStage_c", function(sender, stage, advisor, prim,
                 elsVehs[vehNetID].stage = stage
                 if (stage == 1) then
                     elsVehs[vehNetID].advisor = true
+                    elsVehs[vehNetID].secondary = false
                 elseif (stage == 2) then
+                    elsVehs[vehNetID].advisor = true
                     elsVehs[vehNetID].secondary = true
+                    elsVehs[vehNetID].primary = false
                 elseif (stage == 3) then
+                    if (doesVehicleHaveTrafficAdvisor(GetVehiclePedIsUsing(GetPlayerPed(-1)))) then
+                        if canUseAdvisorStageThree(vehNetID) then
+                            elsVehs[vehNetID].advisor = true
+                        end
+                    end
+
+                    elsVehs[vehNetID].secondary = true
                     elsVehs[vehNetID].primary = true
                 else
                     elsVehs[vehNetID].advisor = false
@@ -218,8 +238,27 @@ AddEventHandler("els:setHornState_c", function(sender, newstate)
     end
 end)
 
+RegisterNetEvent("els:setSceneLightState_c")
+AddEventHandler("els:setSceneLightState_c", function(sender)
+    local player_s = GetPlayerFromServerId(sender)
+    local ped_s = GetPlayerPed(player_s)
+    if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
+        if IsPedInAnyVehicle(ped_s, false) then
+            local veh = GetVehiclePedIsUsing(ped_s)
+            if(elsVehs[veh] == nil) then
+                changeLightStage(0, 1, 1, 1)
+            end
+            if IsVehicleExtraTurnedOn(veh, 12) then
+                setExtraState(veh, 12, 1)
+            else
+                setExtraState(veh, 12, 0)
+            end
+        end
+    end
+end)
+
 RegisterNetEvent("els:setTakedownState_c")
-AddEventHandler("els:setTakedownState_c", function(sender, newstate)
+AddEventHandler("els:setTakedownState_c", function(sender)
     local player_s = GetPlayerFromServerId(sender)
     local ped_s = GetPlayerPed(player_s)
     if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
@@ -772,10 +811,11 @@ Citizen.CreateThread(function()
                     DisableControlAction(0, keyboard.siren.dual_two, true)
                     DisableControlAction(0, keyboard.siren.dual_three, true)
 
-                    DisableControlAction(0, 311, true)
-                    DisableControlAction(0, 7, true)
+                    DisableControlAction(0, 140, true)
+                    DisableControlAction(0, 246, true)
+                    DisableControlAction(0, 303, true)
 
-                    if IsDisabledControlJustPressed(0, 311) then
+                    if IsDisabledControlJustPressed(0, 140) then
                         if playButtonPressSounds then
                             PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
                         end
@@ -790,7 +830,7 @@ Citizen.CreateThread(function()
                         end
                     end
 
-                    if IsDisabledControlJustPressed(0, 7) then
+                    if IsDisabledControlJustPressed(0, 246) then
                         if playButtonPressSounds then
                             PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
                         end
@@ -802,6 +842,23 @@ Citizen.CreateThread(function()
                             end
                         else
                             TriggerServerEvent("els:changePartState_s", "secondary", true)
+                        end
+                    end
+
+                    if (doesVehicleHaveTrafficAdvisor(GetVehiclePedIsUsing(GetPlayerPed(-1)))) then
+                        if IsDisabledControlJustPressed(0, 303) then
+                            if playButtonPressSounds then
+                                PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+                            end
+                            if elsVehs[GetVehiclePedIsUsing(GetPlayerPed(-1))] ~= nil then
+                                if elsVehs[GetVehiclePedIsUsing(GetPlayerPed(-1))].advisor then
+                                    TriggerServerEvent("els:changePartState_s", "advisor", false)
+                                else
+                                    TriggerServerEvent("els:changePartState_s", "advisor", true)
+                                end
+                            else
+                                TriggerServerEvent("els:changePartState_s", "advisor", true)
+                            end
                         end
                     end
 
@@ -927,22 +984,25 @@ Citizen.CreateThread(function()
                         end
                     end
 
+                    if IsDisabledControlJustReleased(0, keyboard.guiKey) then
+                        if playButtonPressSounds then
+                            PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+                        end
+                        if guiEnabled then
+                            guiEnabled = false
+                        else
+                            guiEnabled = true
+                        end
+                    end
                     if IsDisabledControlPressed(0, keyboard.modifyKey) then
-                        DisableControlAction(0, keyboard.takedown, true)
-                        DisableControlAction(0, keyboard.guiKey, true)
-
-                        if IsDisabledControlPressed(0, keyboard.modifyKey) and IsDisabledControlJustReleased(0, keyboard.guiKey) then
+                        if IsDisabledControlJustReleased(0, keyboard.takedown) then
                             if playButtonPressSounds then
                                 PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
                             end
-                            if guiEnabled then
-                                guiEnabled = false
-                            else
-                                guiEnabled = true
-                            end
+                            TriggerServerEvent("els:setSceneLightState_s")
                         end
-
-                        if IsDisabledControlPressed(0, keyboard.modifyKey) and IsDisabledControlJustReleased(0, keyboard.takedown) then
+                    else
+                        if IsDisabledControlJustReleased(0, keyboard.takedown) then
                             if playButtonPressSounds then
                                 PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
                             end
@@ -1120,179 +1180,179 @@ Citizen.CreateThread(function()
                     (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), 0) == GetPlayerPed(-1)) then
                     local vehN = checkCarHash(GetVehiclePedIsUsing(GetPlayerPed(-1)))
 
-                    _DrawRect(0.85 + panelOffsetX, 0.91 + panelOffsetY, 0.24, 0.11, 0, 0, 0, 200, 0)
+                    _DrawRect(0.85 + panelOffsetX, 0.905 + panelOffsetY, 0.26, 0.13, 0, 0, 0, 200, 0)
 
                     if (getVehicleLightStage(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 1) then
-                        _DrawRect(0.75 + panelOffsetX, 0.88 + panelOffsetY, 0.03, 0.02, 173, 0, 0, 225, 0)
-                        Draw("1", 0, 0, 0, 255, 0.75 + panelOffsetX, 0.87 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+                        _DrawRect(0.784 + panelOffsetX, 0.858 + panelOffsetY, 0.03, 0.02, 173, 0, 0, 225, 0)
+                        Draw("1", 0, 0, 0, 255, 0.784 + panelOffsetX, 0.848 + panelOffsetY, 0.25, 0.25, 1, true, 0)
                     else
-                        _DrawRect(0.75 + panelOffsetX, 0.88 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
-                        Draw("1", 0, 0, 0, 255, 0.75 + panelOffsetX, 0.87 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+                        _DrawRect(0.784 + panelOffsetX, 0.858 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
+                        Draw("1", 0, 0, 0, 255, 0.784 + panelOffsetX, 0.848 + panelOffsetY, 0.25, 0.25, 1, true, 0)
                     end
 
                     if (getVehicleLightStage(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 2) then
-                        _DrawRect(0.784 + panelOffsetX, 0.88 + panelOffsetY, 0.03, 0.02, 173, 0, 0, 225, 0)
-                        Draw("2", 0, 0, 0, 255, 0.784 + panelOffsetX, 0.87 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+                        _DrawRect(0.817 + panelOffsetX, 0.858 + panelOffsetY, 0.03, 0.02, 173, 0, 0, 225, 0)
+                        Draw("2", 0, 0, 0, 255, 0.817 + panelOffsetX, 0.848 + panelOffsetY, 0.25, 0.25, 1, true, 0)
                     else
-                        _DrawRect(0.784 + panelOffsetX, 0.88 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
-                        Draw("2", 0, 0, 0, 255, 0.784 + panelOffsetX, 0.87 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+                        _DrawRect(0.817 + panelOffsetX, 0.858 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
+                        Draw("2", 0, 0, 0, 255, 0.817 + panelOffsetX, 0.848 + panelOffsetY, 0.25, 0.25, 1, true, 0)
                     end
 
                     if (getVehicleLightStage(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 3) then
-                        _DrawRect(0.817 + panelOffsetX, 0.88 + panelOffsetY, 0.03, 0.02, 173, 0, 0, 225, 0)
-                        Draw("3", 0, 0, 0, 255, 0.817 + panelOffsetX, 0.87 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+                        _DrawRect(0.850 + panelOffsetX, 0.858 + panelOffsetY, 0.03, 0.02, 173, 0, 0, 225, 0)
+                        Draw("3", 0, 0, 0, 255, 0.850 + panelOffsetX, 0.848 + panelOffsetY, 0.25, 0.25, 1, true, 0)
                     else
-                        _DrawRect(0.817 + panelOffsetX, 0.88 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
-                        Draw("3", 0, 0, 0, 255, 0.817 + panelOffsetX, 0.87 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+                        _DrawRect(0.850 + panelOffsetX, 0.858 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
+                        Draw("3", 0, 0, 0, 255, 0.850 + panelOffsetX, 0.848 + panelOffsetY, 0.25, 0.25, 1, true, 0)
                     end
 
-                    _DrawRect(0.854 + panelOffsetX, 0.88 + panelOffsetY, 0.035, 0.02, 186, 186, 186, 225, 0)
-                    Draw("PRIM " .. tostring(lightPatternPrim), 0, 0, 0, 255, 0.854 + panelOffsetX, 0.87 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+                    _DrawRect(0.75 + panelOffsetX, 0.89 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
+                    Draw("PRIM " .. tostring(lightPatternPrim), 0, 0, 0, 255, 0.75 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 
-                    _DrawRect(0.854 + panelOffsetX, 0.91 + panelOffsetY, 0.035, 0.02, 186, 186, 186, 225, 0)
-                    Draw("SEC " .. tostring(lightPatternSec), 0, 0, 0, 255, 0.854 + panelOffsetX, 0.9 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+                    _DrawRect(0.784 + panelOffsetX, 0.89 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
+                    Draw("SEC " .. tostring(lightPatternSec), 0, 0, 0, 255, 0.784 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 
-                    if (doesVehicleHaveTrafficAdvisor(GetVehiclePedIsUsing(GetPlayerPed(-1)))) then
-                        _DrawRect(0.854 + panelOffsetX, 0.94 + panelOffsetY, 0.035, 0.02, 186, 186, 186, 225, 0)
-                        Draw("ADV " .. tostring(advisorPatternSelectedIndex), 0, 0, 0, 255, 0.854 + panelOffsetX, 0.93 + panelOffsetY, 0.25, 0.25, 1, true, 0)
-                    end
+                    _DrawRect(0.817 + panelOffsetX, 0.89 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
+                    Draw("WRN " .. tostring(advisorPatternSelectedIndex), 0, 0, 0, 255, 0.817 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 
                     if (h_horn_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 1) then
-                        _DrawRect(0.75 + panelOffsetX, 0.91 + panelOffsetY, 0.03, 0.02, 0, 173, 0, 225, 0)
-                        Draw("HORN", 0, 0, 0, 255, 0.75 + panelOffsetX, 0.9 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+                        _DrawRect(0.75 + panelOffsetX, 0.92 + panelOffsetY, 0.03, 0.02, 0, 173, 0, 225, 0)
+                        Draw("HORN", 0, 0, 0, 255, 0.75 + panelOffsetX, 0.91 + panelOffsetY, 0.25, 0.25, 1, true, 0)
                     else
-                        _DrawRect(0.75 + panelOffsetX, 0.91 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
-                        Draw("HORN", 0, 0, 0, 255, 0.75 + panelOffsetX, 0.9 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+                        _DrawRect(0.75 + panelOffsetX, 0.92 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
+                        Draw("HORN", 0, 0, 0, 255, 0.75 + panelOffsetX, 0.91 + panelOffsetY, 0.25, 0.25, 1, true, 0)
                     end
 
                     if (dualEnable[GetVehiclePedIsUsing(GetPlayerPed(-1))]) then
-                        _DrawRect(0.784 + panelOffsetX, 0.91 + panelOffsetY, 0.03, 0.02, 0, 213, 255, 225, 0)
-                        Draw("DUAL", 0, 0, 0, 255, 0.784 + panelOffsetX, 0.9 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+                        _DrawRect(0.784 + panelOffsetX, 0.92 + panelOffsetY, 0.03, 0.02, 0, 213, 255, 225, 0)
+                        Draw("DUAL", 0, 0, 0, 255, 0.784 + panelOffsetX, 0.91 + panelOffsetY, 0.25, 0.25, 1, true, 0)
                     else
-                        _DrawRect(0.784 + panelOffsetX, 0.91 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
-                        Draw("DUAL", 0, 0, 0, 255, 0.784 + panelOffsetX, 0.9 + panelOffsetY, 0.25, 0.25, 1, true, 0)
-                    end
-
-                    if (IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 11)) then
-                        _DrawRect(0.817 + panelOffsetX, 0.91 + panelOffsetY, 0.03, 0.02, 255, 0, 0, 255, 0)
-                        Draw("TKD", 0, 0, 0, 255, 0.817 + panelOffsetX, 0.9 + panelOffsetY, 0.25, 0.25, 1, true, 0)
-                    else
-                        _DrawRect(0.817 + panelOffsetX, 0.91 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
-                        Draw("TKD", 0, 0, 0, 255, 0.817 + panelOffsetX, 0.9 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+                        _DrawRect(0.784 + panelOffsetX, 0.92 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
+                        Draw("DUAL", 0, 0, 0, 255, 0.784 + panelOffsetX, 0.91 + panelOffsetY, 0.25, 0.25, 1, true, 0)
                     end
 
                     if (m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 1) then
                         if (d_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 1) then
-                            _DrawRect(0.743 + panelOffsetX, 0.94 + panelOffsetY, 0.015, 0.02, 0, 173, 0, 225, 0)
+                            _DrawRect(0.743 + panelOffsetX, 0.95 + panelOffsetY, 0.015, 0.02, 0, 173, 0, 225, 0)
                         else
-                            _DrawRect(0.75 + panelOffsetX, 0.94 + panelOffsetY, 0.03, 0.02, 0, 173, 0, 225, 0)
+                            _DrawRect(0.75 + panelOffsetX, 0.95 + panelOffsetY, 0.03, 0.02, 0, 173, 0, 225, 0)
                         end
                     else
-                        _DrawRect(0.75 + panelOffsetX, 0.94 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
+                        _DrawRect(0.75 + panelOffsetX, 0.95 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
                     end
 
                     if (d_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 1) then
                         if (m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 1) then
-                            _DrawRect(0.758 + panelOffsetX, 0.94 + panelOffsetY, 0.015, 0.02, 0, 213, 255, 225, 2)
+                            _DrawRect(0.758 + panelOffsetX, 0.95 + panelOffsetY, 0.015, 0.02, 0, 213, 255, 225, 2)
                         else
-                            _DrawRect(0.75 + panelOffsetX, 0.94 + panelOffsetY, 0.03, 0.02, 0, 213, 255, 225, 0)
+                            _DrawRect(0.75 + panelOffsetX, 0.95 + panelOffsetY, 0.03, 0.02, 0, 213, 255, 225, 0)
                         end
                     end
                     
-                    Draw("MAIN", 0, 0, 0, 255, 0.75 + panelOffsetX, 0.93 + panelOffsetY, 0.25, 0.25, 3, true, 0)
+                    Draw("MAIN", 0, 0, 0, 255, 0.75 + panelOffsetX, 0.94 + panelOffsetY, 0.25, 0.25, 3, true, 0)
 
                     if (m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 2) then
                         if (d_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 2) then
-                            _DrawRect(0.777 + panelOffsetX, 0.94 + panelOffsetY, 0.015, 0.02, 0, 173, 0, 225, 0)
+                            _DrawRect(0.777 + panelOffsetX, 0.95 + panelOffsetY, 0.015, 0.02, 0, 173, 0, 225, 0)
                         else
-                            _DrawRect(0.784 + panelOffsetX, 0.94 + panelOffsetY, 0.03, 0.02, 0, 173, 0, 225, 0)
+                            _DrawRect(0.784 + panelOffsetX, 0.95 + panelOffsetY, 0.03, 0.02, 0, 173, 0, 225, 0)
                         end
                     else
-                        _DrawRect(0.784 + panelOffsetX, 0.94 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
+                        _DrawRect(0.784 + panelOffsetX, 0.95 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
                     end
 
                     if (d_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 2) then
                         if (m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 2) then
-                            _DrawRect(0.792 + panelOffsetX, 0.94 + panelOffsetY, 0.015, 0.02, 0, 213, 255, 225, 2)
+                            _DrawRect(0.792 + panelOffsetX, 0.95 + panelOffsetY, 0.015, 0.02, 0, 213, 255, 225, 2)
                         else
-                            _DrawRect(0.784 + panelOffsetX, 0.94 + panelOffsetY, 0.03, 0.02, 0, 213, 255, 255, 0)
+                            _DrawRect(0.784 + panelOffsetX, 0.95 + panelOffsetY, 0.03, 0.02, 0, 213, 255, 255, 0)
                         end
                     end
 
-                    Draw("SEC", 0, 0, 0, 255, 0.784 + panelOffsetX, 0.93 + panelOffsetY, 0.25, 0.25, 3, true, 0)
+                    Draw("SEC", 0, 0, 0, 255, 0.784 + panelOffsetX, 0.94 + panelOffsetY, 0.25, 0.25, 3, true, 0)
 
                     if (m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 3) then
                         if (d_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 3) then
-                            _DrawRect(0.81 + panelOffsetX, 0.94 + panelOffsetY, 0.015, 0.02, 0, 173, 0, 225, 0)
+                            _DrawRect(0.81 + panelOffsetX, 0.95 + panelOffsetY, 0.015, 0.02, 0, 173, 0, 225, 0)
                         else
-                            _DrawRect(0.817 + panelOffsetX, 0.94 + panelOffsetY, 0.03, 0.02, 0, 173, 0, 225, 0)
+                            _DrawRect(0.817 + panelOffsetX, 0.95 + panelOffsetY, 0.03, 0.02, 0, 173, 0, 225, 0)
                         end
                     else
-                        _DrawRect(0.817 + panelOffsetX, 0.94 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
+                        _DrawRect(0.817 + panelOffsetX, 0.95 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
                     end
 
                     if (d_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 3) then
                         if (m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 3) then
-                            _DrawRect(0.823 + panelOffsetX, 0.94 + panelOffsetY, 0.015, 0.02, 0, 213, 255, 225, 2)
+                            _DrawRect(0.823 + panelOffsetX, 0.95 + panelOffsetY, 0.015, 0.02, 0, 213, 255, 225, 2)
                         else
-                            _DrawRect(0.817 + panelOffsetX, 0.94 + panelOffsetY, 0.03, 0.02, 0, 213, 255, 255, 0)
+                            _DrawRect(0.817 + panelOffsetX, 0.95 + panelOffsetY, 0.03, 0.02, 0, 213, 255, 255, 0)
                         end
                     end
 
-                    Draw("AUX", 0, 0, 0, 255, 0.817 + panelOffsetX, 0.93 + panelOffsetY, 0.25, 0.25, 3, true, 0)
+                    Draw("AUX", 0, 0, 0, 255, 0.817 + panelOffsetX, 0.94 + panelOffsetY, 0.25, 0.25, 3, true, 0)
 
-                    if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 7)) then
-                        _DrawRect(0.9 + panelOffsetX, 0.94 + panelOffsetY, 0.015, 0.015, els_Vehicles[vehN].extras[7].env_color.r, els_Vehicles[vehN].extras[7].env_color.g, els_Vehicles[vehN].extras[7].env_color.b, 225, 0)
+                    if (IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 11)) then
+                        _DrawRect(0.88 + panelOffsetX, 0.911 + panelOffsetY, 0.015, 0.005, 255, 255, 255, 225, 0)
+                        _DrawRect(0.9 + panelOffsetX, 0.911 + panelOffsetY, 0.015, 0.005, 255, 255, 255, 225, 0)
                     else
-                        _DrawRect(0.9 + panelOffsetX, 0.94 + panelOffsetY, 0.015, 0.015, 186, 186, 186, 225, 0)
+                        _DrawRect(0.88 + panelOffsetX, 0.911 + panelOffsetY, 0.015, 0.005, 186, 186, 186, 225, 0)
+                        _DrawRect(0.9 + panelOffsetX, 0.911 + panelOffsetY, 0.015, 0.005, 186, 186, 186, 225, 0)
                     end
 
-                    if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 8)) then
-                        _DrawRect(0.92 + panelOffsetX, 0.94 + panelOffsetY, 0.015, 0.015, els_Vehicles[vehN].extras[8].env_color.r, els_Vehicles[vehN].extras[8].env_color.g, els_Vehicles[vehN].extras[8].env_color.b, 225, 0)
+                    if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 7)) then
+                        _DrawRect(0.87 + panelOffsetX, 0.95 + panelOffsetY, 0.015, 0.015, els_Vehicles[vehN].extras[7].env_color.r, els_Vehicles[vehN].extras[7].env_color.g, els_Vehicles[vehN].extras[7].env_color.b, 225, 0)
                     else
-                        _DrawRect(0.92 + panelOffsetX, 0.94 + panelOffsetY, 0.015, 0.015, 186, 186, 186, 225, 0)
+                        _DrawRect(0.87 + panelOffsetX, 0.95 + panelOffsetY, 0.015, 0.015, 186, 186, 186, 225, 0)
+                    end
+
+                    if doesVehicleHaveTrafficAdvisor(GetVehiclePedIsUsing(GetPlayerPed(-1))) then
+                        if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 8)) then
+                            _DrawRect(0.89 + panelOffsetX, 0.95 + panelOffsetY, 0.015, 0.015, els_Vehicles[vehN].extras[8].env_color.r, els_Vehicles[vehN].extras[8].env_color.g, els_Vehicles[vehN].extras[8].env_color.b, 225, 0)
+                        else
+                            _DrawRect(0.89 + panelOffsetX, 0.95 + panelOffsetY, 0.015, 0.015, 186, 186, 186, 225, 0)
+                        end
                     end
 
                     if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 9)) then
-                        _DrawRect(0.94 + panelOffsetX, 0.94 + panelOffsetY, 0.015, 0.015, els_Vehicles[vehN].extras[9].env_color.r, els_Vehicles[vehN].extras[9].env_color.g, els_Vehicles[vehN].extras[9].env_color.b, 225, 0)
+                        _DrawRect(0.91 + panelOffsetX, 0.95 + panelOffsetY, 0.015, 0.015, els_Vehicles[vehN].extras[9].env_color.r, els_Vehicles[vehN].extras[9].env_color.g, els_Vehicles[vehN].extras[9].env_color.b, 225, 0)
                     else
-                        _DrawRect(0.94 + panelOffsetX, 0.94 + panelOffsetY, 0.015, 0.015, 186, 186, 186, 225, 0)
+                        _DrawRect(0.91 + panelOffsetX, 0.95 + panelOffsetY, 0.015, 0.015, 186, 186, 186, 225, 0)
                     end
 
                     if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 1)) then
-                        _DrawRect(0.89 + panelOffsetX, 0.92 + panelOffsetY, 0.015, 0.015, els_Vehicles[vehN].extras[1].env_color.r, els_Vehicles[vehN].extras[1].env_color.g, els_Vehicles[vehN].extras[1].env_color.b, 225, 0)
+                        _DrawRect(0.86 + panelOffsetX, 0.93 + panelOffsetY, 0.015, 0.015, els_Vehicles[vehN].extras[1].env_color.r, els_Vehicles[vehN].extras[1].env_color.g, els_Vehicles[vehN].extras[1].env_color.b, 225, 0)
                     else
-                        _DrawRect(0.89 + panelOffsetX, 0.92 + panelOffsetY, 0.015, 0.015, 186, 186, 186, 225, 0)
+                        _DrawRect(0.86 + panelOffsetX, 0.93 + panelOffsetY, 0.015, 0.015, 186, 186, 186, 225, 0)
                     end
 
                     if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 2)) then
-                        _DrawRect(0.91 + panelOffsetX, 0.92 + panelOffsetY, 0.015, 0.015, els_Vehicles[vehN].extras[2].env_color.r, els_Vehicles[vehN].extras[2].env_color.g, els_Vehicles[vehN].extras[2].env_color.b, 225, 0)
+                        _DrawRect(0.88 + panelOffsetX, 0.93 + panelOffsetY, 0.015, 0.015, els_Vehicles[vehN].extras[2].env_color.r, els_Vehicles[vehN].extras[2].env_color.g, els_Vehicles[vehN].extras[2].env_color.b, 225, 0)
                     else
-                        _DrawRect(0.91 + panelOffsetX, 0.92 + panelOffsetY, 0.015, 0.015, 186, 186, 186, 225, 0)
+                        _DrawRect(0.88 + panelOffsetX, 0.93 + panelOffsetY, 0.015, 0.015, 186, 186, 186, 225, 0)
                     end
 
                     if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 3)) then
-                        _DrawRect(0.93 + panelOffsetX, 0.92 + panelOffsetY, 0.015, 0.015, els_Vehicles[vehN].extras[3].env_color.r, els_Vehicles[vehN].extras[3].env_color.g, els_Vehicles[vehN].extras[3].env_color.b, 225, 0)
+                        _DrawRect(0.9 + panelOffsetX, 0.93 + panelOffsetY, 0.015, 0.015, els_Vehicles[vehN].extras[3].env_color.r, els_Vehicles[vehN].extras[3].env_color.g, els_Vehicles[vehN].extras[3].env_color.b, 225, 0)
                     else
-                        _DrawRect(0.93 + panelOffsetX, 0.92 + panelOffsetY, 0.015, 0.015, 186, 186, 186, 225, 0)
+                        _DrawRect(0.9 + panelOffsetX, 0.93 + panelOffsetY, 0.015, 0.015, 186, 186, 186, 225, 0)
                     end
 
                     if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 4)) then
-                        _DrawRect(0.95 + panelOffsetX, 0.92 + panelOffsetY, 0.015, 0.015, els_Vehicles[vehN].extras[4].env_color.r, els_Vehicles[vehN].extras[4].env_color.g, els_Vehicles[vehN].extras[4].env_color.b, 225, 0)
+                        _DrawRect(0.92 + panelOffsetX, 0.93 + panelOffsetY, 0.015, 0.015, els_Vehicles[vehN].extras[4].env_color.r, els_Vehicles[vehN].extras[4].env_color.g, els_Vehicles[vehN].extras[4].env_color.b, 225, 0)
                     else
-                        _DrawRect(0.95 + panelOffsetX, 0.92 + panelOffsetY, 0.015, 0.015, 186, 186, 186, 225, 0)
+                        _DrawRect(0.92 + panelOffsetX, 0.93 + panelOffsetY, 0.015, 0.015, 186, 186, 186, 225, 0)
                     end
 
                     if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 5)) then
-                        _DrawRect(0.91 + panelOffsetX, 0.885 + panelOffsetY, 0.015, 0.015, els_Vehicles[vehN].extras[5].env_color.r, els_Vehicles[vehN].extras[5].env_color.g, els_Vehicles[vehN].extras[5].env_color.b, 225, 0)
+                        _DrawRect(0.88 + panelOffsetX, 0.895 + panelOffsetY, 0.015, 0.015, els_Vehicles[vehN].extras[5].env_color.r, els_Vehicles[vehN].extras[5].env_color.g, els_Vehicles[vehN].extras[5].env_color.b, 225, 0)
                     else
-                        _DrawRect(0.91 + panelOffsetX, 0.885 + panelOffsetY, 0.015, 0.015, 186, 186, 186, 225, 0)
+                        _DrawRect(0.88 + panelOffsetX, 0.895 + panelOffsetY, 0.015, 0.015, 186, 186, 186, 225, 0)
                     end
 
                     if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 6)) then
-                        _DrawRect(0.93 + panelOffsetX, 0.885 + panelOffsetY, 0.015, 0.015, els_Vehicles[vehN].extras[6].env_color.r, els_Vehicles[vehN].extras[6].env_color.g, els_Vehicles[vehN].extras[6].env_color.b, 225, 0)
+                        _DrawRect(0.9 + panelOffsetX, 0.895 + panelOffsetY, 0.015, 0.015, els_Vehicles[vehN].extras[6].env_color.r, els_Vehicles[vehN].extras[6].env_color.g, els_Vehicles[vehN].extras[6].env_color.b, 225, 0)
                     else
-                        _DrawRect(0.93 + panelOffsetX, 0.885 + panelOffsetY, 0.015, 0.015, 186, 186, 186, 225, 0)
+                        _DrawRect(0.9 + panelOffsetX, 0.895 + panelOffsetY, 0.015, 0.015, 186, 186, 186, 225, 0)
                     end
                 end
             end
@@ -1302,179 +1362,179 @@ Citizen.CreateThread(function()
                     (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), 0) == GetPlayerPed(-1)) then
                     local vehN = checkCarHash(GetVehiclePedIsUsing(GetPlayerPed(-1)))
 
-                    _DrawRect(0.85, 0.91, 0.24, 0.11, 0, 0, 0, 200, 0)
+                    _DrawRect(0.85 , 0.905 , 0.26, 0.13, 0, 0, 0, 200, 0)
 
                     if (getVehicleLightStage(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 1) then
-                        _DrawRect(0.75, 0.88, 0.03, 0.02, 173, 0, 0, 225, 0)
-                        Draw("1", 0, 0, 0, 255, 0.75, 0.87, 0.25, 0.25, 1, true, 0)
+                        _DrawRect(0.784 , 0.858 , 0.03, 0.02, 173, 0, 0, 225, 0)
+                        Draw("1", 0, 0, 0, 255, 0.784 , 0.848 , 0.25, 0.25, 1, true, 0)
                     else
-                        _DrawRect(0.75, 0.88, 0.03, 0.02, 186, 186, 186, 225, 0)
-                        Draw("1", 0, 0, 0, 255, 0.75, 0.87, 0.25, 0.25, 1, true, 0)
+                        _DrawRect(0.784 , 0.858 , 0.03, 0.02, 186, 186, 186, 225, 0)
+                        Draw("1", 0, 0, 0, 255, 0.784 , 0.848 , 0.25, 0.25, 1, true, 0)
                     end
 
                     if (getVehicleLightStage(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 2) then
-                        _DrawRect(0.784, 0.88, 0.03, 0.02, 173, 0, 0, 225, 0)
-                        Draw("2", 0, 0, 0, 255, 0.784, 0.87, 0.25, 0.25, 1, true, 0)
+                        _DrawRect(0.817 , 0.858 , 0.03, 0.02, 173, 0, 0, 225, 0)
+                        Draw("2", 0, 0, 0, 255, 0.817 , 0.848 , 0.25, 0.25, 1, true, 0)
                     else
-                        _DrawRect(0.784, 0.88, 0.03, 0.02, 186, 186, 186, 225, 0)
-                        Draw("2", 0, 0, 0, 255, 0.784, 0.87, 0.25, 0.25, 1, true, 0)
+                        _DrawRect(0.817 , 0.858 , 0.03, 0.02, 186, 186, 186, 225, 0)
+                        Draw("2", 0, 0, 0, 255, 0.817 , 0.848 , 0.25, 0.25, 1, true, 0)
                     end
 
                     if (getVehicleLightStage(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 3) then
-                        _DrawRect(0.817, 0.88, 0.03, 0.02, 173, 0, 0, 225, 0)
-                        Draw("3", 0, 0, 0, 255, 0.817, 0.87, 0.25, 0.25, 1, true, 0)
+                        _DrawRect(0.850 , 0.858 , 0.03, 0.02, 173, 0, 0, 225, 0)
+                        Draw("3", 0, 0, 0, 255, 0.850 , 0.848 , 0.25, 0.25, 1, true, 0)
                     else
-                        _DrawRect(0.817, 0.88, 0.03, 0.02, 186, 186, 186, 225, 0)
-                        Draw("3", 0, 0, 0, 255, 0.817, 0.87, 0.25, 0.25, 1, true, 0)
+                        _DrawRect(0.850 , 0.858 , 0.03, 0.02, 186, 186, 186, 225, 0)
+                        Draw("3", 0, 0, 0, 255, 0.850 , 0.848 , 0.25, 0.25, 1, true, 0)
                     end
 
-                    _DrawRect(0.854, 0.88, 0.035, 0.02, 186, 186, 186, 225, 0)
-                    Draw("PRIM " .. tostring(lightPatternPrim), 0, 0, 0, 255, 0.854, 0.87, 0.25, 0.25, 1, true, 0)
+                    _DrawRect(0.75 , 0.89 , 0.03, 0.02, 186, 186, 186, 225, 0)
+                    Draw("PRIM " .. tostring(lightPatternPrim), 0, 0, 0, 255, 0.75 , 0.88 , 0.25, 0.25, 1, true, 0)
 
-                    _DrawRect(0.854, 0.91, 0.035, 0.02, 186, 186, 186, 225, 0)
-                    Draw("SEC " .. tostring(lightPatternSec), 0, 0, 0, 255, 0.854, 0.9, 0.25, 0.25, 1, true, 0)
+                    _DrawRect(0.784 , 0.89 , 0.03, 0.02, 186, 186, 186, 225, 0)
+                    Draw("SEC " .. tostring(lightPatternSec), 0, 0, 0, 255, 0.784 , 0.88 , 0.25, 0.25, 1, true, 0)
 
-                    if (doesVehicleHaveTrafficAdvisor(GetVehiclePedIsUsing(GetPlayerPed(-1)))) then
-                        _DrawRect(0.854, 0.94, 0.035, 0.02, 186, 186, 186, 225, 0)
-                        Draw("ADV " .. tostring(advisorPatternSelectedIndex), 0, 0, 0, 255, 0.854, 0.93, 0.25, 0.25, 1, true, 0)
-                    end
+                    _DrawRect(0.817 , 0.89 , 0.03, 0.02, 186, 186, 186, 225, 0)
+                    Draw("WRN " .. tostring(advisorPatternSelectedIndex), 0, 0, 0, 255, 0.817 , 0.88 , 0.25, 0.25, 1, true, 0)
 
                     if (h_horn_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 1) then
-                        _DrawRect(0.75, 0.91, 0.03, 0.02, 0, 173, 0, 225, 0)
-                        Draw("HORN", 0, 0, 0, 255, 0.75, 0.9, 0.25, 0.25, 1, true, 0)
+                        _DrawRect(0.75 , 0.92 , 0.03, 0.02, 0, 173, 0, 225, 0)
+                        Draw("HORN", 0, 0, 0, 255, 0.75 , 0.91 , 0.25, 0.25, 1, true, 0)
                     else
-                        _DrawRect(0.75, 0.91, 0.03, 0.02, 186, 186, 186, 225, 0)
-                        Draw("HORN", 0, 0, 0, 255, 0.75, 0.9, 0.25, 0.25, 1, true, 0)
+                        _DrawRect(0.75 , 0.92 , 0.03, 0.02, 186, 186, 186, 225, 0)
+                        Draw("HORN", 0, 0, 0, 255, 0.75 , 0.91 , 0.25, 0.25, 1, true, 0)
                     end
 
                     if (dualEnable[GetVehiclePedIsUsing(GetPlayerPed(-1))]) then
-                        _DrawRect(0.784, 0.91, 0.03, 0.02, 0, 213, 255, 225, 0)
-                        Draw("DUAL", 0, 0, 0, 255, 0.784, 0.9, 0.25, 0.25, 1, true, 0)
+                        _DrawRect(0.784 , 0.92 , 0.03, 0.02, 0, 213, 255, 225, 0)
+                        Draw("DUAL", 0, 0, 0, 255, 0.784 , 0.91 , 0.25, 0.25, 1, true, 0)
                     else
-                        _DrawRect(0.784, 0.91, 0.03, 0.02, 186, 186, 186, 225, 0)
-                        Draw("DUAL", 0, 0, 0, 255, 0.784, 0.9, 0.25, 0.25, 1, true, 0)
-                    end
-
-                    if (IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 11)) then
-                        _DrawRect(0.817, 0.91, 0.03, 0.02, 255, 0, 0, 255, 0)
-                        Draw("TKD", 0, 0, 0, 255, 0.817, 0.9, 0.25, 0.25, 1, true, 0)
-                    else
-                        _DrawRect(0.817, 0.91, 0.03, 0.02, 186, 186, 186, 225, 0)
-                        Draw("TKD", 0, 0, 0, 255, 0.817, 0.9, 0.25, 0.25, 1, true, 0)
+                        _DrawRect(0.784 , 0.92 , 0.03, 0.02, 186, 186, 186, 225, 0)
+                        Draw("DUAL", 0, 0, 0, 255, 0.784 , 0.91 , 0.25, 0.25, 1, true, 0)
                     end
 
                     if (m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 1) then
                         if (d_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 1) then
-                            _DrawRect(0.743, 0.94, 0.015, 0.02, 0, 173, 0, 225, 0)
+                            _DrawRect(0.743 , 0.95 , 0.015, 0.02, 0, 173, 0, 225, 0)
                         else
-                            _DrawRect(0.75, 0.94, 0.03, 0.02, 0, 173, 0, 225, 0)
+                            _DrawRect(0.75 , 0.95 , 0.03, 0.02, 0, 173, 0, 225, 0)
                         end
                     else
-                        _DrawRect(0.75, 0.94, 0.03, 0.02, 186, 186, 186, 225, 0)
+                        _DrawRect(0.75 , 0.95 , 0.03, 0.02, 186, 186, 186, 225, 0)
                     end
 
                     if (d_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 1) then
                         if (m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 1) then
-                            _DrawRect(0.758, 0.94, 0.015, 0.02, 0, 213, 255, 225, 2)
+                            _DrawRect(0.758 , 0.95 , 0.015, 0.02, 0, 213, 255, 225, 2)
                         else
-                            _DrawRect(0.75, 0.94, 0.03, 0.02, 0, 213, 255, 225, 0)
+                            _DrawRect(0.75 , 0.95 , 0.03, 0.02, 0, 213, 255, 225, 0)
                         end
                     end
                     
-                    Draw("MAIN", 0, 0, 0, 255, 0.75, 0.93, 0.25, 0.25, 3, true, 0)
+                    Draw("MAIN", 0, 0, 0, 255, 0.75 , 0.94 , 0.25, 0.25, 3, true, 0)
 
                     if (m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 2) then
                         if (d_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 2) then
-                            _DrawRect(0.777, 0.94, 0.015, 0.02, 0, 173, 0, 225, 0)
+                            _DrawRect(0.777 , 0.95 , 0.015, 0.02, 0, 173, 0, 225, 0)
                         else
-                            _DrawRect(0.784, 0.94, 0.03, 0.02, 0, 173, 0, 225, 0)
+                            _DrawRect(0.784 , 0.95 , 0.03, 0.02, 0, 173, 0, 225, 0)
                         end
                     else
-                        _DrawRect(0.784, 0.94, 0.03, 0.02, 186, 186, 186, 225, 0)
+                        _DrawRect(0.784 , 0.95 , 0.03, 0.02, 186, 186, 186, 225, 0)
                     end
 
                     if (d_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 2) then
                         if (m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 2) then
-                            _DrawRect(0.792, 0.94, 0.015, 0.02, 0, 213, 255, 225, 2)
+                            _DrawRect(0.792 , 0.95 , 0.015, 0.02, 0, 213, 255, 225, 2)
                         else
-                            _DrawRect(0.784, 0.94, 0.03, 0.02, 0, 213, 255, 255, 0)
+                            _DrawRect(0.784 , 0.95 , 0.03, 0.02, 0, 213, 255, 255, 0)
                         end
                     end
 
-                    Draw("SEC", 0, 0, 0, 255, 0.784, 0.93, 0.25, 0.25, 3, true, 0)
+                    Draw("SEC", 0, 0, 0, 255, 0.784 , 0.94 , 0.25, 0.25, 3, true, 0)
 
                     if (m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 3) then
                         if (d_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 3) then
-                            _DrawRect(0.81, 0.94, 0.015, 0.02, 0, 173, 0, 225, 0)
+                            _DrawRect(0.81 , 0.95 , 0.015, 0.02, 0, 173, 0, 225, 0)
                         else
-                            _DrawRect(0.817, 0.94, 0.03, 0.02, 0, 173, 0, 225, 0)
+                            _DrawRect(0.817 , 0.95 , 0.03, 0.02, 0, 173, 0, 225, 0)
                         end
                     else
-                        _DrawRect(0.817, 0.94, 0.03, 0.02, 186, 186, 186, 225, 0)
+                        _DrawRect(0.817 , 0.95 , 0.03, 0.02, 186, 186, 186, 225, 0)
                     end
 
                     if (d_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 3) then
                         if (m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 3) then
-                            _DrawRect(0.823, 0.94, 0.015, 0.02, 0, 213, 255, 225, 2)
+                            _DrawRect(0.823 , 0.95 , 0.015, 0.02, 0, 213, 255, 225, 2)
                         else
-                            _DrawRect(0.817, 0.94, 0.03, 0.02, 0, 213, 255, 255, 0)
+                            _DrawRect(0.817 , 0.95 , 0.03, 0.02, 0, 213, 255, 255, 0)
                         end
                     end
 
-                    Draw("AUX", 0, 0, 0, 255, 0.817, 0.93, 0.25, 0.25, 3, true, 0)
+                    Draw("AUX", 0, 0, 0, 255, 0.817 , 0.94 , 0.25, 0.25, 3, true, 0)
 
-                    if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 7)) then
-                        _DrawRect(0.9, 0.94, 0.015, 0.015, els_Vehicles[vehN].extras[7].env_color.r, els_Vehicles[vehN].extras[7].env_color.g, els_Vehicles[vehN].extras[7].env_color.b, 225, 0)
+                    if (IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 11)) then
+                        _DrawRect(0.88 , 0.911 , 0.015, 0.005, 255, 255, 255, 225, 0)
+                        _DrawRect(0.9 , 0.911 , 0.015, 0.005, 255, 255, 255, 225, 0)
                     else
-                        _DrawRect(0.9, 0.94, 0.015, 0.015, 186, 186, 186, 225, 0)
+                        _DrawRect(0.88 , 0.911 , 0.015, 0.005, 186, 186, 186, 225, 0)
+                        _DrawRect(0.9 , 0.911 , 0.015, 0.005, 186, 186, 186, 225, 0)
                     end
 
-                    if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 8)) then
-                        _DrawRect(0.92, 0.94, 0.015, 0.015, els_Vehicles[vehN].extras[8].env_color.r, els_Vehicles[vehN].extras[8].env_color.g, els_Vehicles[vehN].extras[8].env_color.b, 225, 0)
+                    if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 7)) then
+                        _DrawRect(0.87 , 0.95 , 0.015, 0.015, els_Vehicles[vehN].extras[7].env_color.r, els_Vehicles[vehN].extras[7].env_color.g, els_Vehicles[vehN].extras[7].env_color.b, 225, 0)
                     else
-                        _DrawRect(0.92, 0.94, 0.015, 0.015, 186, 186, 186, 225, 0)
+                        _DrawRect(0.87 , 0.95 , 0.015, 0.015, 186, 186, 186, 225, 0)
+                    end
+
+                    if doesVehicleHaveTrafficAdvisor(GetVehiclePedIsUsing(GetPlayerPed(-1))) then
+                        if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 8)) then
+                            _DrawRect(0.89 , 0.95 , 0.015, 0.015, els_Vehicles[vehN].extras[8].env_color.r, els_Vehicles[vehN].extras[8].env_color.g, els_Vehicles[vehN].extras[8].env_color.b, 225, 0)
+                        else
+                            _DrawRect(0.89 , 0.95 , 0.015, 0.015, 186, 186, 186, 225, 0)
+                        end
                     end
 
                     if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 9)) then
-                        _DrawRect(0.94, 0.94, 0.015, 0.015, els_Vehicles[vehN].extras[9].env_color.r, els_Vehicles[vehN].extras[9].env_color.g, els_Vehicles[vehN].extras[9].env_color.b, 225, 0)
+                        _DrawRect(0.91 , 0.95 , 0.015, 0.015, els_Vehicles[vehN].extras[9].env_color.r, els_Vehicles[vehN].extras[9].env_color.g, els_Vehicles[vehN].extras[9].env_color.b, 225, 0)
                     else
-                        _DrawRect(0.94, 0.94, 0.015, 0.015, 186, 186, 186, 225, 0)
+                        _DrawRect(0.91 , 0.95 , 0.015, 0.015, 186, 186, 186, 225, 0)
                     end
 
                     if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 1)) then
-                        _DrawRect(0.89, 0.92, 0.015, 0.015, els_Vehicles[vehN].extras[1].env_color.r, els_Vehicles[vehN].extras[1].env_color.g, els_Vehicles[vehN].extras[1].env_color.b, 225, 0)
+                        _DrawRect(0.86 , 0.93 , 0.015, 0.015, els_Vehicles[vehN].extras[1].env_color.r, els_Vehicles[vehN].extras[1].env_color.g, els_Vehicles[vehN].extras[1].env_color.b, 225, 0)
                     else
-                        _DrawRect(0.89, 0.92, 0.015, 0.015, 186, 186, 186, 225, 0)
+                        _DrawRect(0.86 , 0.93 , 0.015, 0.015, 186, 186, 186, 225, 0)
                     end
 
                     if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 2)) then
-                        _DrawRect(0.91, 0.92, 0.015, 0.015, els_Vehicles[vehN].extras[2].env_color.r, els_Vehicles[vehN].extras[2].env_color.g, els_Vehicles[vehN].extras[2].env_color.b, 225, 0)
+                        _DrawRect(0.88 , 0.93 , 0.015, 0.015, els_Vehicles[vehN].extras[2].env_color.r, els_Vehicles[vehN].extras[2].env_color.g, els_Vehicles[vehN].extras[2].env_color.b, 225, 0)
                     else
-                        _DrawRect(0.91, 0.92, 0.015, 0.015, 186, 186, 186, 225, 0)
+                        _DrawRect(0.88 , 0.93 , 0.015, 0.015, 186, 186, 186, 225, 0)
                     end
 
                     if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 3)) then
-                        _DrawRect(0.93, 0.92, 0.015, 0.015, els_Vehicles[vehN].extras[3].env_color.r, els_Vehicles[vehN].extras[3].env_color.g, els_Vehicles[vehN].extras[3].env_color.b, 225, 0)
+                        _DrawRect(0.9 , 0.93 , 0.015, 0.015, els_Vehicles[vehN].extras[3].env_color.r, els_Vehicles[vehN].extras[3].env_color.g, els_Vehicles[vehN].extras[3].env_color.b, 225, 0)
                     else
-                        _DrawRect(0.93, 0.92, 0.015, 0.015, 186, 186, 186, 225, 0)
+                        _DrawRect(0.9 , 0.93 , 0.015, 0.015, 186, 186, 186, 225, 0)
                     end
 
                     if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 4)) then
-                        _DrawRect(0.95, 0.92, 0.015, 0.015, els_Vehicles[vehN].extras[4].env_color.r, els_Vehicles[vehN].extras[4].env_color.g, els_Vehicles[vehN].extras[4].env_color.b, 225, 0)
+                        _DrawRect(0.92 , 0.93 , 0.015, 0.015, els_Vehicles[vehN].extras[4].env_color.r, els_Vehicles[vehN].extras[4].env_color.g, els_Vehicles[vehN].extras[4].env_color.b, 225, 0)
                     else
-                        _DrawRect(0.95, 0.92, 0.015, 0.015, 186, 186, 186, 225, 0)
+                        _DrawRect(0.92 , 0.93 , 0.015, 0.015, 186, 186, 186, 225, 0)
                     end
 
                     if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 5)) then
-                        _DrawRect(0.91, 0.885, 0.015, 0.015, els_Vehicles[vehN].extras[5].env_color.r, els_Vehicles[vehN].extras[5].env_color.g, els_Vehicles[vehN].extras[5].env_color.b, 225, 0)
+                        _DrawRect(0.88 , 0.895 , 0.015, 0.015, els_Vehicles[vehN].extras[5].env_color.r, els_Vehicles[vehN].extras[5].env_color.g, els_Vehicles[vehN].extras[5].env_color.b, 225, 0)
                     else
-                        _DrawRect(0.91, 0.885, 0.015, 0.015, 186, 186, 186, 225, 0)
+                        _DrawRect(0.88 , 0.895 , 0.015, 0.015, 186, 186, 186, 225, 0)
                     end
 
                     if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 6)) then
-                        _DrawRect(0.93, 0.885, 0.015, 0.015, els_Vehicles[vehN].extras[6].env_color.r, els_Vehicles[vehN].extras[6].env_color.g, els_Vehicles[vehN].extras[6].env_color.b, 225, 0)
+                        _DrawRect(0.9 , 0.895 , 0.015, 0.015, els_Vehicles[vehN].extras[6].env_color.r, els_Vehicles[vehN].extras[6].env_color.g, els_Vehicles[vehN].extras[6].env_color.b, 225, 0)
                     else
-                        _DrawRect(0.93, 0.885, 0.015, 0.015, 186, 186, 186, 225, 0)
+                        _DrawRect(0.9 , 0.895 , 0.015, 0.015, 186, 186, 186, 225, 0)
                     end
                 end
             end
@@ -1522,17 +1582,23 @@ Citizen.CreateThread(function()
                                         if i == 11 then
                                             DrawSpotLightWithShadow(coords.x + els_Vehicles[vehN].extras[11].env_pos.x, coords.y + els_Vehicles[vehN].extras[11].env_pos.y, coords.z + els_Vehicles[vehN].extras[11].env_pos.z, rotX, rotY, rotZ, 255, 255, 255, 75.0, 2.0, 10.0, 20.0, 0.0, true)
                                         end
+                                        if i == 12 then
+                                            DrawLightWithRange(coords.x + els_Vehicles[vehN].extras[12].env_pos.x, coords.y + els_Vehicles[vehN].extras[12].env_pos.y, coords.z + els_Vehicles[vehN].extras[12].env_pos.z, 255, 255, 255, 50.0, envirementLightBrightness + 0.2)
+                                        end
                                     else
                                         if i == 11 then
                                             DrawSpotLightWithShadow(coords.x, coords.y, coords.z + 0.2, rotX, rotY, rotZ, 255, 255, 255, 75.0, 2.0, 10.0, 20.0, 0.0, true)
                                         end
-                                    end
-
-                                    if doesVehicleHaveTrafficAdvisor(k) then
-                                        if (i ~= 7 and i ~= 8 and i ~= 9) then
-                                            runEnvirementLightWithBrightness(k, i, 0.01)
+                                        if i == 12 then
+                                            DrawLightWithRange(coords.x, coords.y, coords.z, 255, 255, 255, 50.0, envirementLightBrightness + 0.2)
                                         end
                                     end
+
+                                    -- if doesVehicleHaveTrafficAdvisor(k) then
+                                    --     if (i == 7 or i == 8 or i == 9) then
+                                    --         runEnvirementLightWithBrightness(k, i, 0.01)
+                                    --     end
+                                    -- end
                                 end
                             end
                         end
@@ -1599,9 +1665,8 @@ Citizen.CreateThread(function()
                 else
                     setExtraState(elsVehicle, 5, 1)
                     setExtraState(elsVehicle, 6, 1)
-                    if not doesVehicleHaveTrafficAdvisor(k) and not v.advisor then
+                    if not doesVehicleHaveTrafficAdvisor(k) then
                         setExtraState(elsVehicle, 7, 1)
-                        setExtraState(elsVehicle, 8, 1)
                         setExtraState(elsVehicle, 9, 1)
                     end
                 end

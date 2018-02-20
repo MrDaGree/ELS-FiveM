@@ -1,7 +1,7 @@
 vehicleInfoTable = {}
 patternInfoTable = {}
 
-_VERSION = "1.1.3d"
+_VERSION = "1.1.3e"
 local updateAvailable = false
 
 if build == nil then
@@ -29,7 +29,8 @@ if build == nil then
 				print('\n       All good! You are all up to date.')
 			end
 
-			print('\n  This change is was made while listening to Nova by Ahrix')
+			print('\n  Whats the point of putting something funny')
+			print('             if its not even funny?')
 			print('-------------------------------------------------')
 		end)
 	end)
@@ -57,7 +58,8 @@ else
 				print('\n       All good! You are all up to date.')
 			end
 
-			print('\n  This change is was made while listening to Nova by Ahrix')
+			print('\n  Whats the point of putting something funny')
+			print('             if its not even funny?')
 			print('-------------------------------------------------')
 		end)
 	end)
@@ -567,5 +569,10 @@ end)
 
 RegisterServerEvent("els:setTakedownState_s")
 AddEventHandler("els:setTakedownState_s", function(state)
-	TriggerClientEvent("els:setTakedownState_c", -1, source, state)
+	TriggerClientEvent("els:setTakedownState_c", -1, source)
+end)
+
+RegisterServerEvent("els:setSceneLightState_s")
+AddEventHandler("els:setSceneLightState_s", function(state)
+	TriggerClientEvent("els:setSceneLightState_c", -1, source)
 end)

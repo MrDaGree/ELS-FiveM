@@ -24,6 +24,7 @@ pattern_files = {
 
 modelsWithTrafficAdvisor = {
 	"FBI2",
+	"AMBULANCE",
 }
 
 modelsWithFireSiren = {
@@ -42,6 +43,7 @@ stagethreewithsiren = false
 playButtonPressSounds = true
 vehicleStageThreeAdvisor = {
     "FBI2",
+    "AMBULANCE",
 }
 
 
@@ -58,9 +60,9 @@ shared = {
 
 keyboard = {
 	modifyKey = 132,
-	stageChange = 85,
+	stageChange = 311,
 	guiKey = 243,
-	takedown = 245,
+	takedown = 182,
 	siren = {
 		tone_one = 157,
 		tone_two = 158,
