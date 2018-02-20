@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ELS VEHICLE CONFIGURATION FILE -->
-<vcfroot Description="Sample VCF" Author="Luxart" >ALLENjr12
+<vcfroot Description="Ford F-550 Ambulance" Author="Downcoldkiller" >
 	<!-- INTERFACE -->
 	<INTERFACE>
-		<LstgActivationType>auto</LstgActivationType>
+		<LstgActivationType>invert</LstgActivationType>
 		<DefaultSirenMode>standby</DefaultSirenMode>
-		<InfoPanelHeaderColor>blue</InfoPanelHeaderColor>
-		<InfoPanelButtonLightColor>red</InfoPanelButtonLightColor>
+		<InfoPanelHeaderColor>grey</InfoPanelHeaderColor>
+		<InfoPanelButtonLightColor>green</InfoPanelButtonLightColor>
 	</INTERFACE>
 	<!-- EXTRAS OVERRIDE AND ENV LIGHTING-->
 	<EOVERRIDE>	
 		<Extra01 IsElsControlled="true" AllowEnvLight="true" Color="red" OffsetX="-0.70" OffsetY="-0.20" OffsetZ="0.50" />
 		<Extra02 IsElsControlled="true" AllowEnvLight="true" Color="red" OffsetX="-0.25" OffsetY="-0.20" OffsetZ="0.50" />
-		<Extra03 IsElsControlled="true" AllowEnvLight="true" Color="blue" OffsetX="0.25" OffsetY="-0.20" OffsetZ="0.50" />
-		<Extra04 IsElsControlled="true" AllowEnvLight="true" Color="blue" OffsetX="0.70" OffsetY="-0.20" OffsetZ="0.50" />
-		<Extra05 IsElsControlled="true" AllowEnvLight="true" Color="red" OffsetX="-0.70" OffsetY="-0.20" OffsetZ="0.50" />
-		<Extra06 IsElsControlled="true" AllowEnvLight="true" Color="blue" OffsetX="0.70" OffsetY="-0.20" OffsetZ="0.50" />
-		<Extra07 IsElsControlled="true" AllowEnvLight="true" Color="amber" OffsetX="-0.40" OffsetY="-0.80" OffsetZ="0.40" TrafficAdvisor="true" />
-		<Extra08 IsElsControlled="true" AllowEnvLight="true" Color="red" OffsetX="0.00" OffsetY="-0.80" OffsetZ="0.40" />
-		<Extra09 IsElsControlled="true" AllowEnvLight="true" Color="blue" OffsetX="0.40" OffsetY="-0.80" OffsetZ="0.40" />
-		<Extra10 IsElsControlled="true" AllowEnvLight="true" Color="white" OffsetX="0.25" OffsetY="-0.20" OffsetZ="0.50" />
-		<Extra11 IsElsControlled="true" AllowEnvLight="true" Color="white" OffsetX="0.40" OffsetY="-0.80" OffsetZ="0.40" /> 
-		<Extra12 IsElsControlled="true" AllowEnvLight="true" Color="white" OffsetX="-0.40" OffsetY="-0.80" OffsetZ="0.40" /> 
+		<Extra03 IsElsControlled="true" AllowEnvLight="true" Color="red" OffsetX="0.25" OffsetY="-0.20" OffsetZ="0.50" />
+		<Extra04 IsElsControlled="true" AllowEnvLight="true" Color="red" OffsetX="0.70" OffsetY="-0.20" OffsetZ="0.50" />
+		<Extra05 IsElsControlled="true" AllowEnvLight="true" Color="white" OffsetX="-0.70" OffsetY="-0.20" OffsetZ="0.50" />
+		<Extra06 IsElsControlled="true" AllowEnvLight="true" Color="white" OffsetX="0.70" OffsetY="-0.20" OffsetZ="0.50" />
+		<Extra07 IsElsControlled="true" AllowEnvLight="true" Color="amber" OffsetX="-0.40" OffsetY="-0.80" OffsetZ="0.40" />
+		<Extra08 IsElsControlled="true" AllowEnvLight="false" Color="amber" OffsetX="0.00" OffsetY="-0.80" OffsetZ="0.40" />
+		<Extra09 IsElsControlled="false" AllowEnvLight="true" Color="amber" OffsetX="0.40" OffsetY="-0.80" OffsetZ="0.40" />
+		<Extra10 IsElsControlled="false" />
+		<Extra11 IsElsControlled="false" />
+		<Extra12 IsElsControlled="true" />
 	</EOVERRIDE>
 	<!-- MISC -->
 	<MISC>
@@ -29,17 +29,17 @@
 		<ArrowboardType>off</ArrowboardType>
 		<UseSteadyBurnLights>false</UseSteadyBurnLights>
 		<DfltSirenLtsActivateAtLstg>3</DfltSirenLtsActivateAtLstg>
-		<Takedowns AllowUse="true" Mirrored="true" />
-		<SceneLights AllowUse="true" IlluminateSidesOnly="true" />	
+		<Takedowns AllowUse="false" Mirrored="false" />
+		<SceneLights AllowUse="true" IlluminateSidesOnly="false" />	
 	</MISC>
 	<!-- CRUISE -->
 	<CRUISE>
 		<DisableAtLstg3>true</DisableAtLstg3>
-		<UseExtras Extra1="true" Extra2="false" Extra3="false" Extra4="true" />
+		<UseExtras Extra1="false" Extra2="false" Extra3="false" Extra4="false" />
 	</CRUISE>
 	<!-- AUX CORONAS -->
 	<ACORONAS>
-		<Headlights DfltPattern="0" ColorL="white" ColorR="white" />
+		<Headlights DfltPattern="1" ColorL="white" ColorR="white" />
 		<TailLights DfltPattern="0" ColorL="red" ColorR="red" />
 		<IndicatorsF DfltPattern="0" ColorL="white" ColorR="white" />
 		<IndicatorsB DfltPattern="0" ColorL="red" ColorR="red" />
@@ -60,17 +60,16 @@
 	<!-- WRNL -->
 	<WRNL LightingFormat="leds" >
 		<PresetPatterns>
-			<Lstg2 Enabled="true" Pattern="35" />
 			<Lstg3 Enabled="true" Pattern="35" />
 		</PresetPatterns>
 		<ForcedPatterns>
-			<MainHorn Enabled="false" Pattern="17" />
-			<SrnTone1 Enabled="false" Pattern="80" />
-			<SrnTone2 Enabled="false" Pattern="80" />
-			<SrnTone3 Enabled="false" Pattern="17" />
+			<MainHorn Enabled="false" Pattern="0" />
+			<SrnTone1 Enabled="false" Pattern="0" />
+			<SrnTone2 Enabled="false" Pattern="0" />
+			<SrnTone3 Enabled="false" Pattern="0" />
 			<SrnTone4 Enabled="false" Pattern="0" />
 			<PanicMde Enabled="false" Pattern="0" />
-			<OutOfVeh Enabled="false" Pattern="80" />
+			<OutOfVeh Enabled="False" Pattern="0" />
 		</ForcedPatterns>
 		<ScanPatternCustomPool Enabled="false" Sequential="true" >
 			<Pattern>0</Pattern>
@@ -79,19 +78,19 @@
 		</ScanPatternCustomPool>
 	</WRNL>
 	<!-- PRML -->
-	<PRML LightingFormat="leds" ExtrasActiveAtLstg2="5and6" >
+	<PRML LightingFormat="leds" ExtrasActiveAtLstg2="1and4" >
 		<PresetPatterns>
-			<Lstg2 Enabled="false" Pattern="67" />
-			<Lstg3 Enabled="true" Pattern="67" />
+			<Lstg2 Enabled="true" Pattern="115" />
+			<Lstg3 Enabled="true" Pattern="115" />
 		</PresetPatterns>
 		<ForcedPatterns>
-			<MainHorn Enabled="false" Pattern="17" />
-			<SrnTone1 Enabled="false" Pattern="80" />
-			<SrnTone2 Enabled="false" Pattern="80" />
-			<SrnTone3 Enabled="false" Pattern="17" />
+			<MainHorn Enabled="false" Pattern="0" />
+			<SrnTone1 Enabled="false" Pattern="0" />
+			<SrnTone2 Enabled="false" Pattern="0" />
+			<SrnTone3 Enabled="false" Pattern="0" />
 			<SrnTone4 Enabled="false" Pattern="0" />
 			<PanicMde Enabled="false" Pattern="0" />
-			<OutOfVeh Enabled="false" Pattern="80" />
+			<OutOfVeh Enabled="false" Pattern="0" />
 		</ForcedPatterns>
 		<ScanPatternCustomPool Enabled="false" Sequential="true">
 			<Pattern>0</Pattern>
@@ -102,18 +101,18 @@
 	<!-- SECL -->
 	<SECL LightingFormat="leds" DisableAtLstg3="false" >
 		<PresetPatterns>
-			<Lstg1 Enabled="true" Pattern="1" />
-			<Lstg2 Enabled="true" Pattern="1" />
-			<Lstg3 Enabled="true" Pattern="1" />
+			<Lstg1 Enabled="false" Pattern="54" />
+			<Lstg2 Enabled="false" Pattern="94" />
+			<Lstg3 Enabled="false" Pattern="94" />
 		</PresetPatterns>
 		<ForcedPatterns>
-			<MainHorn Enabled="false" Pattern="17" />
-			<SrnTone1 Enabled="false" Pattern="80" />
-			<SrnTone2 Enabled="false" Pattern="80" />
-			<SrnTone3 Enabled="false" Pattern="17" />
+			<MainHorn Enabled="false" Pattern="0" />
+			<SrnTone1 Enabled="false" Pattern="0" />
+			<SrnTone2 Enabled="false" Pattern="0" />
+			<SrnTone3 Enabled="false" Pattern="0" />
 			<SrnTone4 Enabled="false" Pattern="0" />
 			<PanicMde Enabled="false" Pattern="0" />
-			<OutOfVeh Enabled="false" Pattern="80" />
+			<OutOfVeh Enabled="false" Pattern="0" />
 		</ForcedPatterns>
 		<ScanPatternCustomPool Enabled="false" Sequential="true" >
 			<Pattern>0</Pattern>

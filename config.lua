@@ -23,11 +23,10 @@ pattern_files = {
 }
 
 modelsWithTrafficAdvisor = {
-	"FBI2"
+	"FBI2",
 }
 
-modelsWithFireSiren =
-{
+modelsWithFireSiren = {
     "FIRETRUK",
 }
 
@@ -49,7 +48,9 @@ vehicleStageThreeAdvisor = {
 vehicleSyncDistance = 150
 envirementLightBrightness = 0.2
 
-build = "master"
+build = "development"
+panelOffsetX = 0.0
+panelOffsetY = 0.0
 
 shared = {
 	horn = 86,
