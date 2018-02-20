@@ -1,7 +1,7 @@
 vehicleInfoTable = {}
 patternInfoTable = {}
 
-_VERSION = "1.1.3b"
+_VERSION = "1.1.3c"
 local updateAvailable = false
 
 if build == nil then
