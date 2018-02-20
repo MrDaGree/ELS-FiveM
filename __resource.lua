@@ -7,7 +7,7 @@ client_script {
 }
 
 server_script {
+	'config.lua',
 	'server/server.lua',
 	'server/xml.lua',
-	'config.lua',
 }

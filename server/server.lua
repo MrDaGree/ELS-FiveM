@@ -1,39 +1,67 @@
 vehicleInfoTable = {}
 patternInfoTable = {}
 
-_VERSION = "1.1.3c"
+_VERSION = "1.1.3d"
 local updateAvailable = false
 
 if build == nil then
-	build = "master"
-end
+	PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/master/VERSION', function(Error, NewestVersion, Header)
+		PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/master/CHANGES', function(Error, Changes, Header)
+			print("\n---------- ELS (" .. build .. " Build) by MrDaGree ----------")
+			print('           Current Version: ' .. _VERSION)
+			print('           Newest Version: ' .. NewestVersion)
+			print('')
+			if _VERSION ~= NewestVersion then
+				print('---------- Outdated ----------\n')
+				PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/master/PERVIOUSVERSION', function(Error, PreviousVersion, Header)
+					if _VERSION == PreviousVersion then
+						UpdateAvailable = true
+					end
+					if UpdateAvailable then
+						print('\nPlease download the newest version or use "els update"')
+						build = "master"
+					end
+				end)
+				
+				print('  CHANGES: \n' .. Changes)
+			else
+				UpdateAvailable = false
+				print('\n       All good! You are all up to date.')
+			end
 
-PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/VERSION', function(Error, NewestVersion, Header)
-	PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/CHANGES', function(Error, Changes, Header)
-		print("\n---------- ELS (" .. build .. " Build) by MrDaGree ----------")
-		print('           Current Version: ' .. _VERSION)
-		print('           Newest Version: ' .. NewestVersion)
-		print('')
-		if _VERSION ~= NewestVersion then
-			print('---------- Outdated ----------\n')
-			PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/PERVIOUSVERSION', function(Error, PreviousVersion, Header)
-				if _VERSION == PreviousVersion then
-					UpdateAvailable = true
-				end
-				if UpdateAvailable then
-					print('\nPlease download the newest version or use "els update"')
-				end
-			end)
-			
-			print('CHANGES: \n' .. Changes)
-		else
-			UpdateAvailable = false
-			print('\n       All good! You are all up to date.')
-			print('\nThis change is was made while listening to Nova by Ahrix')
+			print('\n  This change is was made while listening to Nova by Ahrix')
 			print('-------------------------------------------------')
-		end
+		end)
 	end)
-end)
+else
+	PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/VERSION', function(Error, NewestVersion, Header)
+		PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/CHANGES', function(Error, Changes, Header)
+			print("\n---------- ELS (" .. build .. " Build) by MrDaGree ----------")
+			print('           Current Version: ' .. _VERSION)
+			print('           Newest Version: ' .. NewestVersion)
+			print('')
+			if _VERSION ~= NewestVersion then
+				print('---------- Outdated ----------\n')
+				PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/PERVIOUSVERSION', function(Error, PreviousVersion, Header)
+					if _VERSION == PreviousVersion then
+						UpdateAvailable = true
+					end
+					if UpdateAvailable then
+						print('\nPlease download the newest version or use "els update"')
+					end
+				end)
+				
+				print('  CHANGES: \n' .. Changes)
+			else
+				UpdateAvailable = false
+				print('\n       All good! You are all up to date.')
+			end
+
+			print('\n  This change is was made while listening to Nova by Ahrix')
+			print('-------------------------------------------------')
+		end)
+	end)
+end
 
 RegisterServerEvent('els:update')
 AddEventHandler('els:update', function()
