@@ -1,8 +1,14 @@
 els_patterns = {}
-canaryClient = true
 
-function getNumberOfPrimaryPatterns()
+function getNumberOfPrimaryPatterns(veh)
 	local count = 0
+	if veh.primType == string.lower("leds") then
+		for k,v in pairs(led_PrimaryPatterns) do
+			if (v ~= nil) then
+				count = count + 1
+			end
+		end
+	end
 	for k,v in pairs(els_patterns.primarys) do
 		if (v ~= nil) then
 			count = count + 1
@@ -125,6 +131,7 @@ function runPatternStageThree(k, pattern, cb)
 	Citizen.CreateThread(function()
 		if (not IsEntityDead(k) and DoesEntityExist(k)) then
         	SetVehicleAutoRepairDisabled(k, true)
+        	pattern = pattern - 140
 
 			local max = 0
 			local count = 1
@@ -169,6 +176,46 @@ function runPatternStageThree(k, pattern, cb)
 				stageThreeAllow = 1
 			else
 				stageThreeAllow = stageThreeAllow + 1
+			end
+		end
+	end)
+end
+
+local ledStageThreeAllow = {
+	[1] = 1,
+	[2] = 1,
+	[3] = 1,
+	[4] = 1
+}
+function runLedPatternStageThree(k, extra, pattern, cb) 
+	Citizen.CreateThread(function()
+		if (not IsEntityDead(k) and DoesEntityExist(k)) then
+        	SetVehicleAutoRepairDisabled(k, true)
+
+			local rate = fps / (fps * 60 / 70)
+
+			if (rate < 1) then rate = Ceil(rate) else rate = Floor(rate) end
+
+			if (rate == ledStageThreeAllow[extra]) then
+				ledStageThreeAllow[extra] = 1
+
+				cb(false)
+
+				for spot = 1, string.len(led_PrimaryPatterns[pattern][extra]) do
+				    local c = tonumber(string.sub(led_PrimaryPatterns[pattern][extra], spot, spot) )
+					setExtraState(k, extra, c)
+					if c == 0 then
+						runEnvirementLight(k, extra)
+					end
+
+					Wait(50)
+				end
+
+				cb(true)
+			elseif (ledStageThreeAllow[extra] > rate) then
+				ledStageThreeAllow[extra] = 1
+			else
+				ledStageThreeAllow[extra] = ledStageThreeAllow[extra] + 1
 			end
 		end
 	end)

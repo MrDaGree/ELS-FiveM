@@ -1,3 +1,5 @@
+outputLoading = false
+
 vcf_files = {
 	"POLICE.xml",
 	"POLICE2.xml",
@@ -6,7 +8,8 @@ vcf_files = {
 	"PRANGER.xml",
 	"SHERIFF2.xml",
 	"AMBULANCE.xml",
-	"FBI2.xml"
+	"FBI2.xml",
+	"SADLER.xml"
 }
 
 pattern_files = {
@@ -19,12 +22,12 @@ pattern_files = {
 	"T_ADVIS_RIGHT_LEFT.xml",
 	"T_ADVIS_LEFT_RIGHT.xml",
 	"T_ADVIS_BACKFOURTH.xml",
-	"WIGWAG5.xml"
-}
-
-modelsWithTrafficAdvisor = {
-	"FBI2",
-	"AMBULANCE",
+	"WIGWAG5.xml",
+	"CHP.xml",
+	"T_ADVIS_ARRW_LEFT.xml",
+	"T_ADVIS_ARRW_LLEFT.xml",
+	"T_ADVIS_ARRW_RIGHT.xml",
+	"T_ADVIS_ARRW_RRIGHT.xml"
 }
 
 modelsWithFireSiren = {

@@ -39,7 +39,7 @@ function SLAXML:parser(callbacks)
 	return { _call=callbacks or self._call, parse=SLAXML.parse }
 end
 
-function SLAXML:parse(xml,options)
+function SLAXML:parse(xml, fileName, options)
 	if not options then options = { stripWhitespace=false } end
 
 	-- Cache references for maximum speed
@@ -245,17 +245,18 @@ function SLAXML:parse(xml,options)
 		elseif state=="attributes" then
 			if not findAttribute() then
 				if not closeElement() then
-					error("Was in an element and couldn't find attributes or the close.")
+					print("\n[ERROR] " .. fileName .. " is broken! Please put in online validator and fix!\n")
+					break
 				end
 			end
 		end
 	end
 
-	if not anyElement then error("Parsing did not discover any elements") end
-	if #nsStack > 0 then error("Parsing ended with unclosed elements") end
+	-- if not anyElement then error("Parsing did not discover any elements") end
+	-- if #nsStack > 0 then print("Parsing could not find closing to attribute. Please put in online validator and fix!\nTo figure out what Pattern/VCF is broken look at the last loaded, the one after that is broken.\n\n") end
 end
 
-function SLAXML:dom(xml,opts)
+function SLAXML:dom(xml, filename, opts)
 	if not opts then opts={} end
 	local rich = not opts.simple
 	local push, pop = table.insert, table.remove
@@ -298,7 +299,7 @@ function SLAXML:dom(xml,opts)
 			push(current.kids,{type='pi',name=name,value=value,parent=rich and current or nil})
 		end
 	}
-	builder:parse(xml,opts)
+	builder:parse(xml, filename, opts)
 	return doc
 end
 return SLAXML

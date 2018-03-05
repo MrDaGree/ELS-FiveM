@@ -1,7 +1,7 @@
 vehicleInfoTable = {}
 patternInfoTable = {}
 
-_VERSION = "1.1.3f"
+_VERSION = "1.1.4"
 local updateAvailable = false
 
 if build == nil then
@@ -35,15 +35,15 @@ if build == nil then
 		end)
 	end)
 else
-	PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/VERSION', function(Error, NewestVersion, Header)
-		PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/CHANGES', function(Error, Changes, Header)
+	PerformHttpRequest('https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/' .. build .. '/VERSION.md', function(Error, NewestVersion, Header)
+		PerformHttpRequest('https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/' .. build .. '/CHANGES.md', function(Error, Changes, Header)
 			print("\n---------- ELS (" .. build .. " Build) by MrDaGree ----------")
 			print('           Current Version: ' .. _VERSION)
 			print('           Newest Version: ' .. NewestVersion)
 			print('')
 			if _VERSION ~= NewestVersion then
 				print('---------- Outdated ----------\n')
-				PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/PERVIOUSVERSION', function(Error, PreviousVersion, Header)
+				PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/PERVIOUSVERSION.md', function(Error, PreviousVersion, Header)
 					if _VERSION == PreviousVersion then
 						UpdateAvailable = true
 					end
@@ -68,7 +68,7 @@ end
 RegisterServerEvent('els:update')
 AddEventHandler('els:update', function()
 	if UpdateAvailable then
-		PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/CHANGEDFILES', function(Error, Content, Header)
+		PerformHttpRequest('https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/' .. build .. '/CHANGEDFILES.md', function(Error, Content, Header)
 			ContentSplitted = stringsplit(Content, '\n')
 			for k, Line in ipairs(ContentSplitted) do
 				local PreviousContent = ''
@@ -76,7 +76,7 @@ AddEventHandler('els:update', function()
 					Line = Line:gsub('-add')
 					PreviousContent = LoadResourceFile(GetCurrentResourceName(), Line) .. '\n'
 				end
-				PerformHttpRequest('http://git.mrdagree.com/mrdagree/ELS-FiveM/raw/' .. build .. '/' .. Line, function(Error, NewContent, Header)
+				PerformHttpRequest('https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/' .. build .. '/' .. Line, function(Error, NewContent, Header)
 					SaveResourceFile(GetCurrentResourceName(), Line, PreviousContent .. NewContent, -1)
 				end)
 			end
@@ -149,6 +149,9 @@ function parseVehData(xml, fileName)
     a.extras = {}
 
     for i=1,#xml.root.el do
+    	if(xml.root.el[i].name == "PRML") then
+    		a.primType = string.lower(xml.root.el[i].attr['LightingFormat'])
+    	end
     	if(xml.root.el[i].name == "INTERFACE") then
     		for ex=1,#xml.root.el[i].kids do
     			if(xml.root.el[i].kids[ex].name== "LstgActivationType") then
@@ -157,6 +160,49 @@ function parseVehData(xml, fileName)
     					a.activateUp = true
     				else
     					a.activateUp = false
+    				end
+    			end
+    			if(xml.root.el[i].kids[ex].name== "InfoPanelHeaderColor") then
+    				local elem = xml.root.el[i].kids[ex]
+    				a.headerColor = {}
+    				if elem.kids[1].value == string.lower("grey") then
+    					a.headerColor['r'] = 40
+    					a.headerColor['g'] = 40
+    					a.headerColor['b'] = 40
+    				end
+    				if elem.kids[1].value == string.lower("white") then
+    					a.headerColor['r'] = 255
+    					a.headerColor['g'] = 255
+    					a.headerColor['b'] = 255
+    				end
+    			end
+    			if(xml.root.el[i].kids[ex].name== "InfoPanelButtonLightColor") then
+    				local elem = xml.root.el[i].kids[ex]
+    				a.buttonColor = {}
+    				if elem.kids[1].value == string.lower("green") then
+    					a.buttonColor['r'] = 0
+    					a.buttonColor['g'] = 255
+    					a.buttonColor['b'] = 0
+    				end
+    				if elem.kids[1].value == string.lower("red") then
+    					a.buttonColor['r'] = 255
+    					a.buttonColor['g'] = 0
+    					a.buttonColor['b'] = 0
+    				end
+    				if elem.kids[1].value == string.lower("blue") then
+    					a.buttonColor['r'] = 0
+    					a.buttonColor['g'] = 0
+    					a.buttonColor['b'] = 255
+    				end
+    				if elem.kids[1].value == string.lower("purple") then
+    					a.buttonColor['r'] = 170
+    					a.buttonColor['g'] = 0
+    					a.buttonColor['b'] = 255
+    				end
+    				if elem.kids[1].value == string.lower("orange") then
+    					a.buttonColor['r'] = 255
+    					a.buttonColor['g'] = 157
+    					a.buttonColor['b'] = 0
     				end
     			end
     		end
@@ -220,7 +266,9 @@ function parseVehData(xml, fileName)
 
     vehicleInfoTable[fileName] = a
 
-    print("Done with vehicle: " .. fileName)
+    if outputLoading and outputLoading ~= nil then
+    	print("Done with vehicle: " .. fileName)
+    end
 end
 
 function parsePatternData(xml, fileName)
@@ -228,6 +276,7 @@ function parsePatternData(xml, fileName)
     local primary = {}
     local secondary = {}
     local advisor = {}
+    local patternError = false
 
     fileName = string.sub(fileName, 1, -5)
 
@@ -472,20 +521,29 @@ function parsePatternData(xml, fileName)
     end
     patternInfoTable[#patternInfoTable + 1] = a
 
-    print("Done with pattern: " .. fileName)
+    if outputLoading and outputLoading ~= nil then
+    	print("Done with pattern: " .. fileName)
+    end
 end
 
 function parseObjSet(data, fileName)
-    local xml = SLAXML:dom(data)
-
+    local xml = SLAXML:dom(data, fileName)
     if xml and xml.root then
         if xml.root.name == "vcfroot" then
             parseVehData(xml, fileName)
         elseif xml.root.name == "pattern" then
         	parsePatternData(xml, fileName)
         end
-
     end
+end
+
+function configCheck()
+	if (panelOffsetX == nil) then
+		print("\n\n[ERROR] Please add 'panelOffsetX = 0.0' to your config or you will not get a panel.\n\n")
+	end
+	if (panelOffsetY == nil) then
+		print("\n\n[ERROR] Please add 'panelOffsetY = 0.0' to your config or you will not get a panel.\n\n")
+	end
 end
 
 AddEventHandler('onResourceStart', function(name)
@@ -508,6 +566,7 @@ AddEventHandler('onResourceStart', function(name)
 		        parseObjSet(data, pattern_files[i])
 		    end
 	    end
+	    configCheck()
 	end
 end)
 
