@@ -4,40 +4,72 @@ patternInfoTable = {}
 _VERSION = "1.1.3"
 local updateAvailable = false
 
-if build == nil then
-	build = "master"
-end
 
-PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/VERSION', function(Error, NewestVersion, Header)
-	PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/CHANGES', function(Error, Changes, Header)
-		print("\n---------- ELS (" .. build .. " Build) by MrDaGree ----------")
-		print('           Current Version: ' .. _VERSION)
-		print('           Newest Version: ' .. NewestVersion)
-		print('')
-		if _VERSION ~= NewestVersion then
-			print('---------- Outdated ----------\n')
-			PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/PERVIOUSVERSION', function(Error, PreviousVersion, Header)
-				if _VERSION == PreviousVersion then
-					UpdateAvailable = true
-				end
-				if UpdateAvailable then
-					print('\nPlease download the newest version or use "els update"')
-				end
-			end)
-			
-			print('CHANGES: \n' .. Changes)
-		else
-			UpdateAvailable = false
-			print('\n       All good! You are all up to date.')
+if build == nil then
+	PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/master/VERSION', function(Error, NewestVersion, Header)
+		PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/master/CHANGES', function(Error, Changes, Header)
+			print("\n---------- ELS (master Build) by MrDaGree ----------")
+			print('           Current Version: ' .. _VERSION)
+			print('           Newest Version: ' .. NewestVersion)
+			print('')
+			if _VERSION ~= NewestVersion then
+				print('---------- Outdated ----------\n')
+				PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/master/PERVIOUSVERSION', function(Error, PreviousVersion, Header)
+					if _VERSION == PreviousVersion then
+						UpdateAvailable = true
+					end
+					if UpdateAvailable then
+						print('\nPlease download the newest version or use "els update"')
+						build = "master"
+					end
+				end)
+				
+				print('  CHANGES: \n' .. Changes)
+			else
+				UpdateAvailable = false
+				print('\n       All good! You are all up to date.')
+			end
+
+			print('\n  Whats the point of putting something funny')
+			print('             if its not even funny?')
 			print('-------------------------------------------------')
-		end
+		end)
 	end)
-end)
+else
+	PerformHttpRequest('https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/' .. build .. '/VERSION.md', function(Error, NewestVersion, Header)
+		PerformHttpRequest('https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/' .. build .. '/CHANGES.md', function(Error, Changes, Header)
+			print("\n---------- ELS (" .. build .. " Build) by MrDaGree ----------")
+			print('           Current Version: ' .. _VERSION)
+			print('           Newest Version: ' .. NewestVersion)
+			print('')
+			if _VERSION ~= NewestVersion then
+				print('---------- Outdated ----------\n')
+				PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/PERVIOUSVERSION.md', function(Error, PreviousVersion, Header)
+					if _VERSION == PreviousVersion then
+						UpdateAvailable = true
+					end
+					if UpdateAvailable then
+						print('\nPlease download the newest version or use "els update"')
+					end
+				end)
+				
+				print('  CHANGES: \n' .. Changes)
+			else
+				UpdateAvailable = false
+				print('\n       All good! You are all up to date.')
+			end
+
+			print('\n  Whats the point of putting something funny')
+			print('             if its not even funny?')
+			print('-------------------------------------------------')
+		end)
+	end)
+end
 
 RegisterServerEvent('els:update')
 AddEventHandler('els:update', function()
 	if UpdateAvailable then
-		PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/CHANGEDFILES', function(Error, Content, Header)
+		PerformHttpRequest('https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/' .. build .. '/CHANGEDFILES.md', function(Error, Content, Header)
 			ContentSplitted = stringsplit(Content, '\n')
 			for k, Line in ipairs(ContentSplitted) do
 				local PreviousContent = ''
@@ -45,7 +77,7 @@ AddEventHandler('els:update', function()
 					Line = Line:gsub('-add')
 					PreviousContent = LoadResourceFile(GetCurrentResourceName(), Line) .. '\n'
 				end
-				PerformHttpRequest('http://git.mrdagree.com/mrdagree/ELS-FiveM/raw/' .. build .. '/' .. Line, function(Error, NewContent, Header)
+				PerformHttpRequest('https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/' .. build .. '/' .. Line, function(Error, NewContent, Header)
 					SaveResourceFile(GetCurrentResourceName(), Line, PreviousContent .. NewContent, -1)
 				end)
 			end
