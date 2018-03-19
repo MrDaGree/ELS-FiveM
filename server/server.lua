@@ -6,15 +6,15 @@ local updateAvailable = false
 
 
 if build == nil then
-	PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/master/VERSION', function(Error, NewestVersion, Header)
-		PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/master/CHANGES', function(Error, Changes, Header)
+	PerformHttpRequest('https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/master/VERSION.md', function(Error, NewestVersion, Header)
+		PerformHttpRequest('https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/master/CHANGES.md', function(Error, Changes, Header)
 			print("\n---------- ELS (master Build) by MrDaGree ----------")
 			print('           Current Version: ' .. _VERSION)
 			print('           Newest Version: ' .. NewestVersion)
 			print('')
 			if _VERSION ~= NewestVersion then
 				print('---------- Outdated ----------\n')
-				PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/master/PERVIOUSVERSION', function(Error, PreviousVersion, Header)
+				PerformHttpRequest('https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/master/PERVIOUSVERSION.md', function(Error, PreviousVersion, Header)
 					if _VERSION == PreviousVersion then
 						UpdateAvailable = true
 					end
