@@ -8,7 +8,7 @@ Here is just some quick information on how to setup traffic advisers for your ve
 (Keyboard)
 * Q - Up 1 light stage
 * LCTRL + Q - Down 1 Light Stage
-* 1, 2, 3 - 3 siren tons
+* 1, 2, 3 - 3 siren tones
 * 4 - Enable/disable dual siren
 * 5,6,7 - With duals on will sound another siren
 * LCTRL + T - Takedown lights
