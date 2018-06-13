@@ -18,6 +18,7 @@ Here is just some quick information on how to setup traffic advisers for your ve
 * LCTRL + Y - Down 1 pattern for primary
 * LCTRL + U - Down 1 pattern for secondary
 * LCTRL + L - Down 1 for traffic adviser
+* LCTRL + ~ - Toggles GUI
 
 (Controller)
 
