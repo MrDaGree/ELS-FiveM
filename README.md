@@ -1,4 +1,6 @@
-Hey everyone! After a bunch of developing, testers testing, and having fun with this project I am proud to announce its release. https://discord.gg/yQpk5d2
+### Master branch is now considered development work. Use the releases tab for stable builds.
+
+Hey everyone! After a bunch of developing, testers testing, and having fun with this project I am proud to announce its release. https://discord.gg/GUvNXNe
 
 Here is just some quick information on how to setup traffic advisers for your vehicles BEFORE the installation begins.
 
