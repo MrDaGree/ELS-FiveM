@@ -1,4 +1,4 @@
 {
-    "version":"1.6",
-    "changelog":"Faster lighting, CHP patterns, optimizations, and bug fixes."
+    "version":"1.7",
+    "changelog":"Fixed FRFuel/scripts that require ELS vehicle to turn off."
 }
