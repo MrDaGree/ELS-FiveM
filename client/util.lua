@@ -617,11 +617,20 @@ function upOneStage()
     changeLightStage(newStage, advisorPatternSelectedIndex, lightPatternPrim, lightPatternSec)
 
     if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
-        if newStage >= getVehicleVCFInfo(GetVehiclePedIsUsing(GetPlayerPed(-1))).misc.dfltsirenltsactivateatlstg then
-            toggleSirenMute(veh, true)
-            SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
+        if sirenActivationStage ~= nil then
+            if newStage >= sirenActivationStage then
+                toggleSirenMute(veh, true)
+                SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
+            else
+                SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
+            end
         else
-            SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
+            if newStage >= getVehicleVCFInfo(GetVehiclePedIsUsing(GetPlayerPed(-1))).misc.dfltsirenltsactivateatlstg then
+                toggleSirenMute(veh, true)
+                SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
+            else
+                SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
+            end
         end
 
         if(newStage == 0) then
@@ -652,11 +661,20 @@ function downOneStage()
     changeLightStage(newStage, advisorPatternSelectedIndex, lightPatternPrim, lightPatternSec)
 
     if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
-        if newStage >= getVehicleVCFInfo(GetVehiclePedIsUsing(GetPlayerPed(-1))).misc.dfltsirenltsactivateatlstg then
-            toggleSirenMute(veh, true)
-            SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
+        if sirenActivationStage ~= nil then
+            if newStage >= sirenActivationStage then
+                toggleSirenMute(veh, true)
+                SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
+            else
+                SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
+            end
         else
-            SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
+            if newStage >= getVehicleVCFInfo(GetVehiclePedIsUsing(GetPlayerPed(-1))).misc.dfltsirenltsactivateatlstg then
+                toggleSirenMute(veh, true)
+                SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
+            else
+                SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
+            end
         end
 
         if (newStage == 0) then
