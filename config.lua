@@ -1,55 +1,12 @@
-vcf_files = {
-	"POLICE.xml",
-	"POLICE2.xml",
-	"POLICE3.xml",
-	"POLICE4.xml",
-	"PRANGER.xml",
-	"SHERIFF2.xml",
-	"AMBULANCE.xml",
-	"FBI2.xml"
-}
+outputLoading = false
 
-pattern_files = {
-	"WIGWAG.xml",
-	"WIGWAG3.xml",
-	"FAST.xml",
-	"COMPLEX.xml",
-	"BACKFOURTH.xml",
-	"BACKFOURTH2.xml",
-	"T_ADVIS_RIGHT_LEFT.xml",
-	"T_ADVIS_LEFT_RIGHT.xml",
-	"T_ADVIS_BACKFOURTH.xml",
-	"WIGWAG5.xml"
-}
-
-modelsWithTrafficAdvisor = {
-	"FBI2"
-}
-
-modelsWithFireSiren =
-{
-    "FIRETRUK",
-}
-
-
-modelsWithAmbWarnSiren =
-{   
-    "AMBULANCE",
-    "FIRETRUK",
-    "LGUARD",
-}
-
-stagethreewithsiren = false
 playButtonPressSounds = true
-vehicleStageThreeAdvisor = {
-    "FBI3",
-}
-
 
 vehicleSyncDistance = 150
-envirementLightBrightness = 0.2
+envirementLightBrightness = 0.005
 
-build = "master"
+panelOffsetX = 0.0
+panelOffsetY = 0.0
 
 shared = {
 	horn = 86,
@@ -58,22 +15,25 @@ shared = {
 keyboard = {
 	modifyKey = 132,
 	stageChange = 85,
-	guiKey = 243,
-	takedown = 245,
+	guiKey = 199,
+	takedown = 83,
 	siren = {
 		tone_one = 157,
 		tone_two = 158,
 		tone_three = 160,
-		dual_toggle = 164,
-		dual_one = 165,
-		dual_two = 159,
-		dual_three = 161,
+		dual_toggle = 79,
+		dual_one = 164,
+		dual_two = 165,
+		dual_three = 159,
 	},
 	pattern = {
-		primary = 246,
-		secondary = 303,
-		advisor = 182,
+		primary = 163,
+		secondary = 162,
+		warning = 161,
 	},
+	warning = 246,
+	secondary = 303,
+	primary = 7,
 }
 
 controller = {
