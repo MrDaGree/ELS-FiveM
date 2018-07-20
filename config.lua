@@ -1,5 +1,4 @@
 outputLoading = false
-
 playButtonPressSounds = true
 
 vehicleSyncDistance = 150
