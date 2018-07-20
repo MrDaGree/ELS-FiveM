@@ -23,36 +23,6 @@ Citizen.CreateThread( function()
 	end, "GET", "", {version = 'this'})
 end)
 
-
-
-RegisterCommand("els", function(source, args, rawCommand)
-
-	if string.sub(rawCommand, 1, 3):lower() == "els" then
-		if #args == 1 then
-			if args[1]:lower() == 'update' then
-				TriggerEvent("els:update")
-			end
-		else
-			print('Argument count mismatch (Passed: ' .. #args .. ', Wanted: 1)')
-		end
-	end
-end, true)
-
-function stringsplit(input, seperator)
-	if seperator == nil then
-		seperator = '%s'
-	end
-	
-	local t={} ; i=1
-	
-	for str in string.gmatch(input, '([^'..seperator..']+)') do
-		t[i] = str
-		i = i + 1
-	end
-	
-	return t
-end
-
 local function processXml(el)
     local v = {}
     local text
@@ -167,7 +137,17 @@ function parseVehData(xml, fileName)
 	    				a.extras[extra].enabled = true
 	    			else
 	    				a.extras[extra].enabled = false
-	    			end
+					end
+					
+					a.extras[extra].env_light = false
+					a.extras[extra].env_pos = {}
+					a.extras[extra].env_pos['x'] = 0
+					a.extras[extra].env_pos['y'] = 0
+					a.extras[extra].env_pos['z'] = 0
+					a.extras[extra].env_color = {}
+					a.extras[extra].env_color['r'] = 255
+					a.extras[extra].env_color['g'] = 0
+					a.extras[extra].env_color['b'] = 0
 
 	    			if(elem.attr['AllowEnvLight'] == "true") then
 	    				a.extras[extra].env_light = true
