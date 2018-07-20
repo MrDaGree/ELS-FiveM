@@ -1,91 +1,29 @@
 vehicleInfoTable = {}
 patternInfoTable = {}
 
-_VERSION = "1.1.4"
-local updateAvailable = false
+local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
+local curVersion = json.decode(verFile).version
+Citizen.CreateThread( function()
+	local updatePath = "ELS-FiveM"
+	local resourceName = "ELS-FiveM ("..GetCurrentResourceName()..")"
+	PerformHttpRequest("https://raw.githubusercontent.com/MrDaGree/"..updatePath.."/master/version.json", function(err, response, headers)
+		local data = json.decode(response)
 
-if build == nil then
-	PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/master/VERSION', function(Error, NewestVersion, Header)
-		PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/master/CHANGES', function(Error, Changes, Header)
-			print("\n---------- ELS (master Build) by MrDaGree ----------")
-			print('           Current Version: ' .. _VERSION)
-			print('           Newest Version: ' .. NewestVersion)
-			print('')
-			if _VERSION ~= NewestVersion then
-				print('---------- Outdated ----------\n')
-				PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/master/PERVIOUSVERSION', function(Error, PreviousVersion, Header)
-					if _VERSION == PreviousVersion then
-						UpdateAvailable = true
-					end
-					if UpdateAvailable then
-						print('\nPlease download the newest version or use "els update"')
-						build = "master"
-					end
-				end)
-				
-				print('  CHANGES: \n' .. Changes)
-			else
-				UpdateAvailable = false
-				print('\n       All good! You are all up to date.')
-			end
 
-			print('\n  Whats the point of putting something funny')
-			print('             if its not even funny?')
-			print('-------------------------------------------------')
-		end)
-	end)
-else
-	PerformHttpRequest('https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/' .. build .. '/VERSION.md', function(Error, NewestVersion, Header)
-		PerformHttpRequest('https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/' .. build .. '/CHANGES.md', function(Error, Changes, Header)
-			print("\n---------- ELS (" .. build .. " Build) by MrDaGree ----------")
-			print('           Current Version: ' .. _VERSION)
-			print('           Newest Version: ' .. NewestVersion)
-			print('')
-			if _VERSION ~= NewestVersion then
-				print('---------- Outdated ----------\n')
-				PerformHttpRequest('https://git.mrdagree.com/mrdagree/ELS-FiveM-Info/raw/' .. build .. '/PERVIOUSVERSION.md', function(Error, PreviousVersion, Header)
-					if _VERSION == PreviousVersion then
-						UpdateAvailable = true
-					end
-					if UpdateAvailable then
-						print('\nPlease download the newest version or use "els update"')
-					end
-				end)
-				
-				print('  CHANGES: \n' .. Changes)
-			else
-				UpdateAvailable = false
-				print('\n       All good! You are all up to date.')
-			end
-
-			print('\n  Whats the point of putting something funny')
-			print('             if its not even funny?')
-			print('-------------------------------------------------')
-		end)
-	end)
-end
-
-RegisterServerEvent('els:update')
-AddEventHandler('els:update', function()
-	if UpdateAvailable then
-		PerformHttpRequest('https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/' .. build .. '/CHANGEDFILES.md', function(Error, Content, Header)
-			ContentSplitted = stringsplit(Content, '\n')
-			for k, Line in ipairs(ContentSplitted) do
-				local PreviousContent = ''
-				if Line:find('-add') then
-					Line = Line:gsub('-add')
-					PreviousContent = LoadResourceFile(GetCurrentResourceName(), Line) .. '\n'
-				end
-				PerformHttpRequest('https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/' .. build .. '/' .. Line, function(Error, NewContent, Header)
-					SaveResourceFile(GetCurrentResourceName(), Line, PreviousContent .. NewContent, -1)
-				end)
-			end
-		end)
-		print('Update finished! Enter "restart ' .. GetCurrentResourceName() .. '" now!')
-	else
-		print('This is already the newest version! [' .. _VERSION .. ']')
-	end
+		if curVersion ~= data.version and tonumber(curVersion) < tonumber(data.version) then
+			print("\n--------------------------------------------------------------------------")
+			print("\n"..resourceName.." is outdated.\nCurrent Version: "..data.version.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com"..updatePath.."")
+			print("\nUpdate Changelog:\n"..data.changelog)
+			print("\n--------------------------------------------------------------------------")
+		elseif tonumber(curVersion) > tonumber(data.version) then
+			print("Your version of "..resourceName.." seems to be higher than the current version. Hax bro?")
+		else
+			print(resourceName.." is up to date!")
+		end
+	end, "GET", "", {version = 'this'})
 end)
+
+
 
 RegisterCommand("els", function(source, args, rawCommand)
 
@@ -146,72 +84,83 @@ function parseVehData(xml, fileName)
     fileName = string.sub(fileName, 1, -5)
 
     a = {}
+    a.interface = {}
     a.extras = {}
+    a.misc = {}
+    a.cruise = {}
+    a.sounds = {}
+    a.wrnl = {}
+    a.priml = {}
+    a.secl = {}
 
     for i=1,#xml.root.el do
-    	if(xml.root.el[i].name == "PRML") then
-    		a.primType = string.lower(xml.root.el[i].attr['LightingFormat'])
-    	end
-    	if(xml.root.el[i].name == "INTERFACE") then
-    		for ex=1,#xml.root.el[i].kids do
-    			if(xml.root.el[i].kids[ex].name== "LstgActivationType") then
-    				local elem = xml.root.el[i].kids[ex]
-    				if elem.kids[1].value == "manual" or elem.kids[1].value == "auto" then
-    					a.activateUp = true
-    				else
-    					a.activateUp = false
-    				end
-    			end
-    			if(xml.root.el[i].kids[ex].name== "InfoPanelHeaderColor") then
-    				local elem = xml.root.el[i].kids[ex]
-    				a.headerColor = {}
-    				if elem.kids[1].value == string.lower("grey") then
-    					a.headerColor['r'] = 40
-    					a.headerColor['g'] = 40
-    					a.headerColor['b'] = 40
-    				end
-    				if elem.kids[1].value == string.lower("white") then
-    					a.headerColor['r'] = 255
-    					a.headerColor['g'] = 255
-    					a.headerColor['b'] = 255
-    				end
-    			end
-    			if(xml.root.el[i].kids[ex].name== "InfoPanelButtonLightColor") then
-    				local elem = xml.root.el[i].kids[ex]
-    				a.buttonColor = {}
-    				if elem.kids[1].value == string.lower("green") then
-    					a.buttonColor['r'] = 0
-    					a.buttonColor['g'] = 255
-    					a.buttonColor['b'] = 0
-    				end
-    				if elem.kids[1].value == string.lower("red") then
-    					a.buttonColor['r'] = 255
-    					a.buttonColor['g'] = 0
-    					a.buttonColor['b'] = 0
-    				end
-    				if elem.kids[1].value == string.lower("blue") then
-    					a.buttonColor['r'] = 0
-    					a.buttonColor['g'] = 0
-    					a.buttonColor['b'] = 255
-    				end
-    				if elem.kids[1].value == string.lower("purple") then
-    					a.buttonColor['r'] = 170
-    					a.buttonColor['g'] = 0
-    					a.buttonColor['b'] = 255
-    				end
-    				if elem.kids[1].value == string.lower("orange") then
-    					a.buttonColor['r'] = 255
-    					a.buttonColor['g'] = 157
-    					a.buttonColor['b'] = 0
-    				end
-    			end
-    		end
-    	end
-    	if(xml.root.el[i].name == "EOVERRIDE") then
-    		a.advisor = false
-    		for ex=1,#xml.root.el[i].kids do
-    			if(string.upper(string.sub(xml.root.el[i].kids[ex].name, 1, -3)) == "EXTRA") then
-    				local elem = xml.root.el[i].kids[ex]
+		if(xml.root.el[i].name == "INTERFACE") then
+			for ex=1,#xml.root.el[i].kids do
+				if(xml.root.el[i].kids[ex].name== "LstgActivationType") then
+					local elem = xml.root.el[i].kids[ex]
+					a.interface.activationType = elem.kids[1].value
+
+				end
+				if(xml.root.el[i].kids[ex].name== "InfoPanelHeaderColor") then
+					local elem = xml.root.el[i].kids[ex]
+					a.interface.headerColor = {}
+					if elem.kids[1].value == string.lower("grey") then
+						a.interface.headerColor['r'] = 40
+						a.interface.headerColor['g'] = 40
+						a.interface.headerColor['b'] = 40
+					end
+					if elem.kids[1].value == string.lower("white") then
+						a.interface.headerColor['r'] = 255
+						a.interface.headerColor['g'] = 255
+						a.interface.headerColor['b'] = 255
+					end
+					if elem.kids[1].value == string.lower("yellow") then
+						a.interface.headerColor['r'] = 242
+						a.interface.headerColor['g'] = 238
+						a.interface.headerColor['b'] = 0
+					end
+				end
+				if(xml.root.el[i].kids[ex].name== "InfoPanelButtonLightColor") then
+					local elem = xml.root.el[i].kids[ex]
+					a.interface.buttonColor = {}
+					if elem.kids[1].value == string.lower("green") then
+						a.interface.buttonColor['r'] = 0
+						a.interface.buttonColor['g'] = 255
+						a.interface.buttonColor['b'] = 0
+					end
+					if elem.kids[1].value == string.lower("red") then
+						a.interface.buttonColor['r'] = 255
+						a.interface.buttonColor['g'] = 0
+						a.interface.buttonColor['b'] = 0
+					end
+					if elem.kids[1].value == string.lower("blue") then
+						a.interface.buttonColor['r'] = 0
+						a.interface.buttonColor['g'] = 0
+						a.interface.buttonColor['b'] = 255
+					end
+					if elem.kids[1].value == string.lower("purple") then
+						a.interface.buttonColor['r'] = 170
+						a.interface.buttonColor['g'] = 0
+						a.interface.buttonColor['b'] = 255
+					end
+					if elem.kids[1].value == string.lower("orange") then
+						a.interface.buttonColor['r'] = 255
+						a.interface.buttonColor['g'] = 157
+						a.interface.buttonColor['b'] = 0
+					end
+					if elem.kids[1].value == string.lower("yellow") then
+						a.interface.buttonColor['r'] = 242
+						a.interface.buttonColor['g'] = 238
+						a.interface.buttonColor['b'] = 0
+					end
+				end
+			end
+		end
+
+		if(xml.root.el[i].name == "EOVERRIDE") then
+			for ex=1,#xml.root.el[i].kids do
+				if(string.upper(string.sub(xml.root.el[i].kids[ex].name, 1, -3)) == "EXTRA") then
+					local elem = xml.root.el[i].kids[ex]
 	    			local extra = tonumber(string.sub(elem.name, -2))
 	    			a.extras[extra] = {}
 	    			if elem.attr['IsElsControlled'] == "true" then
@@ -220,15 +169,7 @@ function parseVehData(xml, fileName)
 	    				a.extras[extra].enabled = false
 	    			end
 
-	    			if not a.advisor then
-	    				if extra == 7 then
-	    					if string.upper(elem.attr['Color']) == "AMBER" then
-	    						a.advisor = true
-	    					end
-	    				end
-	    			end
-
-	    			if(elem.attr['AllowEnvLight']) then
+	    			if(elem.attr['AllowEnvLight'] == "true") then
 	    				a.extras[extra].env_light = true
 	    				a.extras[extra].env_pos = {}
 	    				a.extras[extra].env_pos['x'] = tonumber(elem.attr['OffsetX'])
@@ -258,10 +199,193 @@ function parseVehData(xml, fileName)
 		                    a.extras[extra].env_color['b'] = 255
 		                end
 	    			end
+				end
+
+			end
+		end
+
+		if(xml.root.el[i].name == "MISC") then
+			for ex=1,#xml.root.el[i].kids do
+				if(xml.root.el[i].kids[ex].name == "ArrowboardType") then
+					local elem = xml.root.el[i].kids[ex]
+					a.misc.arrowboardType = elem.kids[1].value
+				end
+
+				if(xml.root.el[i].kids[ex].name == "UseSteadyBurnLights") then
+					local elem = xml.root.el[i].kids[ex]
+					if elem.kids[1].value == "true" then
+						a.misc.usesteadyburnlights = true
+					else
+						a.misc.usesteadyburnlights = false
+					end
+				end
+
+				if(xml.root.el[i].kids[ex].name == "DfltSirenLtsActivateAtLstg") then
+					local elem = xml.root.el[i].kids[ex]
+					a.misc.dfltsirenltsactivateatlstg = tonumber(elem.kids[1].value)
+				end
+			end
+    	end
+
+    	if(xml.root.el[i].name == "CRUISE") then
+    		for ex=1,#xml.root.el[i].kids do
+    			local elem = xml.root.el[i].kids[ex]
+    			if(xml.root.el[i].kids[ex].name== "UseExtras") then
+    				if elem.attr['Extra1'] == "true" then a.cruise[1] = 0 else a.cruise[1] = 1 end
+    				if elem.attr['Extra2'] == "true" then a.cruise[2] = 0 else a.cruise[2] = 1 end
+    				if elem.attr['Extra3'] == "true" then a.cruise[3] = 0 else a.cruise[3] = 1 end
+    				if elem.attr['Extra4'] == "true" then a.cruise[4] = 0 else a.cruise[4] = 1 end
     			end
 
+    			if(xml.root.el[i].kids[ex].name== "DisableAtLstg3") then
+    				local elem = xml.root.el[i].kids[ex]
+    				if elem.kids[1].value == "true" then
+    					a.cruise.DisableLstgThree = true
+    				else
+    					a.cruise.DisableLstgThree = false
+    				end
+    			end
     		end
     	end
+
+    	if(xml.root.el[i].name == "SOUNDS") then
+    		for ex=1,#xml.root.el[i].kids do
+    			local elem = xml.root.el[i].kids[ex]
+    			if(xml.root.el[i].kids[ex].name== "MainHorn") then
+    				a.sounds.mainHorn = {}
+    				if elem.attr['InterruptsSiren'] == "true" then a.sounds.mainHorn.interrupt = true else a.sounds.mainHorn.interrupt = false end
+    				a.sounds.mainHorn.audioString = elem.attr['AudioString']
+    			end
+
+    			if(xml.root.el[i].kids[ex].name== "ManTone1") then
+    				a.sounds.manTone1 = {}
+    				if elem.attr['AllowUse'] == "true" then a.sounds.manTone1.allowUse = true else a.sounds.manTone1.allowUse = false end
+    				a.sounds.manTone1.audioString = elem.attr['AudioString']
+    			end
+
+    			if(xml.root.el[i].kids[ex].name== "ManTone2") then
+    				a.sounds.manTone2 = {}
+    				if elem.attr['AllowUse'] == "true" then a.sounds.manTone2.allowUse = true else a.sounds.manTone2.allowUse = false end
+    				a.sounds.manTone2.audioString = elem.attr['AudioString']
+    			end
+
+    			if(xml.root.el[i].kids[ex].name== "SrnTone1") then
+    				a.sounds.srnTone1 = {}
+    				if elem.attr['AllowUse'] == "true" then a.sounds.srnTone1.allowUse = true else a.sounds.srnTone1.allowUse = false end
+    				a.sounds.srnTone1.audioString = elem.attr['AudioString']
+    			end
+
+    			if(xml.root.el[i].kids[ex].name== "SrnTone2") then
+    				a.sounds.srnTone2 = {}
+    				if elem.attr['AllowUse'] == "true" then a.sounds.srnTone2.allowUse = true else a.sounds.srnTone2.allowUse = false end
+    				a.sounds.srnTone2.audioString = elem.attr['AudioString']
+    			end
+
+    			if(xml.root.el[i].kids[ex].name== "SrnTone3") then
+    				a.sounds.srnTone3 = {}
+    				if elem.attr['AllowUse'] == "true" then a.sounds.srnTone3.allowUse = true else a.sounds.srnTone3.allowUse = false end
+    				a.sounds.srnTone3.audioString = elem.attr['AudioString']
+    			end
+
+    			if(xml.root.el[i].kids[ex].name== "SrnTone4") then
+    				a.sounds.srnTone4 = {}
+    				if elem.attr['AllowUse'] == "true" then a.sounds.srnTone4.allowUse = true else a.sounds.srnTone4.allowUse = false end
+    				a.sounds.srnTone4.audioString = elem.attr['AudioString']
+    			end
+
+    			if(xml.root.el[i].kids[ex].name== "AuxSiren") then
+    				a.sounds.auxSiren = {}
+    				if elem.attr['AllowUse'] == "true" then a.sounds.auxSiren.allowUse = true else a.sounds.auxSiren.allowUse = false end
+    				a.sounds.auxSiren.audioString = elem.attr['AudioString']
+    			end
+
+    			if(xml.root.el[i].kids[ex].name== "PanicMde") then
+    				a.sounds.panicMode = {}
+    				if elem.attr['AllowUse'] == "true" then a.sounds.panicMode.allowUse = true else a.sounds.panicMode.allowUse = false end
+    				a.sounds.panicMode.audioString = elem.attr['AudioString']
+    			end
+    		end
+    	end
+
+    	if(xml.root.el[i].name == "WRNL") then
+    		a.wrnl.type = string.lower(xml.root.el[i].attr['LightingFormat'])
+    		a.wrnl.PresetPatterns = {}
+    		a.wrnl.ForcedPatterns = {}
+    		for ex=1,#xml.root.el[i].kids do
+				if(xml.root.el[i].kids[ex].name == "PresetPatterns") then
+					for inner=1,#xml.root.el[i].kids[ex].el do
+						local elem = xml.root.el[i].kids[ex].el[inner]
+
+						a.wrnl.PresetPatterns[string.lower(elem.name)] = {}
+						if string.lower(elem.attr['Enabled']) == "true" then a.wrnl.PresetPatterns[string.lower(elem.name)].enabled = true else a.wrnl.PresetPatterns[string.lower(elem.name)].enabled = false end
+						a.wrnl.PresetPatterns[string.lower(elem.name)].pattern = tonumber(elem.attr['Pattern'])
+					end
+				end
+				if(xml.root.el[i].kids[ex].name == "ForcedPatterns") then
+					for inner=1,#xml.root.el[i].kids[ex].el do
+						local elem = xml.root.el[i].kids[ex].el[inner]
+
+						a.wrnl.ForcedPatterns[string.lower(elem.name)] = {}
+						if string.lower(elem.attr['Enabled']) == "true" then a.wrnl.ForcedPatterns[string.lower(elem.name)].enabled = true else a.wrnl.ForcedPatterns[string.lower(elem.name)].enabled = false end
+						a.wrnl.ForcedPatterns[string.lower(elem.name)].pattern = tonumber(elem.attr['Pattern'])
+					end
+				end
+			end
+    	end
+
+    	if(xml.root.el[i].name == "PRML") then
+    		a.priml.type = string.lower(xml.root.el[i].attr['LightingFormat'])
+    		a.priml.ExtrasActiveAtLstg2 = string.lower(xml.root.el[i].attr['ExtrasActiveAtLstg2'])
+    		a.priml.PresetPatterns = {}
+    		a.priml.ForcedPatterns = {}
+    		for ex=1,#xml.root.el[i].kids do
+				if(xml.root.el[i].kids[ex].name == "PresetPatterns") then
+					for inner=1,#xml.root.el[i].kids[ex].el do
+						local elem = xml.root.el[i].kids[ex].el[inner]
+
+						a.priml.PresetPatterns[string.lower(elem.name)] = {}
+						if string.lower(elem.attr['Enabled']) == "true" then a.priml.PresetPatterns[string.lower(elem.name)].enabled = true else a.priml.PresetPatterns[string.lower(elem.name)].enabled = false end
+						a.priml.PresetPatterns[string.lower(elem.name)].pattern = tonumber(elem.attr['Pattern'])
+					end
+				end
+				if(xml.root.el[i].kids[ex].name == "ForcedPatterns") then
+					for inner=1,#xml.root.el[i].kids[ex].el do
+						local elem = xml.root.el[i].kids[ex].el[inner]
+
+						a.priml.ForcedPatterns[string.lower(elem.name)] = {}
+						if string.lower(elem.attr['Enabled']) == "true" then a.priml.ForcedPatterns[string.lower(elem.name)].enabled = true else a.priml.ForcedPatterns[string.lower(elem.name)].enabled = false end
+						a.priml.ForcedPatterns[string.lower(elem.name)].pattern = tonumber(elem.attr['Pattern'])
+					end
+				end
+			end
+    	end
+
+    	if(xml.root.el[i].name == "SECL") then
+    		a.secl.type = string.lower(xml.root.el[i].attr['LightingFormat'])
+    		a.secl.PresetPatterns = {}
+    		a.secl.ForcedPatterns = {}
+    		for ex=1,#xml.root.el[i].kids do
+				if(xml.root.el[i].kids[ex].name == "PresetPatterns") then
+					for inner=1,#xml.root.el[i].kids[ex].el do
+						local elem = xml.root.el[i].kids[ex].el[inner]
+
+						a.secl.PresetPatterns[string.lower(elem.name)] = {}
+						if string.lower(elem.attr['Enabled']) == "true" then a.secl.PresetPatterns[string.lower(elem.name)].enabled = true else a.secl.PresetPatterns[string.lower(elem.name)].enabled = false end
+						a.secl.PresetPatterns[string.lower(elem.name)].pattern = tonumber(elem.attr['Pattern'])
+					end
+				end
+				if(xml.root.el[i].kids[ex].name == "ForcedPatterns") then
+					for inner=1,#xml.root.el[i].kids[ex].el do
+						local elem = xml.root.el[i].kids[ex].el[inner]
+
+						a.secl.ForcedPatterns[string.lower(elem.name)] = {}
+						if string.lower(elem.attr['Enabled']) == "true" then a.secl.ForcedPatterns[string.lower(elem.name)].enabled = true else a.secl.ForcedPatterns[string.lower(elem.name)].enabled = false end
+						a.secl.ForcedPatterns[string.lower(elem.name)].pattern = tonumber(elem.attr['Pattern'])
+					end
+				end
+			end
+    	end
+    	
     end
 
     vehicleInfoTable[fileName] = a
@@ -559,13 +683,13 @@ AddEventHandler('onResourceStart', function(name)
 		    end
 	    end
 
-	    for i=1,#pattern_files do
-	    	local data = LoadResourceFile(GetCurrentResourceName(), "patterns/" .. pattern_files[i])
+	    -- for i=1,#pattern_files do
+	    -- 	local data = LoadResourceFile(GetCurrentResourceName(), "patterns/" .. pattern_files[i])
 
-		    if data then
-		        parseObjSet(data, pattern_files[i])
-		    end
-	    end
+		   --  if data then
+		   --      parseObjSet(data, pattern_files[i])
+		   --  end
+	    -- end
 	    configCheck()
 	end
 end)
@@ -634,4 +758,9 @@ end)
 RegisterServerEvent("els:setSceneLightState_s")
 AddEventHandler("els:setSceneLightState_s", function(state)
 	TriggerClientEvent("els:setSceneLightState_c", -1, source)
+end)
+
+RegisterServerEvent("els:setCruiseLights_s")
+AddEventHandler("els:setCruiseLights_s", function(state)
+	TriggerClientEvent("els:setCruiseLights_c", -1, source)
 end)

@@ -1,3 +1,0 @@
-- Added more primary lights for LED type
-- Attempts to fix steady burn
-- Key Change! Now uses actual ELS bindings (cannot be changed currently) RCNTRL must be pressed before any keys work.
