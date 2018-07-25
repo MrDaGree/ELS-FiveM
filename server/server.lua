@@ -370,8 +370,10 @@ function parseVehData(xml, fileName)
 
     vehicleInfoTable[fileName] = a
 
-	if outputLoading and outputLoading ~= nil and printDebugInformation then
-		print("Done with vehicle: " .. fileName)
+	if outputLoading and outputLoading ~= nil then
+		if printDebugInformation == nil or printDebugInformation == true then
+			print("Done with vehicle: " .. fileName)
+		end
 	end
 end
 
@@ -625,8 +627,10 @@ function parsePatternData(xml, fileName)
     end
     patternInfoTable[#patternInfoTable + 1] = a
 
-	if outputLoading and outputLoading ~= nil and printDebugInformation then
-		print("Done with pattern: " .. fileName)
+	if outputLoading and outputLoading ~= nil then
+		if printDebugInformation == nil or printDebugInformation == true then
+			print("Done with pattern: " .. fileName)
+		end
 	end
 end
 
@@ -676,7 +680,7 @@ end)
 
 RegisterServerEvent("els:requestVehiclesUpdate")
 AddEventHandler('els:requestVehiclesUpdate', function()
-	if printDebugInformation then
+	if printDebugInformation == nil or printDebugInformation == true then
 		print("Sending player (" .. source .. ") ELS data")
 	end
 
