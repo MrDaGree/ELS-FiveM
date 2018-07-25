@@ -442,10 +442,10 @@ function Draw(text, r, g, b, alpha, x, y, width, height, ya, center, font)
     SetTextCentre(center)
     SetTextDropshadow(0, 0, 0, 0, 0)
     SetTextEdge(1, 0, 0, 0, 205)
-    SetTextEntry("STRING")
-    AddTextComponentString(text)
-    Citizen.InvokeNative(0x61BB1D9B3A95D802, ya)
-    DrawText(x, y)
+    BeginTextCommandDisplayText("STRING")
+    AddTextComponentSubstringPlayerName(text)
+    SetUiLayer(ya)
+    EndTextCommandDisplayText(x, y)
 end
 
 function hornCleanup()
@@ -488,7 +488,7 @@ function sirenCleanup()
 end
 
 function _DrawRect(x, y, width, height, r, g, b, a, ya)
-    Citizen.InvokeNative(0x61BB1D9B3A95D802, ya)
+    SetUiLayer(ya)
     DrawRect(x, y, width, height, r, g, b, a)
 end
 
