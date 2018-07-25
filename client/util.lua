@@ -505,16 +505,9 @@ function vehicleLightCleanup()
 end
 
 function LghtSoundCleaner()
-    if curCleanupTime > 350 then
-        curCleanupTime = 0
-
-        vehicleLightCleanup()
-        hornCleanup()
-        sirenCleanup()
-
-    else
-        curCleanupTime = curCleanupTime + 1
-    end
+    vehicleLightCleanup()
+    hornCleanup()
+    sirenCleanup()
 end
 
 function changePrimaryPatternMath(way)

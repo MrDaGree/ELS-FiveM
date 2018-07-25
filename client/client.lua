@@ -648,7 +648,7 @@ Citizen.CreateThread(function()
     while true do
         LghtSoundCleaner()
 
-        Wait(0)
+        Wait(500)
     end
 end)
 
