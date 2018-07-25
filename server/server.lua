@@ -370,9 +370,9 @@ function parseVehData(xml, fileName)
 
     vehicleInfoTable[fileName] = a
 
-    if outputLoading and outputLoading ~= nil then
-    	print("Done with vehicle: " .. fileName)
-    end
+	if outputLoading and outputLoading ~= nil and printDebugInformation then
+		print("Done with vehicle: " .. fileName)
+	end
 end
 
 function parsePatternData(xml, fileName)
@@ -625,9 +625,9 @@ function parsePatternData(xml, fileName)
     end
     patternInfoTable[#patternInfoTable + 1] = a
 
-    if outputLoading and outputLoading ~= nil then
-    	print("Done with pattern: " .. fileName)
-    end
+	if outputLoading and outputLoading ~= nil and printDebugInformation then
+		print("Done with pattern: " .. fileName)
+	end
 end
 
 function parseObjSet(data, fileName)
@@ -676,7 +676,10 @@ end)
 
 RegisterServerEvent("els:requestVehiclesUpdate")
 AddEventHandler('els:requestVehiclesUpdate', function()
-	print("Sending player (" .. source .. ") ELS data")
+	if printDebugInformation then
+		print("Sending player (" .. source .. ") ELS data")
+	end
+
 	TriggerClientEvent("els:updateElsVehicles", source, vehicleInfoTable, patternInfoTable)
 end)
 
