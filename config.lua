@@ -2,7 +2,7 @@ outputLoading = false
 playButtonPressSounds = true
 
 vehicleSyncDistance = 150
-envirementLightBrightness = 0.005
+envirementLightBrightness = 0.009
 
 panelOffsetX = 0.0
 panelOffsetY = 0.0

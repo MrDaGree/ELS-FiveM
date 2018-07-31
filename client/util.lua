@@ -149,7 +149,6 @@ AddEventHandler("els:changePrimaryPattern_c", function(sender, pat)
     end
 end)
 
-
 RegisterNetEvent("els:setSirenState_c")
 AddEventHandler("els:setSirenState_c", function(sender, newstate)
     local player_s = GetPlayerFromServerId(sender)
@@ -158,30 +157,6 @@ AddEventHandler("els:setSirenState_c", function(sender, newstate)
         if IsPedInAnyVehicle(ped_s, false) then
             local veh = GetVehiclePedIsUsing(ped_s)
             setSirenState(veh, newstate)
-        end
-    end
-end)
-
-RegisterNetEvent("els:setDualSiren_c")
-AddEventHandler("els:setDualSiren_c", function(sender, newstate)
-    local player_s = GetPlayerFromServerId(sender)
-    local ped_s = GetPlayerPed(player_s)
-    if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
-        if IsPedInAnyVehicle(ped_s, false) then
-            local veh = GetVehiclePedIsUsing(ped_s)
-            dualEnable[veh] = newstate
-        end
-    end
-end)
-
-RegisterNetEvent("els:setDualSirenState_c")
-AddEventHandler("els:setDualSirenState_c", function(sender, newstate)
-    local player_s = GetPlayerFromServerId(sender)
-    local ped_s = GetPlayerPed(player_s)
-    if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
-        if IsPedInAnyVehicle(ped_s, false) then
-            local veh = GetVehiclePedIsUsing(ped_s)
-            setDualSirenState(veh, newstate)
         end
     end
 end)
@@ -275,48 +250,10 @@ function setHornState(veh, newstate)
                         
             if newstate == 1 then
                 h_soundID_veh[veh] = GetSoundId()
-                PlaySoundFromEntity(h_soundID_veh[veh], "SIRENS_AIRHORN", veh, 0, 0, 0)
+                PlaySoundFromEntity(h_soundID_veh[veh], getVehicleVCFInfo(veh).sounds.mainHorn.audioString, veh, 0, 0, 0)
             end             
                 
             h_horn_state[veh] = newstate
-        end
-    end
-end
-
-function setDualSirenState(veh, newstate)
-    if DoesEntityExist(veh) and not IsEntityDead(veh) then
-        if newstate ~= d_siren_state[veh] then
-                
-            if d_soundID_veh[veh] ~= nil then
-                StopSound(d_soundID_veh[veh])
-                ReleaseSoundId(d_soundID_veh[veh])
-                d_soundID_veh[veh] = nil
-            end
-                        
-            if newstate == 1 then
-
-                d_soundID_veh[veh] = GetSoundId()
-                PlaySoundFromEntity(d_soundID_veh[veh], "VEHICLES_HORNS_SIREN_1", veh, 0, 0, 0)
-                toggleSirenMute(veh, true)
-                
-            elseif newstate == 2 then
-
-                d_soundID_veh[veh] = GetSoundId() 
-                PlaySoundFromEntity(d_soundID_veh[veh], "VEHICLES_HORNS_SIREN_2", veh, 0, 0, 0)
-                toggleSirenMute(veh, true)
-                
-            elseif newstate == 3 then
-
-                d_soundID_veh[veh] = GetSoundId()
-                PlaySoundFromEntity(d_soundID_veh[veh], "VEHICLES_HORNS_POLICE_WARNING", veh, 0, 0, 0)
-                toggleSirenMute(veh, true)
-                
-            else
-                toggleSirenMute(veh, true)
-                
-            end             
-                
-            d_siren_state[veh] = newstate
         end
     end
 end
@@ -334,19 +271,19 @@ function setSirenState(veh, newstate)
             if newstate == 1 then
 
                 m_soundID_veh[veh] = GetSoundId()
-                PlaySoundFromEntity(m_soundID_veh[veh], "VEHICLES_HORNS_SIREN_1", veh, 0, 0, 0)
+                PlaySoundFromEntity(m_soundID_veh[veh], getVehicleVCFInfo(veh).sounds.srntone1.audioString, veh, 0, 0, 0)
                 toggleSirenMute(veh, true)
                 
             elseif newstate == 2 then
 
                 m_soundID_veh[veh] = GetSoundId() 
-                PlaySoundFromEntity(m_soundID_veh[veh], "VEHICLES_HORNS_SIREN_2", veh, 0, 0, 0)
+                PlaySoundFromEntity(m_soundID_veh[veh], getVehicleVCFInfo(veh).sounds.srntone2.audioString, veh, 0, 0, 0)
                 toggleSirenMute(veh, true)
                 
             elseif newstate == 3 then
 
                 m_soundID_veh[veh] = GetSoundId()
-                PlaySoundFromEntity(m_soundID_veh[veh], "VEHICLES_HORNS_POLICE_WARNING", veh, 0, 0, 0)
+                PlaySoundFromEntity(m_soundID_veh[veh], getVehicleVCFInfo(veh).sounds.srntone3.audioString, veh, 0, 0, 0)
                 toggleSirenMute(veh, true)
                 
             else
