@@ -5,6 +5,7 @@ printDebugInformation = true
 vehicleSyncDistance = 150
 envirementLightBrightness = 0.009
 
+panelType = "original"
 panelOffsetX = 0.0
 panelOffsetY = 0.0
 
