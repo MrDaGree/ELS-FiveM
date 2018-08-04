@@ -259,7 +259,6 @@ function setHornState(veh, newstate)
 end
 
 function setSirenState(veh, newstate)
-    print(json.encode(getVehicleVCFInfo(veh).sounds))
     if DoesEntityExist(veh) and not IsEntityDead(veh) then
         if newstate ~= m_siren_state[veh] then
                 
