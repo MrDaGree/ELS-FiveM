@@ -62,10 +62,6 @@ Citizen.CreateThread(function()
                     DisableControlAction(0, keyboard.siren.tone_one, true)
                     DisableControlAction(0, keyboard.siren.tone_two, true)
                     DisableControlAction(0, keyboard.siren.tone_three, true)
-                    DisableControlAction(0, keyboard.siren.dual_toggle, true)
-                    DisableControlAction(0, keyboard.siren.dual_one, true)
-                    DisableControlAction(0, keyboard.siren.dual_two, true)
-                    DisableControlAction(0, keyboard.siren.dual_three, true)
 
                     if IsDisabledControlPressed(0, keyboard.modifyKey) then
 
@@ -170,42 +166,6 @@ Citizen.CreateThread(function()
                                 if IsDisabledControlJustReleased(0, keyboard.siren.tone_three) then
                                     setSirenStateButton(3)
                                 end
-
-
-                                if IsDisabledControlJustReleased(0, keyboard.siren.dual_toggle) then
-                                    if playButtonPressSounds then
-                                        PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-                                    end
-                                    if dualEnable[GetVehiclePedIsUsing(GetPlayerPed(-1))] then
-                                        TriggerServerEvent("els:setDualSiren_s", false)
-                                        TriggerServerEvent("els:setDualSirenState_s", 0)
-                                    else
-                                        TriggerServerEvent("els:setDualSiren_s", true)
-                                    end
-                                end
-                                if dualEnable[GetVehiclePedIsUsing(GetPlayerPed(-1))] then
-                                    if IsDisabledControlJustReleased(0, keyboard.siren.dual_one) then
-                                        if playButtonPressSounds then
-                                            PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-                                        end
-                                        TriggerServerEvent("els:setDualSirenState_s", 1)
-                                    end
-
-                                    if IsDisabledControlJustReleased(0, keyboard.siren.dual_two) then
-                                        if playButtonPressSounds then
-                                            PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-                                        end
-                                        TriggerServerEvent("els:setDualSirenState_s", 2)
-                                    end
-
-                                    if IsDisabledControlJustReleased(0, keyboard.siren.dual_three) then
-                                        if playButtonPressSounds then
-                                            PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-                                        end
-                                        TriggerServerEvent("els:setDualSirenState_s", 3)
-                                    end
-                                end
-
                             end
                             if elsVehs[GetVehiclePedIsUsing(GetPlayerPed(-1))].stage == 2 then
                                 if IsDisabledControlJustReleased(0, keyboard.siren.tone_one) then
@@ -296,43 +256,6 @@ Citizen.CreateThread(function()
                                     end
                                 end
 
-                                if IsDisabledControlPressed(0, controller.modifyKey) then
-
-                                    if IsDisabledControlPressed(0, controller.modifyKey) and IsDisabledControlJustReleased(0, shared.horn) then
-                                        if playButtonPressSounds then
-                                            PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-                                        end
-                                        if dualEnable[GetVehiclePedIsUsing(GetPlayerPed(-1))] then
-                                            TriggerServerEvent("els:setDualSiren_s", false)
-                                            TriggerServerEvent("els:setDualSirenState_s", 0)
-                                        else
-                                            TriggerServerEvent("els:setDualSiren_s", true)
-                                        end
-                                    end
-                                    if dualEnable[GetVehiclePedIsUsing(GetPlayerPed(-1))] then
-                                        if IsDisabledControlPressed(0, controller.modifyKey) and IsDisabledControlJustReleased(0, controller.siren.tone_one) then
-                                            if playButtonPressSounds then
-                                                PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-                                            end
-                                            TriggerServerEvent("els:setDualSirenState_s", 1)
-                                        end
-
-                                        if IsDisabledControlPressed(0, controller.modifyKey) and IsDisabledControlJustReleased(0, controller.siren.tone_two) then
-                                            if playButtonPressSounds then
-                                                PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-                                            end
-                                            TriggerServerEvent("els:setDualSirenState_s", 2)
-                                        end
-
-                                        if IsDisabledControlPressed(0, controller.modifyKey) and IsDisabledControlJustReleased(0, controller.siren.tone_three) then
-                                            if playButtonPressSounds then
-                                                PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-                                            end
-                                            TriggerServerEvent("els:setDualSirenState_s", 3)
-                                        end
-                                    end
-                                end
-
                             end
                             if elsVehs[GetVehiclePedIsUsing(GetPlayerPed(-1))].stage == 2 then
                                 if IsDisabledControlJustReleased(0, controller.siren.tone_one) then
@@ -411,7 +334,7 @@ Citizen.CreateThread(function()
                 end
                 changeSecondaryPatternMath(-1)
             end
-            if IsDisabledControlPressed(0, keyboard.pattern.warning) then
+            if IsDisabledControlPressed(0, keyboard.pattern.advisor) then
                 if playButtonPressSounds then
                     PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
                 end
@@ -430,7 +353,7 @@ Citizen.CreateThread(function()
                 end
                 changeSecondaryPatternMath(1)
             end
-            if IsDisabledControlPressed(0, keyboard.pattern.warning) then
+            if IsDisabledControlPressed(0, keyboard.pattern.advisor) then
                 if playButtonPressSounds then
                     PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
                 end
@@ -651,7 +574,7 @@ Citizen.CreateThread(function()
     while true do
         LghtSoundCleaner()
 
-        Wait(500)
+        Wait(300)
     end
 end)
 
@@ -666,7 +589,7 @@ Citizen.CreateThread(function()
                     
                     local vehN = checkCarHash(k)
 
-                    for i=1,12 do
+                    for i=11,12 do
                         if (not IsEntityDead(k) and DoesEntityExist(k)) then
                             if(els_Vehicles[vehN].extras[i] ~= nil and els_Vehicles[vehN].extras[i].enabled) then
                                 if(IsVehicleExtraTurnedOn(k, i)) then
@@ -679,26 +602,16 @@ Citizen.CreateThread(function()
                                             DrawSpotLightWithShadow(coords.x + els_Vehicles[vehN].extras[11].env_pos.x, coords.y + els_Vehicles[vehN].extras[11].env_pos.y, coords.z + els_Vehicles[vehN].extras[11].env_pos.z, rotX, rotY, rotZ, 255, 255, 255, 75.0, 2.0, 10.0, 20.0, 0.0, true)
                                         end
                                         if i == 12 then
-                                            DrawLightWithRange(coords.x + els_Vehicles[vehN].extras[12].env_pos.x, coords.y + els_Vehicles[vehN].extras[12].env_pos.y, coords.z + els_Vehicles[vehN].extras[12].env_pos.z, 255, 255, 255, 50.0, envirementLightBrightness + 0.2)
+                                            DrawLightWithRange(coords.x + els_Vehicles[vehN].extras[12].env_pos.x, coords.y + els_Vehicles[vehN].extras[12].env_pos.y, coords.z + els_Vehicles[vehN].extras[12].env_pos.z, 255, 255, 255, 50.0, envirementLightBrightness)
                                         end
                                     else
                                         if i == 11 then
                                             DrawSpotLightWithShadow(coords.x, coords.y, coords.z + 0.2, rotX, rotY, rotZ, 255, 255, 255, 75.0, 2.0, 10.0, 20.0, 0.0, true)
                                         end
                                         if i == 12 then
-                                            DrawLightWithRange(coords.x, coords.y, coords.z, 255, 255, 255, 50.0, envirementLightBrightness + 0.2)
+                                            DrawLightWithRange(coords.x, coords.y, coords.z, 255, 255, 255, 50.0, envirementLightBrightness)
                                         end
                                     end
-
-                                    if v.cruise then
-                                        runEnvirementLightWithBrightness(k, i, 0.01)
-                                    end
-
-                                    -- if doesVehicleHaveTrafficAdvisor(k) then
-                                    --     if (i == 7 or i == 8 or i == 9) then
-                                    --         runEnvirementLightWithBrightness(k, i, 0.01)
-                                    --     end
-                                    -- end
                                 end
                             end
                         end

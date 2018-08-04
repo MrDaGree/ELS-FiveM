@@ -259,6 +259,7 @@ function setHornState(veh, newstate)
 end
 
 function setSirenState(veh, newstate)
+    print(json.encode(getVehicleVCFInfo(veh).sounds))
     if DoesEntityExist(veh) and not IsEntityDead(veh) then
         if newstate ~= m_siren_state[veh] then
                 
@@ -271,24 +272,23 @@ function setSirenState(veh, newstate)
             if newstate == 1 then
 
                 m_soundID_veh[veh] = GetSoundId()
-                PlaySoundFromEntity(m_soundID_veh[veh], getVehicleVCFInfo(veh).sounds.srntone1.audioString, veh, 0, 0, 0)
+                PlaySoundFromEntity(m_soundID_veh[veh], getVehicleVCFInfo(veh).sounds.srnTone1.audioString, veh, 0, 0, 0)
                 toggleSirenMute(veh, true)
                 
             elseif newstate == 2 then
 
                 m_soundID_veh[veh] = GetSoundId() 
-                PlaySoundFromEntity(m_soundID_veh[veh], getVehicleVCFInfo(veh).sounds.srntone2.audioString, veh, 0, 0, 0)
+                PlaySoundFromEntity(m_soundID_veh[veh], getVehicleVCFInfo(veh).sounds.srnTone2.audioString, veh, 0, 0, 0)
                 toggleSirenMute(veh, true)
                 
             elseif newstate == 3 then
 
                 m_soundID_veh[veh] = GetSoundId()
-                PlaySoundFromEntity(m_soundID_veh[veh], getVehicleVCFInfo(veh).sounds.srntone3.audioString, veh, 0, 0, 0)
+                PlaySoundFromEntity(m_soundID_veh[veh], getVehicleVCFInfo(veh).sounds.srnTone3.audioString, veh, 0, 0, 0)
                 toggleSirenMute(veh, true)
                 
             else
                 toggleSirenMute(veh, true)
-                
             end             
                 
             m_siren_state[veh] = newstate
@@ -386,42 +386,46 @@ function Draw(text, r, g, b, alpha, x, y, width, height, ya, center, font)
 end
 
 function hornCleanup()
-    for vehicle, state in pairs(h_horn_state) do
-        if state >= 0 then
-            if not DoesEntityExist(vehicle) or IsEntityDead(vehicle) then
-                if h_soundID_veh[vehicle] ~= nil then
-                    StopSound(h_soundID_veh[vehicle])
-                    ReleaseSoundId(h_soundID_veh[vehicle])
-                    h_soundID_veh[vehicle] = nil
-                    h_horn_state[vehicle] = nil
+    Citizen.CreateThread(function()
+        for vehicle, state in pairs(h_horn_state) do
+            if state >= 0 then
+                if not DoesEntityExist(vehicle) or IsEntityDead(vehicle) then
+                    if h_soundID_veh[vehicle] ~= nil then
+                        StopSound(h_soundID_veh[vehicle])
+                        ReleaseSoundId(h_soundID_veh[vehicle])
+                        h_soundID_veh[vehicle] = nil
+                        h_horn_state[vehicle] = nil
+                    end
                 end
             end
         end
-    end
+    end)
 end
 
 function sirenCleanup()
-    for vehicle, state in pairs(m_siren_state) do
-        if m_soundID_veh[vehicle] ~= nil then
-            if not DoesEntityExist(vehicle) or IsEntityDead(vehicle) then
-                StopSound(m_soundID_veh[vehicle])
-                ReleaseSoundId(m_soundID_veh[vehicle])
-                m_soundID_veh[vehicle] = nil
-                m_siren_state[vehicle] = nil
+    Citizen.CreateThread(function()
+        for vehicle, state in pairs(m_siren_state) do
+            if m_soundID_veh[vehicle] ~= nil then
+                if not DoesEntityExist(vehicle) or IsEntityDead(vehicle) then
+                    StopSound(m_soundID_veh[vehicle])
+                    ReleaseSoundId(m_soundID_veh[vehicle])
+                    m_soundID_veh[vehicle] = nil
+                    m_siren_state[vehicle] = nil
+                end
             end
         end
-    end
 
-    for vehicle, state in pairs(d_siren_state) do
-        if d_soundID_veh[vehicle] ~= nil then
-            if not DoesEntityExist(vehicle) or IsEntityDead(vehicle) then
-                StopSound(d_soundID_veh[vehicle])
-                ReleaseSoundId(d_soundID_veh[vehicle])
-                d_soundID_veh[vehicle] = nil
-                d_siren_state[vehicle] = nil
+        for vehicle, state in pairs(d_siren_state) do
+            if d_soundID_veh[vehicle] ~= nil then
+                if not DoesEntityExist(vehicle) or IsEntityDead(vehicle) then
+                    StopSound(d_soundID_veh[vehicle])
+                    ReleaseSoundId(d_soundID_veh[vehicle])
+                    d_soundID_veh[vehicle] = nil
+                    d_siren_state[vehicle] = nil
+                end
             end
         end
-    end
+    end)
 end
 
 function _DrawRect(x, y, width, height, r, g, b, a, ya)
@@ -430,15 +434,17 @@ function _DrawRect(x, y, width, height, r, g, b, a, ya)
 end
 
 function vehicleLightCleanup()
-    for vehicle,_ in pairs(elsVehs) do
-        if elsVehs[vehicle] then
-            if not DoesEntityExist(vehicle) or IsEntityDead(vehicle) then
-                if elsVehs[vehicle] ~= nil then
-                    elsVehs[vehicle] = nil
+    Citizen.CreateThread(function()
+        for vehicle,_ in pairs(elsVehs) do
+            if elsVehs[vehicle] then
+                if not DoesEntityExist(vehicle) or IsEntityDead(vehicle) then
+                    if elsVehs[vehicle] ~= nil then
+                        elsVehs[vehicle] = nil
+                    end
                 end
             end
         end
-    end
+    end)
 end
 
 function LghtSoundCleaner()
@@ -547,7 +553,7 @@ function upOneStage()
     changeLightStage(newStage, advisorPatternSelectedIndex, lightPatternPrim, lightPatternSec)
 
     if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
-        if newStage >= getVehicleVCFInfo(GetVehiclePedIsUsing(GetPlayerPed(-1))).misc.dfltsirenltsactivateatlstg then
+        if newStage == getVehicleVCFInfo(GetVehiclePedIsUsing(GetPlayerPed(-1))).misc.dfltsirenltsactivateatlstg then
             toggleSirenMute(veh, true)
             SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
         else
@@ -582,7 +588,7 @@ function downOneStage()
     changeLightStage(newStage, advisorPatternSelectedIndex, lightPatternPrim, lightPatternSec)
 
     if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
-        if newStage >= getVehicleVCFInfo(GetVehiclePedIsUsing(GetPlayerPed(-1))).misc.dfltsirenltsactivateatlstg then
+        if newStage == getVehicleVCFInfo(GetVehiclePedIsUsing(GetPlayerPed(-1))).misc.dfltsirenltsactivateatlstg then
             toggleSirenMute(veh, true)
             SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
         else
