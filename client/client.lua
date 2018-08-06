@@ -321,43 +321,49 @@ end)
 
 Citizen.CreateThread(function()
     while true do
-        if IsDisabledControlPressed(0, keyboard.modifyKey) then
-            if IsDisabledControlPressed(0, keyboard.pattern.primary) then
-                if playButtonPressSounds then
-                    PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+        if vehInTable(els_Vehicles, checkCarHash(GetVehiclePedIsUsing(GetPlayerPed(-1)))) then
+            if (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), -1) == GetPlayerPed(-1)) or
+                (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), 0) == GetPlayerPed(-1)) then
+
+                if IsDisabledControlPressed(0, keyboard.modifyKey) then
+                    if IsDisabledControlPressed(0, keyboard.pattern.primary) then
+                        if playButtonPressSounds then
+                            PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+                        end
+                        changePrimaryPatternMath(-1)
+                    end
+                    if IsDisabledControlPressed(0, keyboard.pattern.secondary) then
+                        if playButtonPressSounds then
+                            PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+                        end
+                        changeSecondaryPatternMath(-1)
+                    end
+                    if IsDisabledControlPressed(0, keyboard.pattern.advisor) then
+                        if playButtonPressSounds then
+                            PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+                        end
+                        changeAdvisorPatternMath(-1)
+                    end
+                else
+                    if IsDisabledControlPressed(0, keyboard.pattern.primary) then
+                        if playButtonPressSounds then
+                            PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+                        end
+                        changePrimaryPatternMath(1)
+                    end
+                    if IsDisabledControlPressed(0, keyboard.pattern.secondary) then
+                        if playButtonPressSounds then
+                            PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+                        end
+                        changeSecondaryPatternMath(1)
+                    end
+                    if IsDisabledControlPressed(0, keyboard.pattern.advisor) then
+                        if playButtonPressSounds then
+                            PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+                        end
+                        changeAdvisorPatternMath(1)
+                    end
                 end
-                changePrimaryPatternMath(-1)
-            end
-            if IsDisabledControlPressed(0, keyboard.pattern.secondary) then
-                if playButtonPressSounds then
-                    PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-                end
-                changeSecondaryPatternMath(-1)
-            end
-            if IsDisabledControlPressed(0, keyboard.pattern.advisor) then
-                if playButtonPressSounds then
-                    PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-                end
-                changeAdvisorPatternMath(-1)
-            end
-        else
-            if IsDisabledControlPressed(0, keyboard.pattern.primary) then
-                if playButtonPressSounds then
-                    PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-                end
-                changePrimaryPatternMath(1)
-            end
-            if IsDisabledControlPressed(0, keyboard.pattern.secondary) then
-                if playButtonPressSounds then
-                    PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-                end
-                changeSecondaryPatternMath(1)
-            end
-            if IsDisabledControlPressed(0, keyboard.pattern.advisor) then
-                if playButtonPressSounds then
-                    PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-                end
-                changeAdvisorPatternMath(1)
             end
         end
         Wait(150)
@@ -569,14 +575,14 @@ Citizen.CreateThread(function()
     end
 end)
 
-Citizen.CreateThread(function()
+-- Citizen.CreateThread(function()
 
-    while true do
-        LghtSoundCleaner()
+--     while true do
+--         LghtSoundCleaner()
 
-        Wait(800)
-    end
-end)
+--         Wait(800)
+--     end
+-- end)
 
 Citizen.CreateThread(function()
     while true do
