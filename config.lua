@@ -3,7 +3,7 @@ playButtonPressSounds = true
 printDebugInformation = true
 
 vehicleSyncDistance = 150
-envirementLightBrightness = 0.009
+envirementLightBrightness = 0.006
 
 panelType = "original"
 panelOffsetX = 0.0

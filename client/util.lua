@@ -398,6 +398,7 @@ function hornCleanup()
                 end
             end
         end
+        return
     end)
 end
 
@@ -424,6 +425,7 @@ function sirenCleanup()
                 end
             end
         end
+        return
     end)
 end
 
@@ -443,6 +445,7 @@ function vehicleLightCleanup()
                 end
             end
         end
+        return
     end)
 end
 
@@ -553,7 +556,7 @@ function upOneStage()
 
     if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
         if newStage == getVehicleVCFInfo(GetVehiclePedIsUsing(GetPlayerPed(-1))).misc.dfltsirenltsactivateatlstg then
-            toggleSirenMute(veh, true)
+            toggleSirenMute(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
             SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
         else
             SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
@@ -588,7 +591,7 @@ function downOneStage()
 
     if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
         if newStage == getVehicleVCFInfo(GetVehiclePedIsUsing(GetPlayerPed(-1))).misc.dfltsirenltsactivateatlstg then
-            toggleSirenMute(veh, true)
+            toggleSirenMute(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
             SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
         else
             SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
