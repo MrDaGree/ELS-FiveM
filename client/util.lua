@@ -630,7 +630,7 @@ function yelp(veh, newstate)
                         
             if newstate == 1 then
                 h_soundID_veh[veh] = GetSoundId()
-                PlaySoundFromEntity(h_soundID_veh[veh], "VEHICLES_HORNS_SIREN_1", veh, 0, 0, 0)
+                PlaySoundFromEntity(h_soundID_veh[veh], getVehicleVCFInfo(veh).sounds.srnTone1.audioString, veh, 0, 0, 0)
             end             
                 
             h_horn_state[veh] = newstate
