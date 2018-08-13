@@ -62,6 +62,8 @@ Citizen.CreateThread(function()
                     DisableControlAction(0, keyboard.siren.tone_one, true)
                     DisableControlAction(0, keyboard.siren.tone_two, true)
                     DisableControlAction(0, keyboard.siren.tone_three, true)
+					
+					DisableControlAction(0, keyboard.siren.manuel, true)
 
                     if IsDisabledControlPressed(0, keyboard.modifyKey) then
 
@@ -309,6 +311,13 @@ Citizen.CreateThread(function()
 
                         if (IsDisabledControlJustReleased(0, shared.horn)) then
                             TriggerServerEvent("els:setHornState_s", 0)
+                        end
+                        if (IsDisabledControlJustPressed(0, keyboard.siren.manuel)) then
+                            TriggerServerEvent("els:yelp_s", 1)
+                        end
+
+                        if (IsDisabledControlJustReleased(0, keyboard.siren.manuel)) then
+                            TriggerServerEvent("els:yelp_s", 0)
                         end
                     end
                 end
