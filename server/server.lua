@@ -28,11 +28,11 @@ RegisterCommand('_curver', function(source)
 		local data = json.decode(response)
 
 		if curVersion ~= data.version and tonumber(curVersion) < tonumber(data.version) then
-			TriggerClientEvent('chatMessage', source, "ELS-FiveM", {13, 161, 200}, "You are currently an outdated version of [ " .. GetCurrentResourceName() .. " ]. Your version: [ " .. curVersion .. " ]. Newest version: [ " .. data.version .. " ].")
+			TriggerClientEvent('chat:addMessage', source, { args = { "ELS-FiveM", "You are currently an outdated version of [ " .. GetCurrentResourceName() .. " ]. Your version: [ " .. curVersion .. " ]. Newest version: [ " .. data.version .. " ]."}, color = {13, 161, 200}})
 		elseif tonumber(curVersion) > tonumber(data.version) then
-			TriggerClientEvent('chatMessage', source, "ELS-FiveM", {13, 161, 200}, "Um, what? Your version of ELS-FiveM is higher than the current version. What?")
+			TriggerClientEvent('chat:addMessage', source, { args = { "ELS-FiveM", "Um, what? Your version of ELS-FiveM is higher than the current version. What?"}, color = {13, 161, 200}})
 		else
-			TriggerClientEvent('chatMessage', source, "ELS-FiveM", {13, 161, 200}, "Your version of [ " .. GetCurrentResourceName() .. " ] is up to date! Current version: [ " .. curVersion .. " ].")
+			TriggerClientEvent('chat:addMessage', source, { args = { "ELS-FiveM", "Your version of [ " .. GetCurrentResourceName() .. " ] is up to date!. Current version: [ " .. curVersion .. " ]."}, color = {13, 161, 200}})
 		end
 	end, "GET", "", {version = 'this'})
 end)
