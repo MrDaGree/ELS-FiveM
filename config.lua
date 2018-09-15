@@ -9,28 +9,30 @@ panelType = "original"
 panelOffsetX = 0.0
 panelOffsetY = 0.0
 
+-- https://docs.fivem.net/game-references/controls
+
 shared = {
 	horn = 86,
 }
 
 keyboard = {
 	modifyKey = 132,
-	stageChange = 85,
-	guiKey = 199,
-	takedown = 83,
+	stageChange = 85, -- E
+	guiKey = 199, -- P
+	takedown = 83, -- =
 	siren = {
-		tone_one = 157,
-		tone_two = 158,
-		tone_three = 160,
+		tone_one = 157, -- 1
+		tone_two = 158, -- 2
+		tone_three = 160, -- 3
 	},
 	pattern = {
-		primary = 163,
-		secondary = 162,
-		advisor = 161,
+		primary = 163, -- 9
+		secondary = 162, -- 8
+		advisor = 161, -- 7
 	},
-	warning = 246,
-	secondary = 303,
-	primary = 7,
+	warning = 246, -- Y
+	secondary = 303, -- U
+	primary = 7, -- ?? 
 }
 
 controller = {
