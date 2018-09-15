@@ -1,4 +1,4 @@
 {
-    "version":"1.7",
-    "changelog":"Fixed FRFuel/scripts that require ELS vehicle to turn off."
+    "version":"1.75",
+    "changelog":"Added a /_curver command to check the version of ELS that you are using.\nAdded a FiveM docs link in config.lua for those who are interested in changing the keys."
 }
