@@ -32,7 +32,7 @@ RegisterCommand('_curver', function(source)
 		elseif tonumber(curVersion) > tonumber(data.version) then
 			TriggerClientEvent('chat:addMessage', source, { args = { "ELS-FiveM", "Um, what? Your version of ELS-FiveM is higher than the current version. What?"}, color = {13, 161, 200}})
 		else
-			TriggerClientEvent('chat:addMessage', source, { args = { "ELS-FiveM", "Your version of [ " .. GetCurrentResourceName() .. " ] is up to date!. Current version: [ " .. curVersion .. " ]."}, color = {13, 161, 200}})
+			TriggerClientEvent('chat:addMessage', source, { args = { "ELS-FiveM", "Your version of [ " .. GetCurrentResourceName() .. " ] is up to date! Current version: [ " .. curVersion .. " ]."}, color = {13, 161, 200}})
 		end
 	end, "GET", "", {version = 'this'})
 end)
