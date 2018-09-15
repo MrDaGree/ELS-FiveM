@@ -606,6 +606,38 @@ function downOneStage()
     end
 end
 
+RegisterNetEvent("els:yelp_c")
+AddEventHandler("els:yelp_c", function(sender, newstate)
+    local player_s = GetPlayerFromServerId(sender)
+    local ped_s = GetPlayerPed(player_s)
+    if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
+        if IsPedInAnyVehicle(ped_s, false) then
+            local veh = GetVehiclePedIsUsing(ped_s)
+            yelp(veh, newstate)
+        end
+    end
+end)
+
+function yelp(veh, newstate)
+    if DoesEntityExist(veh) and not IsEntityDead(veh) then
+        if newstate ~= h_horn_state[veh] then
+                
+            if h_soundID_veh[veh] ~= nil then
+                StopSound(h_soundID_veh[veh])
+                ReleaseSoundId(h_soundID_veh[veh])
+                h_soundID_veh[veh] = nil
+            end
+                        
+            if newstate == 1 then
+                h_soundID_veh[veh] = GetSoundId()
+                PlaySoundFromEntity(h_soundID_veh[veh], getVehicleVCFInfo(veh).sounds.srnTone1.audioString, veh, 0, 0, 0)
+            end             
+                
+            h_horn_state[veh] = newstate
+        end
+    end
+end
+
 function displayScreenKeyboard(text)
     HideHudAndRadarThisFrame()
     DisplayOnscreenKeyboard(1, text, "", "", "", "", "", 60)

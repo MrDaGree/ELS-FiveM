@@ -751,3 +751,8 @@ RegisterServerEvent("els:setCruiseLights_s")
 AddEventHandler("els:setCruiseLights_s", function(state)
 	TriggerClientEvent("els:setCruiseLights_c", -1, source)
 end)
+
+RegisterServerEvent("els:yelp_s")
+AddEventHandler("els:yelp_s", function(newstate)
+	TriggerClientEvent("els:yelp_c", -1, source, newstate)
+end)
