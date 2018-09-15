@@ -23,6 +23,20 @@ Citizen.CreateThread( function()
 	end, "GET", "", {version = 'this'})
 end)
 
+RegisterCommand('_curver', function(source)
+	PerformHttpRequest('https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/master/version.json', function(err, response, headers)
+		local data = json.decode(response)
+
+		if curVersion ~= data.version and tonumber(curVersion) < tonumber(data.version) then
+			TriggerClientEvent('chatMessage', source, "ELS-FiveM", {13, 161, 200}, "You are currently an outdated version of [ " .. GetCurrentResourceName() .. " ]. Your version: [ " .. curVersion .. " ]. Newest version: [ " .. data.version .. " ].")
+		elseif tonumber(curVersion) > tonumber(data.version) then
+			TriggerClientEvent('chatMessage', source, "ELS-FiveM", {13, 161, 200}, "Um, what? Your version of ELS-FiveM is higher than the current version. What?")
+		else
+			TriggerClientEvent('chatMessage', source, "ELS-FiveM", {13, 161, 200}, "Your version of [ " .. GetCurrentResourceName() .. " ] is up to date! Current version: [ " .. curVersion .. " ].")
+		end
+	end, "GET", "", {version = 'this'})
+end)
+
 local function processXml(el)
     local v = {}
     local text
