@@ -129,7 +129,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageOne[pattern][1]) then
 								done[1] = true
@@ -153,7 +153,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageOne[pattern][2]) then
 								done[2] = true
@@ -177,7 +177,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageOne[pattern][3]) then
 								done[3] = true
@@ -201,7 +201,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageOne[pattern][4]) then
 								done[4] = true
@@ -225,7 +225,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageOne[pattern][5]) then
 								done[5] = true
@@ -249,7 +249,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageOne[pattern][6]) then
 								done[6] = true
@@ -273,7 +273,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageOne[pattern][7]) then
 								done[7] = true
@@ -297,7 +297,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageOne[pattern][8]) then
 								done[8] = true
@@ -321,7 +321,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageOne[pattern][9]) then
 								done[9] = true
@@ -345,7 +345,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageOne[pattern][10]) then
 								done[10] = true
@@ -369,7 +369,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageTwo[pattern][1]) then
 								done[1] = true
@@ -393,7 +393,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageTwo[pattern][2]) then
 								done[2] = true
@@ -417,7 +417,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageTwo[pattern][3]) then
 								done[3] = true
@@ -441,7 +441,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageTwo[pattern][4]) then
 								done[4] = true
@@ -465,7 +465,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageTwo[pattern][5]) then
 								done[5] = true
@@ -489,7 +489,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageTwo[pattern][6]) then
 								done[6] = true
@@ -513,7 +513,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageTwo[pattern][7]) then
 								done[7] = true
@@ -537,7 +537,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageTwo[pattern][8]) then
 								done[8] = true
@@ -561,7 +561,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageTwo[pattern][9]) then
 								done[9] = true
@@ -585,7 +585,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageTwo[pattern][10]) then
 								done[10] = true
@@ -609,7 +609,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageThree[pattern][1]) then
 								done[1] = true
@@ -633,7 +633,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageThree[pattern][2]) then
 								done[2] = true
@@ -657,7 +657,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageThree[pattern][3]) then
 								done[3] = true
@@ -681,7 +681,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageThree[pattern][4]) then
 								done[4] = true
@@ -705,7 +705,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageThree[pattern][5]) then
 								done[5] = true
@@ -729,7 +729,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageThree[pattern][6]) then
 								done[6] = true
@@ -753,7 +753,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageThree[pattern][7]) then
 								done[7] = true
@@ -777,7 +777,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageThree[pattern][8]) then
 								done[8] = true
@@ -801,7 +801,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageThree[pattern][9]) then
 								done[9] = true
@@ -825,7 +825,7 @@ function runCHPPattern(k, pattern, stage)
 								break
 							end
 
-							Wait(0)
+							Wait(lightDelay)
 
 							if spot == string.len(chp_StageThree[pattern][10]) then
 								done[10] = true
@@ -870,7 +870,7 @@ function runTrafPattern(k, pattern)
 							break
 						end
 
-						Wait(0)
+						Wait(lightDelay)
 
 						if spot == string.len(traf_Patterns[pattern][7]) then
 							done[1] = true
@@ -894,7 +894,7 @@ function runTrafPattern(k, pattern)
 							break
 						end
 
-						Wait(0)
+						Wait(lightDelay)
 
 						if spot == string.len(traf_Patterns[pattern][8]) then
 							done[2] = true
@@ -918,7 +918,7 @@ function runTrafPattern(k, pattern)
 							break
 						end
 
-						Wait(0)
+						Wait(lightDelay)
 
 						if spot == string.len(traf_Patterns[pattern][9]) then
 							done[3] = true
@@ -966,7 +966,7 @@ function runLedPatternSecondary(k, pattern)
 						end
 					end
 
-					Wait(0)
+					Wait(lightDelay)
 
 					if spot == string.len(led_SecondaryPatterns[pattern][7]) then
 						done[1] = true
@@ -994,7 +994,7 @@ function runLedPatternSecondary(k, pattern)
 						end
 					end
 
-					Wait(0)
+					Wait(lightDelay)
 
 					if spot == string.len(led_SecondaryPatterns[pattern][8]) then
 						done[2] = true
@@ -1021,7 +1021,7 @@ function runLedPatternSecondary(k, pattern)
 						end
 					end
 
-					Wait(0)
+					Wait(lightDelay)
 
 					if spot == string.len(led_SecondaryPatterns[pattern][9]) then
 						done[3] = true
@@ -1065,7 +1065,7 @@ function runLedPatternWarning(k, pattern)
 						break
 					end
 
-					Wait(0)
+					Wait(lightDelay)
 
 					if spot == string.len(leds_WarningPatterns[pattern][5]) then
 						done[1] = true
@@ -1089,7 +1089,7 @@ function runLedPatternWarning(k, pattern)
 						break
 					end
 
-					Wait(0)
+					Wait(lightDelay)
 
 					if spot == string.len(leds_WarningPatterns[pattern][6]) then
 						done[2] = true
@@ -1134,7 +1134,7 @@ function runLedPatternPrimary(k, pattern)
 						break
 					end
 
-					Wait(0)
+					Wait(lightDelay)
 
 					if spot == string.len(led_PrimaryPatterns[pattern][1]) then
 						done[1] = true
@@ -1158,7 +1158,7 @@ function runLedPatternPrimary(k, pattern)
 						break
 					end
 
-					Wait(0)
+					Wait(lightDelay)
 
 					if spot == string.len(led_PrimaryPatterns[pattern][2]) then
 						done[2] = true
@@ -1182,7 +1182,7 @@ function runLedPatternPrimary(k, pattern)
 						break
 					end
 
-					Wait(0)
+					Wait(lightDelay)
 
 					if spot == string.len(led_PrimaryPatterns[pattern][3]) then
 						done[3] = true
@@ -1206,7 +1206,7 @@ function runLedPatternPrimary(k, pattern)
 						break
 					end
 
-					Wait(0)
+					Wait(lightDelay)
 
 					if spot == string.len(led_PrimaryPatterns[pattern][4]) then
 						done[4] = true
