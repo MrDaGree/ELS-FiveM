@@ -6,7 +6,7 @@ vehicleSyncDistance = 150
 envirementLightBrightness = 0.006
 lightDelay = 20 -- Time in MS
 
-
+panelEnabled = true
 panelType = "original"
 panelOffsetX = 0.0
 panelOffsetY = 0.0
