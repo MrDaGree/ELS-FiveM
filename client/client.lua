@@ -15,7 +15,6 @@ lightPatternPrim = 0
 lightPatternsPrim = 1
 lightPatternSec = 1
 
-guiEnabled = true
 elsVehs = {}
 
 m_siren_state = {}
@@ -69,10 +68,10 @@ Citizen.CreateThread(function()
                             if playButtonPressSounds then
                                 PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
                             end
-                            if guiEnabled then
-                                guiEnabled = false
+                            if panelEnabled then
+                                panelEnabled = false
                             else
-                                guiEnabled = true
+                                panelEnabled = true
                             end
                         end
 
@@ -373,7 +372,7 @@ end)
 Citizen.CreateThread(function()
     while true do
         if panelOffsetX ~= nil and panelOffsetY ~= nil then
-            if guiEnabled and vehInTable(els_Vehicles, checkCarHash(GetVehiclePedIsUsing(GetPlayerPed(-1)))) then
+            if panelEnabled and vehInTable(els_Vehicles, checkCarHash(GetVehiclePedIsUsing(GetPlayerPed(-1)))) then
                 if (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), -1) == GetPlayerPed(-1)) or
                     (GetPedInVehicleSeat(GetVehiclePedIsUsing(GetPlayerPed(-1)), 0) == GetPlayerPed(-1)) then
                     local vehN = GetVehiclePedIsUsing(GetPlayerPed(-1))

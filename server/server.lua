@@ -11,8 +11,8 @@ Citizen.CreateThread( function()
 
 
 		if curVersion ~= data.version and tonumber(curVersion) < tonumber(data.version) then
-			print("\n--------------------------------------------------------------------------")
-			print("\n"..resourceName.." is outdated.\nCurrent Version: "..data.version.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com/MrDaGree"..updatePath.."")
+			print("--------------------------------------------------------------------------")
+			print(resourceName.." is outdated.\nCurrent Version: "..data.version.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com/MrDaGree"..updatePath.."")
 			print("\nUpdate Changelog:\n"..data.changelog)
 			print("\n--------------------------------------------------------------------------")
 		elseif tonumber(curVersion) > tonumber(data.version) then
