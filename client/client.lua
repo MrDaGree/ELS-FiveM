@@ -317,7 +317,7 @@ end)
 
 Citizen.CreateThread(function()
     while true do
-        if vehInTable(els_Vehicles, checkCarHash(GetVehiclePedIsUsing(PlayerPedId()))) then
+        if isVehicleELS then
             if (GetPedInVehicleSeat(GetVehiclePedIsUsing(PlayerPedId()), -1) == PlayerPedId()) or
                 (GetPedInVehicleSeat(GetVehiclePedIsUsing(PlayerPedId()), 0) == PlayerPedId()) then
 
