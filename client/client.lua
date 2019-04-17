@@ -318,8 +318,7 @@ end)
 Citizen.CreateThread(function()
     while true do
         if isVehicleELS then
-            if (GetPedInVehicleSeat(GetVehiclePedIsUsing(PlayerPedId()), -1) == PlayerPedId()) or
-                (GetPedInVehicleSeat(GetVehiclePedIsUsing(PlayerPedId()), 0) == PlayerPedId()) then
+            if canControlELS then
 
                 if IsDisabledControlPressed(0, keyboard.modifyKey) then
                     if IsDisabledControlPressed(0, keyboard.pattern.primary) then
