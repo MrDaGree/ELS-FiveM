@@ -1,4 +1,4 @@
-outputLoading = false
+outputLoading = true
 playButtonPressSounds = true
 printDebugInformation = true
 
