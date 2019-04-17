@@ -359,7 +359,7 @@ function setExtraState(veh, extra, state)
     end
 end
 
-function isVehicleELS(veh)
+function checkVehicleInTable(veh)
     return vehInTable(els_Vehicles, checkCarHash(veh))
 end
 
@@ -630,3 +630,23 @@ end
 function getVehicleVCFInfo(veh)
     return els_Vehicles[checkCarHash(veh)]
 end
+
+isVehicleELS = false
+canControlELS = false
+Citizen.CreateThread(function()
+    while true do
+        ped = PlayerPedId()
+        if IsPedInAnyVehicle(ped, false) then
+            vehicle = GetVehiclePedIsIn(ped, false)
+            isVehicleELS = vehInTable(els_Vehicles, checkCarHash(vehicle))
+            if isVehicleELS and (GetPedInVehicleSeat(vehicle, -1) == ped or GetPedInVehicleSeat(vehicle, 0) == ped) then
+                canControlELS = true
+                if printDebugInformation then print(([[
+                    isVehicleELS = %s 
+                    canControlELS = %s ]]):format(tostring(isVehicleELS), tostring(canControlELS)))
+                end
+            end
+        end
+        Citizen.Wait(500)
+    end
+end)
