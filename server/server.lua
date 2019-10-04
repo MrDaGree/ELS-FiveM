@@ -88,6 +88,11 @@ function parseVehData(xml, fileName)
 				if(xml.root.el[i].kids[ex].name== "InfoPanelHeaderColor") then
 					local elem = xml.root.el[i].kids[ex]
 					a.interface.headerColor = {}
+
+					a.interface.headerColor['r'] = 40
+					a.interface.headerColor['g'] = 40
+					a.interface.headerColor['b'] = 40
+
 					if elem.kids[1].value == string.lower("grey") then
 						a.interface.headerColor['r'] = 40
 						a.interface.headerColor['g'] = 40
@@ -107,6 +112,11 @@ function parseVehData(xml, fileName)
 				if(xml.root.el[i].kids[ex].name== "InfoPanelButtonLightColor") then
 					local elem = xml.root.el[i].kids[ex]
 					a.interface.buttonColor = {}
+
+					a.interface.buttonColor['r'] = 255
+					a.interface.buttonColor['g'] = 0
+					a.interface.buttonColor['b'] = 0
+
 					if elem.kids[1].value == string.lower("green") then
 						a.interface.buttonColor['r'] = 0
 						a.interface.buttonColor['g'] = 255

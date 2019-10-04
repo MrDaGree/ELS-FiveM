@@ -1,4 +1,4 @@
 {
-    "version":"1.75",
-    "changelog":"Added a /_curver command to check the version of ELS that you are using.\nAdded a FiveM docs link in config.lua for those who are interested in changing the keys."
+    "version":"1.8",
+    "changelog":"performance and bug fixes updates"
 }

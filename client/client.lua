@@ -28,8 +28,11 @@ h_soundID_veh = {}
 
 curCleanupTime = 0
 
+
+
 Citizen.CreateThread(function()
 
+    NetworkOverrideClockTime(20,0,0)
     TriggerServerEvent("els:requestVehiclesUpdate")
 
     while true do
@@ -571,7 +574,7 @@ Citizen.CreateThread(function()
                 end
             end
         end
-        Wait(1)
+        Wait(2)
     end
 end)
 
@@ -628,6 +631,8 @@ Citizen.CreateThread(function()
         Wait(4)
     end
 end)
+
+
 
 Citizen.CreateThread(function()
 

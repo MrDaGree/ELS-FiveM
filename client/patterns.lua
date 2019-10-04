@@ -845,10 +845,13 @@ function runCHPPattern(k, pattern, stage)
 	end)
 end
 
+
+trafFR = 0
 local trafPatternReady = {}
 function runTrafPattern(k, pattern) 
 	Citizen.CreateThread(function()
 		if (not IsEntityDead(k) and DoesEntityExist(k) and (trafPatternReady[k] or trafPatternReady[k] == nil)) then
+			if (GetGameTimer() - trafFR >= lightDelay) then
 
 				trafPatternReady[k] = false
 
@@ -859,7 +862,7 @@ function runTrafPattern(k, pattern)
 
 				Citizen.CreateThread(function()
 					for spot = 1, string.len(traf_Patterns[pattern][7]) do
-					    local c = tonumber(string.sub(traf_Patterns[pattern][7], spot, spot) )
+						local c = tonumber(string.sub(traf_Patterns[pattern][7], spot, spot) )
 						setExtraState(k, 7, c)
 						if c == 0 then
 							runEnvirementLight(k, 7)
@@ -870,7 +873,12 @@ function runTrafPattern(k, pattern)
 							break
 						end
 
-						Wait(lightDelay)
+						if not elsVehs[k].secondary then
+							done[1] = true
+							break
+						end
+
+						Wait(flashDelay)
 
 						if spot == string.len(traf_Patterns[pattern][7]) then
 							done[1] = true
@@ -894,7 +902,12 @@ function runTrafPattern(k, pattern)
 							break
 						end
 
-						Wait(lightDelay)
+						if not elsVehs[k].secondary then
+							done[2] = true
+							break
+						end
+
+						Wait(flashDelay)
 
 						if spot == string.len(traf_Patterns[pattern][8]) then
 							done[2] = true
@@ -918,7 +931,12 @@ function runTrafPattern(k, pattern)
 							break
 						end
 
-						Wait(lightDelay)
+						if not elsVehs[k].secondary then
+							done[3] = true
+							break
+						end
+
+						Wait(flashDelay)
 
 						if spot == string.len(traf_Patterns[pattern][9]) then
 							done[3] = true
@@ -933,293 +951,358 @@ function runTrafPattern(k, pattern)
 				if done[1] and done[2] and done[3] then
 					trafPatternReady[k] = true
 				end
+
+				trafFR = GetGameTimer()
+			end
 		end
 	end)
 end
 
+secdFR = 0
 local ledSecondaryReady = {}
 function runLedPatternSecondary(k, pattern)
 	Citizen.CreateThread(function()
 		if (not IsEntityDead(k) and DoesEntityExist(k) and (ledSecondaryReady[k] or ledSecondaryReady[k] == nil)) then
+			if (GetGameTimer() - trafFR >= lightDelay) then
 
-			ledSecondaryReady[k] = false
+				ledSecondaryReady[k] = false
 
-			local done = {}
-			done[1] = false
-			done[2] = false
-			done[3] = false
+				local done = {}
+				done[1] = false
+				done[2] = false
+				done[3] = false
 
-			Citizen.CreateThread(function()
-				for spot = 1, string.len(led_SecondaryPatterns[pattern][7]) do
-				    local c = tonumber(string.sub(led_SecondaryPatterns[pattern][7], spot, spot) )
+				Citizen.CreateThread(function()
+					for spot = 1, string.len(led_SecondaryPatterns[pattern][7]) do
+						local c = tonumber(string.sub(led_SecondaryPatterns[pattern][7], spot, spot) )
 
-					setExtraState(k, 7, c)
-					if c == 0 then
-						runEnvirementLight(k, 7)
-					end
+						setExtraState(k, 7, c)
+						if c == 0 then
+							runEnvirementLight(k, 7)
+						end
 
-					if elsVehs[k] ~= nil then
-						if elsVehs[k].secPattern ~= pattern then
+						if elsVehs[k] ~= nil then
+							if elsVehs[k].secPattern ~= pattern then
+								done[1] = true
+								ledSecondary = 1
+								break
+							end
+						end
+
+						if not elsVehs[k].secondary then
 							done[1] = true
-							ledSecondary = 1
+							break
+						end
+
+
+						Wait(flashDelay)
+
+						if spot == string.len(led_SecondaryPatterns[pattern][7]) then
+							done[1] = true
 							break
 						end
 					end
 
-					Wait(lightDelay)
+					return
+				end)
 
-					if spot == string.len(led_SecondaryPatterns[pattern][7]) then
-						done[1] = true
-						break
-					end
-				end
+				Citizen.CreateThread(function()
+					for spot = 1, string.len(led_SecondaryPatterns[pattern][8]) do
+						local c = tonumber(string.sub(led_SecondaryPatterns[pattern][8], spot, spot) )
 
-				return
-			end)
+						setExtraState(k, 8, c)
+						if c == 0 then
+							runEnvirementLight(k, 8)
+						end
 
-			Citizen.CreateThread(function()
-				for spot = 1, string.len(led_SecondaryPatterns[pattern][8]) do
-				    local c = tonumber(string.sub(led_SecondaryPatterns[pattern][8], spot, spot) )
+						if elsVehs[k] ~= nil then
+							if elsVehs[k].secPattern ~= pattern then
+								done[2] = true
+								ledSecondary = 1
+								break
+							end
+						end
 
-					setExtraState(k, 8, c)
-					if c == 0 then
-						runEnvirementLight(k, 8)
-					end
-
-					if elsVehs[k] ~= nil then
-						if elsVehs[k].secPattern ~= pattern then
+						if not elsVehs[k].secondary then
 							done[2] = true
-							ledSecondary = 1
+							break
+						end
+
+
+						Wait(flashDelay)
+
+						if spot == string.len(led_SecondaryPatterns[pattern][8]) then
+							done[2] = true
 							break
 						end
 					end
 
-					Wait(lightDelay)
+					return
+				end)
 
-					if spot == string.len(led_SecondaryPatterns[pattern][8]) then
-						done[2] = true
-						break
-					end
-				end
+				Citizen.CreateThread(function()
+					for spot = 1, string.len(led_SecondaryPatterns[pattern][9]) do
+						local c = tonumber(string.sub(led_SecondaryPatterns[pattern][9], spot, spot) )
+						setExtraState(k, 9, c)
+						if c == 0 then
+							runEnvirementLight(k, 9)
+						end
 
-				return
-			end)
+						if elsVehs[k] ~= nil then
+							if elsVehs[k].secPattern ~= pattern then
+								done[3] = true
+								ledSecondary = 1
+								break
+							end
+						end
 
-			Citizen.CreateThread(function()
-				for spot = 1, string.len(led_SecondaryPatterns[pattern][9]) do
-				    local c = tonumber(string.sub(led_SecondaryPatterns[pattern][9], spot, spot) )
-					setExtraState(k, 9, c)
-					if c == 0 then
-						runEnvirementLight(k, 9)
-					end
-
-					if elsVehs[k] ~= nil then
-						if elsVehs[k].secPattern ~= pattern then
+						if not elsVehs[k].secondary then
 							done[3] = true
-							ledSecondary = 1
+							break
+						end
+
+
+						Wait(flashDelay)
+
+						if spot == string.len(led_SecondaryPatterns[pattern][9]) then
+							done[3] = true
 							break
 						end
 					end
 
-					Wait(lightDelay)
+					return
+				end)
 
-					if spot == string.len(led_SecondaryPatterns[pattern][9]) then
-						done[3] = true
-						break
-					end
+				while (not done[1] or not done[2] or not done[3]) do Wait(0) end
+				if done[1] and done[2] and done[3] then
+					ledSecondaryReady[k] = true
 				end
-
-				return
-			end)
-
-			while (not done[1] or not done[2] or not done[3]) do Wait(0) end
-			if done[1] and done[2] and done[3] then
-				ledSecondaryReady[k] = true
+				secdFR = GetGameTimer()
 			end
 		end
 	end)
 end
 
+warnFR = 0
 local ledWarningReady = {}
 function runLedPatternWarning(k, pattern) 
 	Citizen.CreateThread(function()
 		if (not IsEntityDead(k) and DoesEntityExist(k) and (ledWarningReady[k] or ledWarningReady[k] == nil)) then
+			if (GetGameTimer() - warnFR >= lightDelay) then
 
-			ledWarningReady[k] = false
+				ledWarningReady[k] = false
 
-			local done = {}
-			done[1] = false
-			done[2] = false
-			done[3] = false
+				local done = {}
+				done[1] = false
+				done[2] = false
+				done[3] = false
 
-			Citizen.CreateThread(function()
-				for spot = 1, string.len(leds_WarningPatterns[pattern][5]) do
-				    local c = tonumber(string.sub(leds_WarningPatterns[pattern][5], spot, spot) )
-					setExtraState(k, 5, c)
-					if c == 0 then
-						runEnvirementLight(k, 5)
+				Citizen.CreateThread(function()
+					for spot = 1, string.len(leds_WarningPatterns[pattern][5]) do
+						local c = tonumber(string.sub(leds_WarningPatterns[pattern][5], spot, spot) )
+						setExtraState(k, 5, c)
+						if c == 0 then
+							runEnvirementLight(k, 5)
+						end
+
+						if elsVehs[k].advisorPattern ~= pattern then
+							done[1] = true
+							break
+						end
+
+						if not elsVehs[k].warning then
+							done[1] = true
+							break
+						end
+
+
+						Wait(flashDelay)
+
+						if spot == string.len(leds_WarningPatterns[pattern][5]) then
+							done[1] = true
+							break
+						end
 					end
 
-					if elsVehs[k].advisorPattern ~= pattern then
-						done[1] = true
-						break
+					return
+				end)
+
+				Citizen.CreateThread(function()
+					for spot = 1, string.len(leds_WarningPatterns[pattern][6]) do
+						local c = tonumber(string.sub(leds_WarningPatterns[pattern][6], spot, spot) )
+						setExtraState(k, 6, c)
+						if c == 0 then
+							runEnvirementLight(k, 6)
+						end
+
+						if elsVehs[k].advisorPattern ~= pattern then
+							done[2] = true
+							break
+						end
+
+						if not elsVehs[k].warning then
+							done[2] = true
+							break
+						end
+
+
+						Wait(flashDelay)
+
+						if spot == string.len(leds_WarningPatterns[pattern][6]) then
+							done[2] = true
+							break
+						end
 					end
 
-					Wait(lightDelay)
+					return
+				end)
 
-					if spot == string.len(leds_WarningPatterns[pattern][5]) then
-						done[1] = true
-						break
-					end
+				while (not done[1] or not done[2]) do Wait(0) end
+				if done[1] and done[2] then
+					ledWarningReady[k] = true
 				end
-
-				return
-			end)
-
-			Citizen.CreateThread(function()
-				for spot = 1, string.len(leds_WarningPatterns[pattern][6]) do
-				    local c = tonumber(string.sub(leds_WarningPatterns[pattern][6], spot, spot) )
-					setExtraState(k, 6, c)
-					if c == 0 then
-						runEnvirementLight(k, 6)
-					end
-
-					if elsVehs[k].advisorPattern ~= pattern then
-						done[2] = true
-						break
-					end
-
-					Wait(lightDelay)
-
-					if spot == string.len(leds_WarningPatterns[pattern][6]) then
-						done[2] = true
-						break
-					end
-				end
-
-				return
-			end)
-
-			while (not done[1] or not done[2]) do Wait(0) end
-			if done[1] and done[2] then
-				ledWarningReady[k] = true
+				warnFR = GetGameTimer()
 			end
 		end
 	end)
 end
 
+primFR = 0
 local ledPrimaryReady = {}
 function runLedPatternPrimary(k, pattern) 
 	Citizen.CreateThread(function()
 		if (not IsEntityDead(k) and DoesEntityExist(k) and (ledPrimaryReady[k] or ledPrimaryReady[k] == nil)) then
+			if (GetGameTimer() - primFR >= lightDelay) then
+				ledPrimaryReady[k] = false
 
-			ledPrimaryReady[k] = false
+				local done = {}
+				done[1] = false
+				done[2] = false
+				done[3] = false
+				done[4] = false
 
-			local done = {}
-			done[1] = false
-			done[2] = false
-			done[3] = false
-			done[4] = false
+				Citizen.CreateThread(function()
+					for spot = 1, string.len(led_PrimaryPatterns[pattern][1]) do
+						local c = tonumber(string.sub(led_PrimaryPatterns[pattern][1], spot, spot) )
+						setExtraState(k, 1, c)
+						if c == 0 then
+							runEnvirementLight(k, 1)
+						end
 
-			Citizen.CreateThread(function()
-				for spot = 1, string.len(led_PrimaryPatterns[pattern][1]) do
-				    local c = tonumber(string.sub(led_PrimaryPatterns[pattern][1], spot, spot) )
-					setExtraState(k, 1, c)
-					if c == 0 then
-						runEnvirementLight(k, 1)
+						if elsVehs[k].primPattern ~= pattern then
+							done[1] = true
+							break
+						end
+
+						if not elsVehs[k].primary then
+							done[1] = true
+							break
+						end
+
+
+						Wait(flashDelay)
+
+						if spot == string.len(led_PrimaryPatterns[pattern][1]) then
+							done[1] = true
+							break
+						end
 					end
 
-					if elsVehs[k].primPattern ~= pattern then
-						done[1] = true
-						break
+					return
+				end)
+
+				Citizen.CreateThread(function()
+					for spot = 1, string.len(led_PrimaryPatterns[pattern][2]) do
+						local c = tonumber(string.sub(led_PrimaryPatterns[pattern][2], spot, spot) )
+						setExtraState(k, 2, c)
+						if c == 0 then
+							runEnvirementLight(k, 2)
+						end
+
+						if elsVehs[k].primPattern ~= pattern then
+							done[2] = true
+							break
+						end
+
+						if not elsVehs[k].primary then
+							done[2] = true
+							break
+						end
+
+						Wait(flashDelay)
+
+						if spot == string.len(led_PrimaryPatterns[pattern][2]) then
+							done[2] = true
+							break
+						end
 					end
 
-					Wait(lightDelay)
+					return
+				end)
 
-					if spot == string.len(led_PrimaryPatterns[pattern][1]) then
-						done[1] = true
-						break
+				Citizen.CreateThread(function()
+					for spot = 1, string.len(led_PrimaryPatterns[pattern][3]) do
+						local c = tonumber(string.sub(led_PrimaryPatterns[pattern][3], spot, spot) )
+						setExtraState(k, 3, c)
+						if c == 0 then
+							runEnvirementLight(k, 3)
+						end
+
+						if elsVehs[k].primPattern ~= pattern then
+							done[3] = true
+							break
+						end
+						
+						if not elsVehs[k].primary then
+							done[3] = true
+							break
+						end
+
+						Wait(flashDelay)
+
+						if spot == string.len(led_PrimaryPatterns[pattern][3]) then
+							done[3] = true
+							break
+						end
 					end
+
+					return
+				end)
+
+				Citizen.CreateThread(function()
+					for spot = 1, string.len(led_PrimaryPatterns[pattern][4]) do
+						local c = tonumber(string.sub(led_PrimaryPatterns[pattern][4], spot, spot) )
+						setExtraState(k, 4, c)
+						if c == 0 then
+							runEnvirementLight(k, 4)
+						end
+
+						if elsVehs[k].primPattern ~= pattern then
+							done[4] = true
+							break
+						end
+
+						if not elsVehs[k].primary then
+							done[4] = true
+							break
+						end
+
+						Wait(flashDelay)
+
+						if spot == string.len(led_PrimaryPatterns[pattern][4]) then
+							done[4] = true
+							break
+						end
+					end
+
+					return
+				end)
+				
+				while (not done[1] or not done[2] or not done[3] or not done[4]) do Wait(0) end
+				if done[1] and done[2] and done[3] and done[4] then
+					ledPrimaryReady[k] = true
 				end
-
-				return
-			end)
-
-			Citizen.CreateThread(function()
-				for spot = 1, string.len(led_PrimaryPatterns[pattern][2]) do
-				    local c = tonumber(string.sub(led_PrimaryPatterns[pattern][2], spot, spot) )
-					setExtraState(k, 2, c)
-					if c == 0 then
-						runEnvirementLight(k, 2)
-					end
-
-					if elsVehs[k].primPattern ~= pattern then
-						done[2] = true
-						break
-					end
-
-					Wait(lightDelay)
-
-					if spot == string.len(led_PrimaryPatterns[pattern][2]) then
-						done[2] = true
-						break
-					end
-				end
-
-				return
-			end)
-
-			Citizen.CreateThread(function()
-				for spot = 1, string.len(led_PrimaryPatterns[pattern][3]) do
-				    local c = tonumber(string.sub(led_PrimaryPatterns[pattern][3], spot, spot) )
-					setExtraState(k, 3, c)
-					if c == 0 then
-						runEnvirementLight(k, 3)
-					end
-
-					if elsVehs[k].primPattern ~= pattern then
-						done[3] = true
-						break
-					end
-
-					Wait(lightDelay)
-
-					if spot == string.len(led_PrimaryPatterns[pattern][3]) then
-						done[3] = true
-						break
-					end
-				end
-
-				return
-			end)
-
-			Citizen.CreateThread(function()
-				for spot = 1, string.len(led_PrimaryPatterns[pattern][4]) do
-				    local c = tonumber(string.sub(led_PrimaryPatterns[pattern][4], spot, spot) )
-					setExtraState(k, 4, c)
-					if c == 0 then
-						runEnvirementLight(k, 4)
-					end
-
-					if elsVehs[k].primPattern ~= pattern then
-						done[4] = true
-						break
-					end
-
-					Wait(lightDelay)
-
-					if spot == string.len(led_PrimaryPatterns[pattern][4]) then
-						done[4] = true
-						break
-					end
-				end
-
-				return
-			end)
-			
-			while (not done[1] or not done[2] or not done[3] or not done[4]) do Wait(0) end
-			if done[1] and done[2] and done[3] and done[4] then
-				ledPrimaryReady[k] = true
+				primFR = GetGameTimer()
 			end
 		end
 	end)

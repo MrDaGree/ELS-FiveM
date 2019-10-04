@@ -101,6 +101,14 @@ AddEventHandler("els:changeAdvisorPattern_c", function(sender, pat)
 
             local vehNetID = GetVehiclePedIsUsing(ped_s)
 
+            if elsVehs[vehNetID] == nil then
+                elsVehs[vehNetID] = {}
+                elsVehs[vehNetID].stage = 0
+                elsVehs[vehNetID].primPattern = 1
+                elsVehs[vehNetID].secPattern = 1
+                elsVehs[vehNetID].advisorPattern = 1
+            end
+
             if elsVehs[vehNetID] ~= nil then
                 elsVehs[vehNetID].advisorPattern = pat
             else
@@ -120,6 +128,14 @@ AddEventHandler("els:changeSecondaryPattern_c", function(sender, pat)
 
             local vehNetID = GetVehiclePedIsUsing(ped_s)
 
+            if elsVehs[vehNetID] == nil then
+                elsVehs[vehNetID] = {}
+                elsVehs[vehNetID].stage = 0
+                elsVehs[vehNetID].primPattern = 1
+                elsVehs[vehNetID].secPattern = 1
+                elsVehs[vehNetID].advisorPattern = 1
+            end
+
             if elsVehs[vehNetID] ~= nil then
                 elsVehs[vehNetID].secPattern = pat
             else
@@ -138,6 +154,14 @@ AddEventHandler("els:changePrimaryPattern_c", function(sender, pat)
         if IsPedInAnyVehicle(ped_s, false) then
 
             local vehNetID = GetVehiclePedIsUsing(ped_s)
+
+            if elsVehs[vehNetID] == nil then
+                elsVehs[vehNetID] = {}
+                elsVehs[vehNetID].stage = 0
+                elsVehs[vehNetID].primPattern = 1
+                elsVehs[vehNetID].secPattern = 1
+                elsVehs[vehNetID].advisorPattern = 1
+            end
 
             if elsVehs[vehNetID] ~= nil then
                 elsVehs[vehNetID].primPattern = pat
