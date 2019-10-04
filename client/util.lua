@@ -666,14 +666,19 @@ Citizen.CreateThread(function()
             if (els_Vehicles ~= nil) then
                 isVehicleELS = vehInTable(els_Vehicles, checkCarHash(vehicle))
             end
-            if isVehicleELS and (GetPedInVehicleSeat(vehicle, -1) == ped or GetPedInVehicleSeat(vehicle, 0) == ped) then
+            if isVehicleELS  then
                 canControlELS = true
                 if printDebugInformation then print(([[
                     isVehicleELS = %s 
                     canControlELS = %s ]]):format(tostring(isVehicleELS), tostring(canControlELS)))
                 end
+            else
+                canControlELS = false
             end
+        else
+            isVehicleELS = false
+            canControlELS = false
         end
-        Citizen.Wait(500)
+        Citizen.Wait(0)
     end
 end)

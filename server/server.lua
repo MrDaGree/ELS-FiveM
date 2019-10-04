@@ -9,7 +9,6 @@ Citizen.CreateThread( function()
 	PerformHttpRequest("https://raw.githubusercontent.com/MrDaGree/"..updatePath.."/master/version.json", function(err, response, headers)
 		local data = json.decode(response)
 
-
 		if curVersion ~= data.version and tonumber(curVersion) < tonumber(data.version) then
 			print("--------------------------------------------------------------------------")
 			print(resourceName.." is outdated.\nCurrent Version: "..data.version.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com/MrDaGree"..updatePath.."")
@@ -34,7 +33,7 @@ RegisterCommand('_curver', function(source)
 			else
 				print("ELS-FiveM: You are currently running an outdated version of [ " .. GetCurrentResourceName() .. " ]. Your version [ " .. curVersion .. " ]. Newest version: [ " .. data.version .. " ].")
 			end
-		elseif tonumber(curVersion) > tonumber(data.version) then
+		elseif tonumber(curVersion.version) > tonumber(data.version) then
 			local message = "Um, what? Your version of ELS-FiveM is higher than the current version. What?"
 			if source > 0 then
 				TriggerClientEvent('chat:addMessage', source, { args = { "ELS-FiveM", message }, color = {13, 161, 200}})

@@ -5,7 +5,7 @@
 	<INTERFACE>
 		<LstgActivationType>auto</LstgActivationType>
 		<DefaultSirenMode>standby</DefaultSirenMode>
-		<InfoPanelHeaderColor>red</InfoPanelHeaderColor>
+		<InfoPanelHeaderColor>grey</InfoPanelHeaderColor>
 		<InfoPanelButtonLightColor>red</InfoPanelButtonLightColor>
 	</INTERFACE>
 	<!-- EXTRAS OVERRIDE AND ENV LIGHTING-->
@@ -16,12 +16,12 @@
 		<Extra04 IsElsControlled="true" AllowEnvLight="true" Color="blue" OffsetX="0.70" OffsetY="-0.20" OffsetZ="0.50" />
 		<Extra05 IsElsControlled="true" AllowEnvLight="true" Color="red" OffsetX="-0.70" OffsetY="-0.20" OffsetZ="0.50" />
 		<Extra06 IsElsControlled="true" AllowEnvLight="true" Color="blue" OffsetX="0.70" OffsetY="-0.20" OffsetZ="0.50" />
-		<Extra07 IsElsControlled="true" AllowEnvLight="true" Color="amber" OffsetX="-0.40" OffsetY="-0.80" OffsetZ="0.40" />
-		<Extra08 IsElsControlled="true" AllowEnvLight="true" Color="amber" OffsetX="0.00" OffsetY="-0.80" OffsetZ="0.40" />
-		<Extra09 IsElsControlled="true" AllowEnvLight="true" Color="amber" OffsetX="0.40" OffsetY="-0.80" OffsetZ="0.40" />
-		<Extra10 IsElsControlled="false" />
-		<Extra11 IsElsControlled="false" />
-		<Extra12 IsElsControlled="true" />
+		<Extra07 IsElsControlled="true" AllowEnvLight="true" Color="blue" OffsetX="-0.40" OffsetY="-0.80" OffsetZ="0.40" />
+		<Extra08 IsElsControlled="true" AllowEnvLight="true" Color="red" OffsetX="0.00" OffsetY="-0.80" OffsetZ="0.40" />
+		<Extra09 IsElsControlled="true" AllowEnvLight="true" Color="blue" OffsetX="0.40" OffsetY="-0.80" OffsetZ="0.40" />
+		<Extra10 IsElsControlled="false"/>
+		<Extra11 IsElsControlled="false"/>
+		<Extra12 IsElsControlled="false"/>
 	</EOVERRIDE>
 	<!-- MISC -->
 	<MISC>
