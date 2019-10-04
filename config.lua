@@ -7,7 +7,7 @@ envirementLightBrightness = 0.006
 lightDelay = 10 -- Time in MS
 flashDelay = 15
 
-
+panelEnabled = true
 panelType = "original"
 panelOffsetX = 0.0
 panelOffsetY = 0.0

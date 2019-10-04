@@ -11,8 +11,8 @@ Citizen.CreateThread( function()
 
 
 		if curVersion ~= data.version and tonumber(curVersion) < tonumber(data.version) then
-			print("\n--------------------------------------------------------------------------")
-			print("\n"..resourceName.." is outdated.\nCurrent Version: "..data.version.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com/MrDaGree"..updatePath.."")
+			print("--------------------------------------------------------------------------")
+			print(resourceName.." is outdated.\nCurrent Version: "..data.version.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com/MrDaGree"..updatePath.."")
 			print("\nUpdate Changelog:\n"..data.changelog)
 			print("\n--------------------------------------------------------------------------")
 		elseif tonumber(curVersion) > tonumber(data.version) then
@@ -28,11 +28,26 @@ RegisterCommand('_curver', function(source)
 		local data = json.decode(response)
 
 		if curVersion ~= data.version and tonumber(curVersion) < tonumber(data.version) then
-			TriggerClientEvent('chat:addMessage', source, { args = { "ELS-FiveM", "You are currently an outdated version of [ " .. GetCurrentResourceName() .. " ]. Your version: [ " .. curVersion .. " ]. Newest version: [ " .. data.version .. " ]."}, color = {13, 161, 200}})
+			local message = "You are currently running an outdated version of [ " .. GetCurrentResourceName() .. " ]. Your version [ " .. curVersion .. " ]. Newest version: [ " .. data.version .. " ]."
+			if source > 0 then
+				TriggerClientEvent('chat:addMessage', source, { args = { "ELS-FiveM", message }, color = {13, 161, 200}})
+			else
+				print("ELS-FiveM: You are currently running an outdated version of [ " .. GetCurrentResourceName() .. " ]. Your version [ " .. curVersion .. " ]. Newest version: [ " .. data.version .. " ].")
+			end
 		elseif tonumber(curVersion) > tonumber(data.version) then
-			TriggerClientEvent('chat:addMessage', source, { args = { "ELS-FiveM", "Um, what? Your version of ELS-FiveM is higher than the current version. What?"}, color = {13, 161, 200}})
+			local message = "Um, what? Your version of ELS-FiveM is higher than the current version. What?"
+			if source > 0 then
+				TriggerClientEvent('chat:addMessage', source, { args = { "ELS-FiveM", message }, color = {13, 161, 200}})
+			else
+				print("ELS-FiveM: " .. message)
+			end
 		else
-			TriggerClientEvent('chat:addMessage', source, { args = { "ELS-FiveM", "Your version of [ " .. GetCurrentResourceName() .. " ] is up to date! Current version: [ " .. curVersion .. " ]."}, color = {13, 161, 200}})
+			local message = "Your version of [ " .. GetCurrentResourceName() .. " ] is up to date! Current version: [ " .. curVersion .. " ]."
+			if source > 0 then
+				TriggerClientEvent('chat:addMessage', source, { args = { "ELS-FiveM", message }, color = {13, 161, 200}})
+			else
+				print("ELS-FiveM: " .. message)
+			end
 		end
 	end, "GET", "", {version = 'this'})
 end)
