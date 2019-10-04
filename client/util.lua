@@ -383,7 +383,7 @@ function setExtraState(veh, extra, state)
     end
 end
 
-function checkVehicleInTable(veh)
+function isVehicleELS(veh)
     return vehInTable(els_Vehicles, checkCarHash(veh))
 end
 
@@ -483,7 +483,7 @@ function changePrimaryPatternMath(way)
     if playButtonPressSounds then
         PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
     end
-    local primMax = getNumberOfPrimaryPatterns(GetVehiclePedIsUsing(PlayerPedId()))
+    local primMax = getNumberOfPrimaryPatterns(GetVehiclePedIsUsing(GetPlayerPed(-1)))
     local primMin = 1
     local temp = lightPatternPrim
 
@@ -507,7 +507,7 @@ function changeSecondaryPatternMath(way)
     if playButtonPressSounds then
         PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
     end
-    local primMax = getNumberOfSecondaryPatterns(GetVehiclePedIsUsing(PlayerPedId()))
+    local primMax = getNumberOfSecondaryPatterns(GetVehiclePedIsUsing(GetPlayerPed(-1)))
     local primMin = 1
     local temp = lightPatternSec
 
@@ -530,7 +530,7 @@ function changeAdvisorPatternMath(way)
         PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
     end
     
-    local primMax = getNumberOfAdvisorPatterns(GetVehiclePedIsUsing(PlayerPedId()))
+    local primMax = getNumberOfAdvisorPatterns(GetVehiclePedIsUsing(GetPlayerPed(-1)))
 
     local primMin = 1
     local temp = advisorPatternSelectedIndex
@@ -553,9 +553,9 @@ function setSirenStateButton(state)
     if playButtonPressSounds then
         PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
     end
-    if m_siren_state[GetVehiclePedIsUsing(PlayerPedId())] ~= state then
+    if m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] ~= state then
         TriggerServerEvent("els:setSirenState_s", state)
-    elseif m_siren_state[GetVehiclePedIsUsing(PlayerPedId())] == state then
+    elseif m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == state then
         TriggerServerEvent("els:setSirenState_s", 0)
     end
 end
@@ -564,7 +564,7 @@ function upOneStage()
     if playButtonPressSounds then
         PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
     end
-    local vehNetID = GetVehiclePedIsUsing(PlayerPedId())
+    local vehNetID = GetVehiclePedIsUsing(GetPlayerPed(-1))
 
     local newStage = 1
 
@@ -578,16 +578,16 @@ function upOneStage()
 
     changeLightStage(newStage, advisorPatternSelectedIndex, lightPatternPrim, lightPatternSec)
 
-    if GetVehicleClass(GetVehiclePedIsUsing(PlayerPedId())) == 18 then
-        if newStage == getVehicleVCFInfo(GetVehiclePedIsUsing(PlayerPedId())).misc.dfltsirenltsactivateatlstg then
-            toggleSirenMute(GetVehiclePedIsUsing(PlayerPedId()), true)
-            SetVehicleSiren(GetVehiclePedIsUsing(PlayerPedId()), true)
+    if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
+        if newStage == getVehicleVCFInfo(GetVehiclePedIsUsing(GetPlayerPed(-1))).misc.dfltsirenltsactivateatlstg then
+            toggleSirenMute(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
+            SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
         else
-            SetVehicleSiren(GetVehiclePedIsUsing(PlayerPedId()), false)
+            SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
         end
 
         if(newStage == 0) then
-            SetVehicleSiren(GetVehiclePedIsUsing(PlayerPedId()), false)
+            SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
             TriggerServerEvent("els:setSirenState_s", 0)
             TriggerServerEvent("els:setDualSirenState_s", 0)
             TriggerServerEvent("els:setDualSiren_s", false)
@@ -599,7 +599,7 @@ function downOneStage()
     if playButtonPressSounds then
         PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
     end
-    local vehNetID = GetVehiclePedIsUsing(PlayerPedId())
+    local vehNetID = GetVehiclePedIsUsing(GetPlayerPed(-1))
 
     local newStage = 3
 
@@ -613,16 +613,16 @@ function downOneStage()
 
     changeLightStage(newStage, advisorPatternSelectedIndex, lightPatternPrim, lightPatternSec)
 
-    if GetVehicleClass(GetVehiclePedIsUsing(PlayerPedId())) == 18 then
-        if newStage == getVehicleVCFInfo(GetVehiclePedIsUsing(PlayerPedId())).misc.dfltsirenltsactivateatlstg then
-            toggleSirenMute(GetVehiclePedIsUsing(PlayerPedId()), true)
-            SetVehicleSiren(GetVehiclePedIsUsing(PlayerPedId()), true)
+    if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
+        if newStage == getVehicleVCFInfo(GetVehiclePedIsUsing(GetPlayerPed(-1))).misc.dfltsirenltsactivateatlstg then
+            toggleSirenMute(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
+            SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
         else
-            SetVehicleSiren(GetVehiclePedIsUsing(PlayerPedId()), false)
+            SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
         end
 
         if (newStage == 0) then
-            SetVehicleSiren(GetVehiclePedIsUsing(PlayerPedId()), false)
+            SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
             TriggerServerEvent("els:setSirenState_s", 0)
             TriggerServerEvent("els:setDualSirenState_s", 0)
             TriggerServerEvent("els:setDualSiren_s", false)
@@ -658,11 +658,14 @@ end
 isVehicleELS = false
 canControlELS = false
 Citizen.CreateThread(function()
+    Wait(500)
     while true do
         ped = PlayerPedId()
         if IsPedInAnyVehicle(ped, false) then
             vehicle = GetVehiclePedIsIn(ped, false)
-            isVehicleELS = vehInTable(els_Vehicles, checkCarHash(vehicle))
+            if (els_Vehicles ~= nil) then
+                isVehicleELS = vehInTable(els_Vehicles, checkCarHash(vehicle))
+            end
             if isVehicleELS and (GetPedInVehicleSeat(vehicle, -1) == ped or GetPedInVehicleSeat(vehicle, 0) == ped) then
                 canControlELS = true
                 if printDebugInformation then print(([[

@@ -1,6 +1,6 @@
 outputLoading = false
 playButtonPressSounds = true
-printDebugInformation = true
+printDebugInformation = false
 
 vehicleSyncDistance = 150
 envirementLightBrightness = 0.006
