@@ -20,4 +20,6 @@ vcf_files = {
 	"hwaycar9.xml",
 	"hwaycar10.xml",
 	"tflatbed4.xml",
+	"policeold1.xml",
+	"policeold2.xml"
 }
