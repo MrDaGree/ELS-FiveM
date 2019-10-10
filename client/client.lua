@@ -36,7 +36,7 @@ Citizen.CreateThread(function()
 
     while true do
 
-        if isVehicleELS and canControlELS and GetVehiclePedIsUsing(PlayerPedId()) ~= nil then
+        if isVehicleELS and canControlELS then
 
             if GetVehicleClass(GetVehiclePedIsUsing(PlayerPedId())) == 18 then
                 DisableControlAction(0, shared.horn, true)
@@ -320,7 +320,7 @@ end)
 
 Citizen.CreateThread(function()
     while true do
-        if isVehicleELS and canControlELS and GetVehiclePedIsUsing(PlayerPedId()) ~= nil then
+        if isVehicleELS and canControlELS then
 
             if IsDisabledControlPressed(0, keyboard.modifyKey) then
                 if IsDisabledControlPressed(0, keyboard.pattern.primary) then
