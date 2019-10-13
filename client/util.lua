@@ -679,6 +679,6 @@ Citizen.CreateThread(function()
             isVehicleELS = false
             canControlELS = false
         end
-        Citizen.Wait(500)
+        Citizen.Wait(0)
     end
 end)
