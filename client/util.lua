@@ -665,7 +665,7 @@ Citizen.CreateThread(function()
                 isVehicleELS = vehInTable(els_Vehicles, checkCarHash(current_vehicle))
             end
             if isVehicleELS then
-                if GetPedInVehicleSeat(vehicle, -1) == ped or GetPedInVehicleSeat(vehicle, 0) == ped then
+                if GetPedInVehicleSeat(current_vehicle, -1) == ped or GetPedInVehicleSeat(current_vehicle, 0) == ped then
                     canControlELS = true
                 end
                 if printDebugInformation then print(([[
