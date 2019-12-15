@@ -660,17 +660,17 @@ canControlELS = false
 Citizen.CreateThread(function()
     Wait(500)
     while true do
-        ped = PlayerPedId()
-        if IsPedInAnyVehicle(ped, false) then
-            vehicle = GetVehiclePedIsIn(ped, false)
+        if current_vehicle ~= 0 then
             if (els_Vehicles ~= nil) then
-                isVehicleELS = vehInTable(els_Vehicles, checkCarHash(vehicle))
+                isVehicleELS = vehInTable(els_Vehicles, checkCarHash(current_vehicle))
             end
-            if isVehicleELS  then
-                canControlELS = true
+            if isVehicleELS then
+                if GetPedInVehicleSeat(vehicle, -1) == ped or GetPedInVehicleSeat(vehicle, 0) == ped then
+                    canControlELS = true
+                end
                 if printDebugInformation then print(([[
                     isVehicleELS = %s 
-                    canControlELS = %s ]]):format(tostring(isVehicleELS), tostring(canControlELS)))
+                    canControlELS = %s ]]):format(tostring(isVehicleELS), tostring(canControlELS))
                 end
             else
                 canControlELS = false
@@ -680,5 +680,13 @@ Citizen.CreateThread(function()
             canControlELS = false
         end
         Citizen.Wait(0)
+    end
+end)
+
+Citizen.CreateThread(function()
+    while true do
+        ped = PlayerPedId()
+        current_vehicle = GetVehiclePedIsIn(ped, false)
+        Citizen.Wait(500)
     end
 end)
