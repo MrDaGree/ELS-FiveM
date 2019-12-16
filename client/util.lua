@@ -668,10 +668,8 @@ Citizen.CreateThread(function()
                 if GetPedInVehicleSeat(current_vehicle, -1) == ped or GetPedInVehicleSeat(current_vehicle, 0) == ped then
                     canControlELS = true
                 end
-                -- if printDebugInformation then print(([[
-                --     isVehicleELS = %s 
-                --     canControlELS = %s ]]):format(tostring(isVehicleELS), tostring(canControlELS)))
-                -- end
+                debugPrint('isVehicleELS = ' .. tostring(isVehicleELS), false, true)
+                debugPrint('canControlELS = ' .. tostring(canControlELS), false, true)
             else
                 canControlELS = false
             end

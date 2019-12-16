@@ -21,3 +21,5 @@ server_script {
 	'server/server.lua',
 	'server/xml.lua'
 }
+
+shared_script 'shared/*.lua'
