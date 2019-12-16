@@ -29,7 +29,8 @@ Citizen.CreateThread(function()
 	end
 end)
 
-RegisterCommand('_curver', function(source)
+RegisterCommand('els', function(source, args)
+	if args[1] ~= 'version' then return end
 	PerformHttpRequest(latestVersionPath, function(err, response, headers)
 		local data = json.decode(response)
 
