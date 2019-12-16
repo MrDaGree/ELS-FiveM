@@ -373,7 +373,7 @@ Citizen.CreateThread(function()
                 if canControlELS then
                     local vehN = GetVehiclePedIsUsing(GetPlayerPed(-1))
 
-                    if vehN ~= nil then
+                    if vehN ~= 0 then
                         if (panelType == "original") then
                             _DrawRect(0.85 + panelOffsetX, 0.89 + panelOffsetY, 0.26, 0.16, 16, 16, 16, 225, 0)
                         
