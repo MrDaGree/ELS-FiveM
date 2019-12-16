@@ -3,27 +3,34 @@ patternInfoTable = {}
 
 local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
 local curVersion = json.decode(verFile).version
-Citizen.CreateThread( function()
-	local updatePath = "ELS-FiveM"
-	local resourceName = "ELS-FiveM ("..GetCurrentResourceName()..")"
-	PerformHttpRequest("https://raw.githubusercontent.com/MrDaGree/"..updatePath.."/master/version.json", function(err, response, headers)
+local resourceName = "ELS-FiveM " .. (GetCurrentResourceName() ~= "ELS-FiveM" and "(" .. GetCurrentResourceName() .. ")" or "")
+local latestVersionPath = "https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/master/version.json"
+function checkVersion()
+	PerformHttpRequest(latestVersionPath, function(err, response, headers)
 		local data = json.decode(response)
 
 		if curVersion ~= data.version and tonumber(curVersion) < tonumber(data.version) then
 			print("--------------------------------------------------------------------------")
-			print(resourceName.." is outdated.\nCurrent Version: "..data.version.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com/MrDaGree"..updatePath.."")
+			print(resourceName .. " is outdated.\nCurrent Version: " .. data.version .. "\nYour Version: " .. curVersion .. "\nPlease update it from https://github.com/MrDaGree/ELS-FiveM")
 			print("\nUpdate Changelog:\n"..data.changelog)
 			print("\n--------------------------------------------------------------------------")
 		elseif tonumber(curVersion) > tonumber(data.version) then
-			print("Your version of "..resourceName.." seems to be higher than the current version. Hax bro?")
+			print("Your version of " .. resourceName .. " seems to be higher than the current version. Hax bro?")
 		else
-			print(resourceName.." is up to date!")
+			print(resourceName .. " is up to date!")
 		end
-	end, "GET", "", {version = 'this'})
+	end, "GET", "", { version = "this" })
+end
+
+Citizen.CreateThread(function()
+	while true do
+		checkVersion()
+		Citizen.Wait(3600000) -- 3600000 msec → 1 hour
+	end
 end)
 
 RegisterCommand('_curver', function(source)
-	PerformHttpRequest('https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/master/version.json', function(err, response, headers)
+	PerformHttpRequest(latestVersionPath, function(err, response, headers)
 		local data = json.decode(response)
 
 		if curVersion ~= data.version and tonumber(curVersion) < tonumber(data.version) then
