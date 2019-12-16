@@ -655,11 +655,11 @@ function getVehicleVCFInfo(veh)
     return els_Vehicles[checkCarHash(veh)]
 end
 
-isVehicleELS = false
-canControlELS = false
 Citizen.CreateThread(function()
     Wait(500)
     while true do
+        isVehicleELS = false
+        canControlELS = false
         if current_vehicle ~= 0 then
             if (els_Vehicles ~= nil) then
                 isVehicleELS = vehInTable(els_Vehicles, checkCarHash(current_vehicle))
@@ -668,10 +668,10 @@ Citizen.CreateThread(function()
                 if GetPedInVehicleSeat(current_vehicle, -1) == ped or GetPedInVehicleSeat(current_vehicle, 0) == ped then
                     canControlELS = true
                 end
-                if printDebugInformation then print(([[
-                    isVehicleELS = %s 
-                    canControlELS = %s ]]):format(tostring(isVehicleELS), tostring(canControlELS))
-                end
+                -- if printDebugInformation then print(([[
+                --     isVehicleELS = %s 
+                --     canControlELS = %s ]]):format(tostring(isVehicleELS), tostring(canControlELS)))
+                -- end
             else
                 canControlELS = false
             end
