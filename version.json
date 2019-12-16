@@ -1,4 +1,6 @@
 {
-    "version":"1.8",
-    "changelog":"performance and bug fixes updates"
+    "version": "1.8",
+    "changelog": [
+        "performance and bug fixes updates"
+    ]
 }
