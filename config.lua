@@ -1,6 +1,6 @@
 outputLoading = false
 playButtonPressSounds = true
-printDebugInformation = false
+printDebugInformation = GetConvar("els_debug", "false") == "true"
 
 vehicleSyncDistance = 150
 envirementLightBrightness = 0.006
