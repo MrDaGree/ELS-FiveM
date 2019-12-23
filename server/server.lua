@@ -703,12 +703,20 @@ AddEventHandler('onResourceStart', function(name)
 		patternInfoTable.primarys = {}
 		patternInfoTable.secondarys = {}
 		patternInfoTable.advisors = {}
-	    for i=1,#vcf_files do
-	    	local data = LoadResourceFile(GetCurrentResourceName(), "vcf/" .. vcf_files[i])
+		for i=1,#vcf_files do
+			local hasExt = true
+			if string.sub(vcf_files[i], -4) ~= '.xml' then
+				print("^1[" .. resourceName .. "] ^3Expected file extension for file " .. vcf_files[i] .. ", please append '.xml' to this entry in the vcf.lua file.^0")
+				hasExt = false
+			end
 
-		    if data then
-		        parseObjSet(data, vcf_files[i])
-		    end
+			if hasExt then
+				local data = LoadResourceFile(GetCurrentResourceName(), "vcf/" .. vcf_files[i])
+
+				if data then
+					parseObjSet(data, vcf_files[i])
+				end
+			end
 	    end
 
 	    -- for i=1,#pattern_files do
