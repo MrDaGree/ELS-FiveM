@@ -36,6 +36,11 @@ Citizen.CreateThread(function()
 
     while true do
 
+        if developerMode and not NetworkIsSessionActive() then
+            print("Not in network session, shit will significantly fuck up, so we're preventing you from using ELS.")
+            return
+        end
+
         if isVehicleELS and canControlELS then
 
             if GetVehicleClass(GetVehiclePedIsUsing(PlayerPedId())) == 18 then
