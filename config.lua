@@ -2,6 +2,19 @@ outputLoading = GetConvar("els_outputLoading", "false") == "true"
 playButtonPressSounds = true
 printDebugInformation = GetConvar("els_debug", "false") == "true"
 
+--[[
+	READ!
+	  This developer mode grants access to specific features which may result in complete breaking of the script,
+	  you should only use this if you want to provide feedback on a feature (which may require certain environments
+	  to be able to test effectively)
+
+	  You will likely see comments linking to an issue on the GitHub repository (https://github.com/MrDaGree/ELS-FiveM)
+	  which ask for feedback and testing for a feature. Which, by the way, is voluntarily enabled of course. Support
+	  will not be granted for those who enable this without knowing what it does or what the consequences of using it
+	  are.
+]]
+developerMode = GetConvar("els_developer", "false") == "true"
+
 vehicleSyncDistance = 150
 envirementLightBrightness = 0.006
 lightDelay = 10 -- Time in MS
