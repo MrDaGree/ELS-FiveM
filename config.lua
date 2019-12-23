@@ -1,4 +1,4 @@
-outputLoading = false
+outputLoading = GetConvar("els_outputLoading", "false") == "true"
 playButtonPressSounds = true
 printDebugInformation = GetConvar("els_debug", "false") == "true"
 
