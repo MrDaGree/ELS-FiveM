@@ -703,6 +703,10 @@ AddEventHandler('onResourceStart', function(name)
 		patternInfoTable.primarys = {}
 		patternInfoTable.secondarys = {}
 		patternInfoTable.advisors = {}
+		if vcf_files == nil then
+			error("No VCF list found, please have a file called vcf.lua - see vcf.default.lua for example.")
+		end
+
 		for i=1,#vcf_files do
 			local hasExt = true
 			if string.sub(vcf_files[i], -4) ~= '.xml' then
