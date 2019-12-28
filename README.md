@@ -1,10 +1,10 @@
 ### Master branch is now considered development work. Use the releases tab for stable builds.
 https://discord.gg/GUvNXNe
 
-#### Default Controls**
+#### Default Controls
 https://github.com/MrDaGree/ELS-FiveM/wiki/Controls
 
-#### Installation Guide**
+#### Installation Guide
 1. Clone the repository or download the [latest version](../../releases/latest).
 2. Place inside your server's `resources` directory.
 3. Create a file called 'vcf.lua' and copy the file contents of 'vcf._default_.lua' into that file, but do not delete the default file.
