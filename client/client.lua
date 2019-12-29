@@ -646,59 +646,59 @@ Citizen.CreateThread(function()
 
                 if getVehicleVCFInfo(k).priml.type == string.lower("chp") and getVehicleVCFInfo(k).wrnl.type == string.lower("chp") and getVehicleVCFInfo(k).secl.type == string.lower("chp") then
 
-                	if v.stage == 0 then
-                		for i=1,10 do
-                			setExtraState(k, i, 1)
-                		end
-                	end
+                    if v.stage == 0 then
+                        for i=1,10 do
+                            setExtraState(k, i, 1)
+                        end
+                    end
 
-                	if v.stage == 1 and v.advisorPattern <= 1 then
-                		runCHPPattern(k, v.advisorPattern, v.stage)
-                	end
+                    if v.stage == 1 and v.advisorPattern <= 1 then
+                        runCHPPattern(k, v.advisorPattern, v.stage)
+                    end
 
-                	if v.stage == 2 and v.secPattern <= 3 then
-                		runCHPPattern(k, v.secPattern, v.stage)
-                	end
+                    if v.stage == 2 and v.secPattern <= 3 then
+                        runCHPPattern(k, v.secPattern, v.stage)
+                    end
 
-                	if v.stage == 3 and v.primPattern <= 3 then
-                		runCHPPattern(k, v.primPattern, v.stage)
-                	end
+                    if v.stage == 3 and v.primPattern <= 3 then
+                        runCHPPattern(k, v.primPattern, v.stage)
+                    end
 
                 else
 
-	                if (v.warning) then
-	                    if getVehicleVCFInfo(k).wrnl.type == string.lower("leds") and v.advisorPattern <= 53 then
-	                        runLedPatternWarning(k, v.advisorPattern)
-	                    end
-	                else
-	                    setExtraState(k, 5, 1)
-	                    setExtraState(k, 6, 1)
-	                end
+                    if (v.warning) then
+                        if getVehicleVCFInfo(k).wrnl.type == string.lower("leds") and v.advisorPattern <= 53 then
+                            runLedPatternWarning(k, v.advisorPattern)
+                        end
+                    else
+                        setExtraState(k, 5, 1)
+                        setExtraState(k, 6, 1)
+                    end
 
-	                if (v.secondary) then
-	                    if getVehicleVCFInfo(k).secl.type == string.lower("leds") and v.secPattern <= 140 then
-	                        runLedPatternSecondary(k, v.secPattern, function(cb) vehIsReadySecondary[k] = cb end)
-	                    elseif getVehicleVCFInfo(k).secl.type == string.lower("traf") and v.secPattern <= 36 then
-	                        runTrafPattern(k, v.secPattern)
-	                    end
-	                else
-	                    setExtraState(k, 7, 1)
-	                    setExtraState(k, 8, 1)
-	                    setExtraState(k, 9, 1)
-	                end
+                    if (v.secondary) then
+                        if getVehicleVCFInfo(k).secl.type == string.lower("leds") and v.secPattern <= 140 then
+                            runLedPatternSecondary(k, v.secPattern, function(cb) vehIsReadySecondary[k] = cb end)
+                        elseif getVehicleVCFInfo(k).secl.type == string.lower("traf") and v.secPattern <= 36 then
+                            runTrafPattern(k, v.secPattern)
+                        end
+                    else
+                        setExtraState(k, 7, 1)
+                        setExtraState(k, 8, 1)
+                        setExtraState(k, 9, 1)
+                    end
 
-	                if (v.primary) then
-	                    if getVehicleVCFInfo(k).priml.type == string.lower("leds") and v.primPattern <= 140 then
-	                        runLedPatternPrimary(k, v.primPattern)
-	                    end
-	                else
-	                    setExtraState(k, 1, 1)
-	                    setExtraState(k, 2, 1)
-	                    setExtraState(k, 3, 1)
-	                    setExtraState(k, 4, 1)
-	                end
+                    if (v.primary) then
+                        if getVehicleVCFInfo(k).priml.type == string.lower("leds") and v.primPattern <= 140 then
+                            runLedPatternPrimary(k, v.primPattern)
+                        end
+                    else
+                        setExtraState(k, 1, 1)
+                        setExtraState(k, 2, 1)
+                        setExtraState(k, 3, 1)
+                        setExtraState(k, 4, 1)
+                    end
 
-	            end
+                end
             end
         end
         Citizen.Wait(0)

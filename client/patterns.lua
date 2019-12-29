@@ -60,16 +60,16 @@ function runEnvirementLightWithBrightness(k, extra, brightness)
 
 		if els_Vehicles[vehN].extras[extra] ~= nil then
 			if(els_Vehicles[vehN].extras[extra].env_light) then
-		        local boneIndex = GetEntityBoneIndexByName(k, "extra_" .. extra)
-		        local coords = GetWorldPositionOfEntityBone(k, boneIndex)
+				local boneIndex = GetEntityBoneIndexByName(k, "extra_" .. extra)
+				local coords = GetWorldPositionOfEntityBone(k, boneIndex)
 				
 				for i=1,6 do
-					 if(IsVehicleExtraTurnedOn(k, extra) == false) then break end
+					if(IsVehicleExtraTurnedOn(k, extra) == false) then break end
 					DrawLightWithRangeAndShadow(coords.x + els_Vehicles[vehN].extras[extra].env_pos.x, coords.y + els_Vehicles[vehN].extras[extra].env_pos.y, coords.z + els_Vehicles[vehN].extras[extra].env_pos.z, els_Vehicles[vehN].extras[extra].env_color.r, els_Vehicles[vehN].extras[extra].env_color.g, els_Vehicles[vehN].extras[extra].env_color.b, 50.0, 0.26, 1.0)
 					--DrawLightWithRangeAndShadow(coords.x + els_Vehicles[vehN].extras[extra].env_pos.x, coords.y + els_Vehicles[vehN].extras[extra].env_pos.y, coords.z + els_Vehicles[vehN].extras[extra].env_pos.z, els_Vehicles[vehN].extras[extra].env_color.r, els_Vehicles[vehN].extras[extra].env_color.g, els_Vehicles[vehN].extras[extra].env_color.b, 150 + 0.0, brightness, 1.0)
 					Wait(2)
 				end
-		    end
+			end
 		end
 	end)
 end
@@ -81,16 +81,16 @@ function runEnvirementLight(k, extra)
 
 			if els_Vehicles[vehN].extras[extra] ~= nil then
 				if(els_Vehicles[vehN].extras[extra].env_light) then
-			        local boneIndex = GetEntityBoneIndexByName(k, "extra_" .. extra)
-			        local coords = GetWorldPositionOfEntityBone(k, boneIndex)
+					local boneIndex = GetEntityBoneIndexByName(k, "extra_" .. extra)
+					local coords = GetWorldPositionOfEntityBone(k, boneIndex)
 					
 					for i=1,6 do
-						 if(IsVehicleExtraTurnedOn(k, extra) == false) then break end
+						if(IsVehicleExtraTurnedOn(k, extra) == false) then break end
 						DrawLightWithRangeAndShadow(coords.x + els_Vehicles[vehN].extras[extra].env_pos.x, coords.y + els_Vehicles[vehN].extras[extra].env_pos.y, coords.z + els_Vehicles[vehN].extras[extra].env_pos.z, els_Vehicles[vehN].extras[extra].env_color.r, els_Vehicles[vehN].extras[extra].env_color.g, els_Vehicles[vehN].extras[extra].env_color.b, 50.0, envirementLightBrightness, 5.0)
 						--DrawLightWithRange(coords.x + els_Vehicles[vehN].extras[extra].env_pos.x, coords.y + els_Vehicles[vehN].extras[extra].env_pos.y, coords.z + els_Vehicles[vehN].extras[extra].env_pos.z, els_Vehicles[vehN].extras[extra].env_color.r, els_Vehicles[vehN].extras[extra].env_color.g, els_Vehicles[vehN].extras[extra].env_color.b, 150 + 0.0, envirementLightBrightness)
 						Wait(2)
 					end
-			    end
+				end
 			end
 		end
 	end)
@@ -118,7 +118,7 @@ function runCHPPattern(k, pattern, stage)
 				if stage == 1 then
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageOne[pattern][1]) do
-						    local c = tonumber(string.sub(chp_StageOne[pattern][1], spot, spot) )
+							local c = tonumber(string.sub(chp_StageOne[pattern][1], spot, spot) )
 							setExtraState(k, 1, c)
 							if c == 0 then
 								runEnvirementLight(k, 1)
@@ -142,7 +142,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageOne[pattern][2]) do
-						    local c = tonumber(string.sub(chp_StageOne[pattern][2], spot, spot) )
+							local c = tonumber(string.sub(chp_StageOne[pattern][2], spot, spot) )
 							setExtraState(k, 2, c)
 							if c == 0 then
 								runEnvirementLight(k, 2)
@@ -166,7 +166,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageOne[pattern][3]) do
-						    local c = tonumber(string.sub(chp_StageOne[pattern][3], spot, spot) )
+							local c = tonumber(string.sub(chp_StageOne[pattern][3], spot, spot) )
 							setExtraState(k, 3, c)
 							if c == 0 then
 								runEnvirementLight(k, 3)
@@ -190,7 +190,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageOne[pattern][4]) do
-						    local c = tonumber(string.sub(chp_StageOne[pattern][4], spot, spot) )
+							local c = tonumber(string.sub(chp_StageOne[pattern][4], spot, spot) )
 							setExtraState(k, 4, c)
 							if c == 0 then
 								runEnvirementLight(k, 4)
@@ -214,7 +214,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageOne[pattern][5]) do
-						    local c = tonumber(string.sub(chp_StageOne[pattern][5], spot, spot) )
+							local c = tonumber(string.sub(chp_StageOne[pattern][5], spot, spot) )
 							setExtraState(k, 5, c)
 							if c == 0 then
 								runEnvirementLight(k, 5)
@@ -238,7 +238,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageOne[pattern][6]) do
-						    local c = tonumber(string.sub(chp_StageOne[pattern][6], spot, spot) )
+							local c = tonumber(string.sub(chp_StageOne[pattern][6], spot, spot) )
 							setExtraState(k, 6, c)
 							if c == 0 then
 								runEnvirementLight(k, 6)
@@ -262,7 +262,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageOne[pattern][7]) do
-						    local c = tonumber(string.sub(chp_StageOne[pattern][7], spot, spot) )
+							local c = tonumber(string.sub(chp_StageOne[pattern][7], spot, spot) )
 							setExtraState(k, 7, c)
 							if c == 0 then
 								runEnvirementLight(k, 7)
@@ -286,7 +286,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageOne[pattern][8]) do
-						    local c = tonumber(string.sub(chp_StageOne[pattern][8], spot, spot) )
+							local c = tonumber(string.sub(chp_StageOne[pattern][8], spot, spot) )
 							setExtraState(k, 8, c)
 							if c == 0 then
 								runEnvirementLight(k, 8)
@@ -310,7 +310,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageOne[pattern][9]) do
-						    local c = tonumber(string.sub(chp_StageOne[pattern][9], spot, spot) )
+							local c = tonumber(string.sub(chp_StageOne[pattern][9], spot, spot) )
 							setExtraState(k, 9, c)
 							if c == 0 then
 								runEnvirementLight(k, 9)
@@ -334,7 +334,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageOne[pattern][10]) do
-						    local c = tonumber(string.sub(chp_StageOne[pattern][10], spot, spot) )
+							local c = tonumber(string.sub(chp_StageOne[pattern][10], spot, spot) )
 							setExtraState(k, 10, c)
 							if c == 0 then
 								runEnvirementLight(k, 10)
@@ -358,7 +358,7 @@ function runCHPPattern(k, pattern, stage)
 				elseif stage == 2 then
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageTwo[pattern][1]) do
-						    local c = tonumber(string.sub(chp_StageTwo[pattern][1], spot, spot) )
+							local c = tonumber(string.sub(chp_StageTwo[pattern][1], spot, spot) )
 							setExtraState(k, 1, c)
 							if c == 0 then
 								runEnvirementLight(k, 1)
@@ -382,7 +382,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageTwo[pattern][2]) do
-						    local c = tonumber(string.sub(chp_StageTwo[pattern][2], spot, spot) )
+							local c = tonumber(string.sub(chp_StageTwo[pattern][2], spot, spot) )
 							setExtraState(k, 2, c)
 							if c == 0 then
 								runEnvirementLight(k, 2)
@@ -406,7 +406,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageTwo[pattern][3]) do
-						    local c = tonumber(string.sub(chp_StageTwo[pattern][3], spot, spot) )
+							local c = tonumber(string.sub(chp_StageTwo[pattern][3], spot, spot) )
 							setExtraState(k, 3, c)
 							if c == 0 then
 								runEnvirementLight(k, 3)
@@ -430,7 +430,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageTwo[pattern][4]) do
-						    local c = tonumber(string.sub(chp_StageTwo[pattern][4], spot, spot) )
+							local c = tonumber(string.sub(chp_StageTwo[pattern][4], spot, spot) )
 							setExtraState(k, 4, c)
 							if c == 0 then
 								runEnvirementLight(k, 4)
@@ -454,7 +454,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageTwo[pattern][5]) do
-						    local c = tonumber(string.sub(chp_StageTwo[pattern][5], spot, spot) )
+							local c = tonumber(string.sub(chp_StageTwo[pattern][5], spot, spot) )
 							setExtraState(k, 5, c)
 							if c == 0 then
 								runEnvirementLight(k, 5)
@@ -478,7 +478,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageTwo[pattern][6]) do
-						    local c = tonumber(string.sub(chp_StageTwo[pattern][6], spot, spot) )
+							local c = tonumber(string.sub(chp_StageTwo[pattern][6], spot, spot) )
 							setExtraState(k, 6, c)
 							if c == 0 then
 								runEnvirementLight(k, 6)
@@ -502,7 +502,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageTwo[pattern][7]) do
-						    local c = tonumber(string.sub(chp_StageTwo[pattern][7], spot, spot) )
+							local c = tonumber(string.sub(chp_StageTwo[pattern][7], spot, spot) )
 							setExtraState(k, 7, c)
 							if c == 0 then
 								runEnvirementLight(k, 7)
@@ -526,7 +526,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageTwo[pattern][8]) do
-						    local c = tonumber(string.sub(chp_StageTwo[pattern][8], spot, spot) )
+							local c = tonumber(string.sub(chp_StageTwo[pattern][8], spot, spot) )
 							setExtraState(k, 8, c)
 							if c == 0 then
 								runEnvirementLight(k, 8)
@@ -550,7 +550,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageTwo[pattern][9]) do
-						    local c = tonumber(string.sub(chp_StageTwo[pattern][9], spot, spot) )
+						local c = tonumber(string.sub(chp_StageTwo[pattern][9], spot, spot) )
 							setExtraState(k, 9, c)
 							if c == 0 then
 								runEnvirementLight(k, 9)
@@ -574,7 +574,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageTwo[pattern][10]) do
-						    local c = tonumber(string.sub(chp_StageTwo[pattern][10], spot, spot) )
+							local c = tonumber(string.sub(chp_StageTwo[pattern][10], spot, spot) )
 							setExtraState(k, 10, c)
 							if c == 0 then
 								runEnvirementLight(k, 10)
@@ -598,7 +598,7 @@ function runCHPPattern(k, pattern, stage)
 				elseif stage == 3 then
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageThree[pattern][1]) do
-						    local c = tonumber(string.sub(chp_StageThree[pattern][1], spot, spot) )
+							local c = tonumber(string.sub(chp_StageThree[pattern][1], spot, spot) )
 							setExtraState(k, 1, c)
 							if c == 0 then
 								runEnvirementLight(k, 1)
@@ -622,7 +622,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageThree[pattern][2]) do
-						    local c = tonumber(string.sub(chp_StageThree[pattern][2], spot, spot) )
+							local c = tonumber(string.sub(chp_StageThree[pattern][2], spot, spot) )
 							setExtraState(k, 2, c)
 							if c == 0 then
 								runEnvirementLight(k, 2)
@@ -646,7 +646,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageThree[pattern][3]) do
-						    local c = tonumber(string.sub(chp_StageThree[pattern][3], spot, spot) )
+							local c = tonumber(string.sub(chp_StageThree[pattern][3], spot, spot) )
 							setExtraState(k, 3, c)
 							if c == 0 then
 								runEnvirementLight(k, 3)
@@ -670,7 +670,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageThree[pattern][4]) do
-						    local c = tonumber(string.sub(chp_StageThree[pattern][4], spot, spot) )
+							local c = tonumber(string.sub(chp_StageThree[pattern][4], spot, spot) )
 							setExtraState(k, 4, c)
 							if c == 0 then
 								runEnvirementLight(k, 4)
@@ -694,7 +694,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageThree[pattern][5]) do
-						    local c = tonumber(string.sub(chp_StageThree[pattern][5], spot, spot) )
+							local c = tonumber(string.sub(chp_StageThree[pattern][5], spot, spot) )
 							setExtraState(k, 5, c)
 							if c == 0 then
 								runEnvirementLight(k, 5)
@@ -718,7 +718,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageThree[pattern][6]) do
-						    local c = tonumber(string.sub(chp_StageThree[pattern][6], spot, spot) )
+							local c = tonumber(string.sub(chp_StageThree[pattern][6], spot, spot) )
 							setExtraState(k, 6, c)
 							if c == 0 then
 								runEnvirementLight(k, 6)
@@ -742,7 +742,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageThree[pattern][7]) do
-						    local c = tonumber(string.sub(chp_StageThree[pattern][7], spot, spot) )
+							local c = tonumber(string.sub(chp_StageThree[pattern][7], spot, spot) )
 							setExtraState(k, 7, c)
 							if c == 0 then
 								runEnvirementLight(k, 7)
@@ -766,7 +766,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageThree[pattern][8]) do
-						    local c = tonumber(string.sub(chp_StageThree[pattern][8], spot, spot) )
+							local c = tonumber(string.sub(chp_StageThree[pattern][8], spot, spot) )
 							setExtraState(k, 8, c)
 							if c == 0 then
 								runEnvirementLight(k, 8)
@@ -790,7 +790,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageThree[pattern][9]) do
-						    local c = tonumber(string.sub(chp_StageThree[pattern][9], spot, spot) )
+							local c = tonumber(string.sub(chp_StageThree[pattern][9], spot, spot) )
 							setExtraState(k, 9, c)
 							if c == 0 then
 								runEnvirementLight(k, 9)
@@ -814,7 +814,7 @@ function runCHPPattern(k, pattern, stage)
 
 					Citizen.CreateThread(function()
 						for spot = 1, string.len(chp_StageThree[pattern][10]) do
-						    local c = tonumber(string.sub(chp_StageThree[pattern][10], spot, spot) )
+							local c = tonumber(string.sub(chp_StageThree[pattern][10], spot, spot) )
 							setExtraState(k, 10, c)
 							if c == 0 then
 								runEnvirementLight(k, 10)
@@ -891,7 +891,7 @@ function runTrafPattern(k, pattern)
 
 				Citizen.CreateThread(function()
 					for spot = 1, string.len(traf_Patterns[pattern][8]) do
-					    local c = tonumber(string.sub(traf_Patterns[pattern][8], spot, spot) )
+						local c = tonumber(string.sub(traf_Patterns[pattern][8], spot, spot) )
 						setExtraState(k, 8, c)
 						if c == 0 then
 							runEnvirementLight(k, 8)
@@ -920,7 +920,7 @@ function runTrafPattern(k, pattern)
 
 				Citizen.CreateThread(function()
 					for spot = 1, string.len(traf_Patterns[pattern][9]) do
-					    local c = tonumber(string.sub(traf_Patterns[pattern][9], spot, spot) )
+						local c = tonumber(string.sub(traf_Patterns[pattern][9], spot, spot) )
 						setExtraState(k, 9, c)
 						if c == 0 then
 							runEnvirementLight(k, 9)

@@ -31,7 +31,7 @@ Citizen.CreateThread(function()
 end)
 
 RegisterCommand('els', function(source, args)
-	if args[1] == 'version' then 
+	if args[1] == 'version' then
 		PerformHttpRequest(latestVersionPath, function(err, response, headers)
 			local data = json.decode(response)
 
@@ -186,7 +186,7 @@ function parseVehData(xml, fileName)
 					else
 						a.extras[extra].enabled = false
 					end
-					
+
 					a.extras[extra].env_light = false
 					a.extras[extra].env_pos = {}
 					a.extras[extra].env_pos['x'] = 0
@@ -413,7 +413,7 @@ function parseVehData(xml, fileName)
 				end
 			end
 		end
-		
+
     end
 
     vehicleInfoTable[fileName] = a
@@ -724,8 +724,8 @@ AddEventHandler('onResourceStart', function(name)
 				end
 			end
 		end
-		
-		
+
+
 		print("^1[" .. resourceName .. "] ^2Successfully loaded " .. loadedFiles .. "/" .. #vcf_files .. " VCF files!^0")
 
 		-- for i=1,#pattern_files do
