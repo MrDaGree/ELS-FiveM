@@ -571,7 +571,7 @@ Citizen.CreateThread(function()
                             end
                             Draw("SCL", 0, 0, 0, 255, 0.96 + panelOffsetX, 0.93 + panelOffsetY, 0.25, 0.25, 1, true, 0)
                         elseif panelType == "fedsigss" then
-
+                            error(string.format("This panel type (%s) is not supported, yet.", panelType))
                         end
                     end
                 end
