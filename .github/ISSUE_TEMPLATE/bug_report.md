@@ -4,22 +4,26 @@ about: Create a report to help us improve
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+<!-- Please review other issues to ensure you don't post a duplicate issue -->
+<!-- Please provide as much detail as possible so we know exactly what you're talking about and can fix the bug faster -->
+<!-- Do not leave issues created by yourself stale (inactive) as it will just get ignored -->
 
-**To Reproduce**
-Steps to reproduce the behavior:
+### Bug Description
+<!-- A clear explanation of the bug -->
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+### Reproductive Steps
+<!-- How are you able to reproduce the issue? -->
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+### Expected Behavior
+<!-- Example: You're supposed to see lights constantly, but instead the lights flicker -->
 
-**ELS Information:**
-Version #:
-Server Version #: 
-Screenshots of Config.lua, vcf.lua, vcf folder:
+### Screenshots
+<!-- Useful for error reporting -->
 
-**Additional context**
-Add any other context about the problem here.
+### ELS Information
+* Version #: <!-- You can find this via the '/els version' command. (or /curver in older versions) -->
+* Server Version #: <!-- Find by running the 'version' command in your server console -->
+* Screenshots of config.lua, vcf.lua, vcf folder:
+
+### Additional Information
+<!-- If applicable, please provide additional information about your issue to improve the likelihood of fixing this -->
