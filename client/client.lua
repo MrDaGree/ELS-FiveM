@@ -603,26 +603,29 @@ Citizen.CreateThread(function()
 
                     for i=11,12 do
                         if (not IsEntityDead(k) and DoesEntityExist(k)) then
-                            if(els_Vehicles[vehN].extras[i] ~= nil and els_Vehicles[vehN].extras[i].enabled) then
-                                if(IsVehicleExtraTurnedOn(k, i)) then
-                                    local boneIndex = GetEntityBoneIndexByName(k, "extra_" .. i)
-                                    local coords = GetWorldPositionOfEntityBone(k, boneIndex)
-                                    local rotX, rotY, rotZ = table.unpack(RotAnglesToVec(GetEntityRotation(k, 2)))
+                            if (els_Vehicles[vehN] == nil or els_Vehicles[vehN].extras == nil or els_Vehicles[i].enabled == nil) then
+                                debugPrint("Index for current vehicle was nil (invalid), returning.", true, true)
+                                return
+                            end
 
-                                    if els_Vehicles[vehN].extras[i].env_light then
-                                        if i == 11 then
-                                            DrawSpotLightWithShadow(coords.x + els_Vehicles[vehN].extras[11].env_pos.x, coords.y + els_Vehicles[vehN].extras[11].env_pos.y, coords.z + els_Vehicles[vehN].extras[11].env_pos.z, rotX, rotY, rotZ, 255, 255, 255, 75.0, 2.0, 10.0, 20.0, 0.0, true)
-                                        end
-                                        if i == 12 then
-                                            DrawLightWithRange(coords.x + els_Vehicles[vehN].extras[12].env_pos.x, coords.y + els_Vehicles[vehN].extras[12].env_pos.y, coords.z + els_Vehicles[vehN].extras[12].env_pos.z, 255, 255, 255, 50.0, envirementLightBrightness)
-                                        end
-                                    else
-                                        if i == 11 then
-                                            DrawSpotLightWithShadow(coords.x, coords.y, coords.z + 0.2, rotX, rotY, rotZ, 255, 255, 255, 75.0, 2.0, 10.0, 20.0, 0.0, true)
-                                        end
-                                        if i == 12 then
-                                            DrawLightWithRange(coords.x, coords.y, coords.z, 255, 255, 255, 50.0, envirementLightBrightness)
-                                        end
+                            if(IsVehicleExtraTurnedOn(k, i)) then
+                                local boneIndex = GetEntityBoneIndexByName(k, "extra_" .. i)
+                                local coords = GetWorldPositionOfEntityBone(k, boneIndex)
+                                local rotX, rotY, rotZ = table.unpack(RotAnglesToVec(GetEntityRotation(k, 2)))
+
+                                if els_Vehicles[vehN].extras[i].env_light then
+                                    if i == 11 then
+                                        DrawSpotLightWithShadow(coords.x + els_Vehicles[vehN].extras[11].env_pos.x, coords.y + els_Vehicles[vehN].extras[11].env_pos.y, coords.z + els_Vehicles[vehN].extras[11].env_pos.z, rotX, rotY, rotZ, 255, 255, 255, 75.0, 2.0, 10.0, 20.0, 0.0, true)
+                                    end
+                                    if i == 12 then
+                                        DrawLightWithRange(coords.x + els_Vehicles[vehN].extras[12].env_pos.x, coords.y + els_Vehicles[vehN].extras[12].env_pos.y, coords.z + els_Vehicles[vehN].extras[12].env_pos.z, 255, 255, 255, 50.0, envirementLightBrightness)
+                                    end
+                                else
+                                    if i == 11 then
+                                        DrawSpotLightWithShadow(coords.x, coords.y, coords.z + 0.2, rotX, rotY, rotZ, 255, 255, 255, 75.0, 2.0, 10.0, 20.0, 0.0, true)
+                                    end
+                                    if i == 12 then
+                                        DrawLightWithRange(coords.x, coords.y, coords.z, 255, 255, 255, 50.0, envirementLightBrightness)
                                     end
                                 end
                             end
