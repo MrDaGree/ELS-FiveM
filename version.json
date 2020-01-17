@@ -1,4 +1,4 @@
 {
-    "version": "1.9",
-    "changelog": "- Fixed an issue where all passengers were able to use ELS controls.\nFixed _curver command - was attempting to index a string.\n- A better debug logging feature."
+    "version": "1.91",
+    "changelog": "- Fix thread crashing by adding a condition for if current iterating model is nil inside ELS vehicles table."
 }
