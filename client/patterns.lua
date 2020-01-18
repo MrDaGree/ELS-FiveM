@@ -104,16 +104,9 @@ function runCHPPattern(k, pattern, stage)
 				chpPatternReady[k] = false
 
 				local done = {}
-				done[1] = false
-				done[2] = false
-				done[3] = false
-				done[4] = false
-				done[5] = false
-				done[6] = false
-				done[7] = false
-				done[8] = false
-				done[9] = false
-				done[10] = false
+				for i=1, 10 do
+					done[i] = false
+				end
 
 				if stage == 1 then
 					Citizen.CreateThread(function()
@@ -856,9 +849,9 @@ function runTrafPattern(k, pattern)
 				trafPatternReady[k] = false
 
 				local done = {}
-				done[1] = false
-				done[2] = false
-				done[3] = false
+				for i=1, 3 do
+					done[i] = false
+				end
 
 				Citizen.CreateThread(function()
 					for spot = 1, string.len(traf_Patterns[pattern][7]) do
@@ -968,9 +961,9 @@ function runLedPatternSecondary(k, pattern)
 				ledSecondaryReady[k] = false
 
 				local done = {}
-				done[1] = false
-				done[2] = false
-				done[3] = false
+				for i=1, 3 do
+					done[i] = false
+				end
 
 				Citizen.CreateThread(function()
 					for spot = 1, string.len(led_SecondaryPatterns[pattern][7]) do
@@ -1093,9 +1086,9 @@ function runLedPatternWarning(k, pattern)
 				ledWarningReady[k] = false
 
 				local done = {}
-				done[1] = false
-				done[2] = false
-				done[3] = false
+				for i=1, 3 do
+					done[i] = false
+				end
 
 				Citizen.CreateThread(function()
 					for spot = 1, string.len(leds_WarningPatterns[pattern][5]) do
@@ -1176,10 +1169,9 @@ function runLedPatternPrimary(k, pattern)
 				ledPrimaryReady[k] = false
 
 				local done = {}
-				done[1] = false
-				done[2] = false
-				done[3] = false
-				done[4] = false
+				for i=1, 4 do
+					done[i] = false
+				end
 
 				Citizen.CreateThread(function()
 					for spot = 1, string.len(led_PrimaryPatterns[pattern][1]) do
