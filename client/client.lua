@@ -647,6 +647,11 @@ Citizen.CreateThread(function()
             if (v ~= nil and DoesEntityExist(k) and GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
                 SetVehicleAutoRepairDisabled(k, true)
 
+                if #getVehicleVCFInfo(k) == 0 then
+                    debugPrint("Insufficient VCF information obtained for " .. k .. ", returning.", true, true)
+                    return
+                end
+
                 if getVehicleVCFInfo(k).priml.type == string.lower("chp") and getVehicleVCFInfo(k).wrnl.type == string.lower("chp") and getVehicleVCFInfo(k).secl.type == string.lower("chp") then
 
                     if v.stage == 0 then
