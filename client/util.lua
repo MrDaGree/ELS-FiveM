@@ -14,59 +14,61 @@ AddEventHandler("els:changeLightStage_c", function(sender, stage, advisor, prim,
 
         local player_s = GetPlayerFromServerId(sender)
         local ped_s = GetPlayerPed(player_s)
-        if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
-            if IsPedInAnyVehicle(ped_s, false) then
+        if player_s ~= -1 then 
+            if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
+                if IsPedInAnyVehicle(ped_s, false) then
 
-                local vehNetID = GetVehiclePedIsUsing(ped_s)
+                    local vehNetID = GetVehiclePedIsUsing(ped_s)
 
-                if elsVehs[vehNetID] ~= nil then
-                    elsVehs[vehNetID].stage = stage
-                    if (stage == 1) then
-                        elsVehs[vehNetID].warning = false
-                        elsVehs[vehNetID].secondary = true
-                        elsVehs[vehNetID].primary = false
-                    elseif (stage == 2) then
-                        elsVehs[vehNetID].warning = false
-                        elsVehs[vehNetID].secondary = true
-                        elsVehs[vehNetID].primary = true
-                    elseif (stage == 3) then
-                        elsVehs[vehNetID].warning = true
-                        elsVehs[vehNetID].secondary = true
-                        elsVehs[vehNetID].primary = true
+                    if elsVehs[vehNetID] ~= nil then
+                        elsVehs[vehNetID].stage = stage
+                        if (stage == 1) then
+                            elsVehs[vehNetID].warning = false
+                            elsVehs[vehNetID].secondary = true
+                            elsVehs[vehNetID].primary = false
+                        elseif (stage == 2) then
+                            elsVehs[vehNetID].warning = false
+                            elsVehs[vehNetID].secondary = true
+                            elsVehs[vehNetID].primary = true
+                        elseif (stage == 3) then
+                            elsVehs[vehNetID].warning = true
+                            elsVehs[vehNetID].secondary = true
+                            elsVehs[vehNetID].primary = true
+                        else
+                            elsVehs[vehNetID].warning = false
+                            elsVehs[vehNetID].secondary = false
+                            elsVehs[vehNetID].primary = false
+                        end
+                        elsVehs[vehNetID].primPattern = prim
+                        elsVehs[vehNetID].secPattern = sec
+                        elsVehs[vehNetID].advisorPattern = advisor
                     else
-                        elsVehs[vehNetID].warning = false
-                        elsVehs[vehNetID].secondary = false
-                        elsVehs[vehNetID].primary = false
+                        elsVehs[vehNetID] = {}
+                        elsVehs[vehNetID].stage = stage
+                        if (stage == 1) then
+                            elsVehs[vehNetID].warning = false
+                            elsVehs[vehNetID].secondary = true
+                            elsVehs[vehNetID].primary = false
+                        elseif (stage == 2) then
+                            elsVehs[vehNetID].warning = false
+                            elsVehs[vehNetID].secondary = true
+                            elsVehs[vehNetID].primary = true
+                        elseif (stage == 3) then
+                            elsVehs[vehNetID].warning = true
+                            elsVehs[vehNetID].secondary = true
+                            elsVehs[vehNetID].primary = true
+                        else
+                            elsVehs[vehNetID].warning = false
+                            elsVehs[vehNetID].secondary = false
+                            elsVehs[vehNetID].primary = false
+                        end
+                        elsVehs[vehNetID].primPattern = prim
+                        elsVehs[vehNetID].secPattern = sec
+                        elsVehs[vehNetID].advisorPattern = advisor
                     end
-                    elsVehs[vehNetID].primPattern = prim
-                    elsVehs[vehNetID].secPattern = sec
-                    elsVehs[vehNetID].advisorPattern = advisor
-                else
-                    elsVehs[vehNetID] = {}
-                    elsVehs[vehNetID].stage = stage
-                    if (stage == 1) then
-                        elsVehs[vehNetID].warning = false
-                        elsVehs[vehNetID].secondary = true
-                        elsVehs[vehNetID].primary = false
-                    elseif (stage == 2) then
-                        elsVehs[vehNetID].warning = false
-                        elsVehs[vehNetID].secondary = true
-                        elsVehs[vehNetID].primary = true
-                    elseif (stage == 3) then
-                        elsVehs[vehNetID].warning = true
-                        elsVehs[vehNetID].secondary = true
-                        elsVehs[vehNetID].primary = true
-                    else
-                        elsVehs[vehNetID].warning = false
-                        elsVehs[vehNetID].secondary = false
-                        elsVehs[vehNetID].primary = false
-                    end
-                    elsVehs[vehNetID].primPattern = prim
-                    elsVehs[vehNetID].secPattern = sec
-                    elsVehs[vehNetID].advisorPattern = advisor
                 end
             end
-        end
+        end 
         return
     end)
 end)
@@ -75,19 +77,21 @@ RegisterNetEvent("els:changePartState_c")
 AddEventHandler("els:changePartState_c", function(sender, part, newstate)
     local player_s = GetPlayerFromServerId(sender)
     local ped_s = GetPlayerPed(player_s)
-    if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
-        if IsPedInAnyVehicle(ped_s, false) then
-            local vehNetID = GetVehiclePedIsUsing(ped_s)
+    if player_s ~= -1 then 
+        if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
+            if IsPedInAnyVehicle(ped_s, false) then
+                local vehNetID = GetVehiclePedIsUsing(ped_s)
 
-            if elsVehs[vehNetID] == nil then
-                elsVehs[vehNetID] = {}
-                elsVehs[vehNetID].stage = 0
-                elsVehs[vehNetID].primPattern = 1
-                elsVehs[vehNetID].secPattern = 1
-                elsVehs[vehNetID].advisorPattern = 1
+                if elsVehs[vehNetID] == nil then
+                    elsVehs[vehNetID] = {}
+                    elsVehs[vehNetID].stage = 0
+                    elsVehs[vehNetID].primPattern = 1
+                    elsVehs[vehNetID].secPattern = 1
+                    elsVehs[vehNetID].advisorPattern = 1
+                end
+
+                elsVehs[vehNetID][part] = newstate
             end
-
-            elsVehs[vehNetID][part] = newstate
         end
     end
 end)
@@ -96,26 +100,28 @@ RegisterNetEvent("els:changeAdvisorPattern_c")
 AddEventHandler("els:changeAdvisorPattern_c", function(sender, pat)
     local player_s = GetPlayerFromServerId(sender)
     local ped_s = GetPlayerPed(player_s)
-    if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
-        if IsPedInAnyVehicle(ped_s, false) then
+    if player_s ~= -1 then 
+        if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
+            if IsPedInAnyVehicle(ped_s, false) then
 
-            local vehNetID = GetVehiclePedIsUsing(ped_s)
+                local vehNetID = GetVehiclePedIsUsing(ped_s)
 
-            if elsVehs[vehNetID] == nil then
-                elsVehs[vehNetID] = {}
-                elsVehs[vehNetID].stage = 0
-                elsVehs[vehNetID].primPattern = 1
-                elsVehs[vehNetID].secPattern = 1
-                elsVehs[vehNetID].advisorPattern = 1
+                if elsVehs[vehNetID] == nil then
+                    elsVehs[vehNetID] = {}
+                    elsVehs[vehNetID].stage = 0
+                    elsVehs[vehNetID].primPattern = 1
+                    elsVehs[vehNetID].secPattern = 1
+                    elsVehs[vehNetID].advisorPattern = 1
+                end
+
+                if elsVehs[vehNetID] ~= nil then
+                    elsVehs[vehNetID].advisorPattern = pat
+                else
+                    elsVehs[vehNetID] = {}
+                    elsVehs[vehNetID].advisorPattern = pat
+                end
             end
-
-            if elsVehs[vehNetID] ~= nil then
-                elsVehs[vehNetID].advisorPattern = pat
-            else
-                elsVehs[vehNetID] = {}
-                elsVehs[vehNetID].advisorPattern = pat
-            end
-        end
+        end 
     end
 end)
 
@@ -123,94 +129,104 @@ RegisterNetEvent("els:changeSecondaryPattern_c")
 AddEventHandler("els:changeSecondaryPattern_c", function(sender, pat)
     local player_s = GetPlayerFromServerId(sender)
     local ped_s = GetPlayerPed(player_s)
-    if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
-        if IsPedInAnyVehicle(ped_s, false) then
+    if player_s ~= -1 then 
+        if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
+            if IsPedInAnyVehicle(ped_s, false) then
 
-            local vehNetID = GetVehiclePedIsUsing(ped_s)
+                local vehNetID = GetVehiclePedIsUsing(ped_s)
 
-            if elsVehs[vehNetID] == nil then
-                elsVehs[vehNetID] = {}
-                elsVehs[vehNetID].stage = 0
-                elsVehs[vehNetID].primPattern = 1
-                elsVehs[vehNetID].secPattern = 1
-                elsVehs[vehNetID].advisorPattern = 1
-            end
+                if elsVehs[vehNetID] == nil then
+                    elsVehs[vehNetID] = {}
+                    elsVehs[vehNetID].stage = 0
+                    elsVehs[vehNetID].primPattern = 1
+                    elsVehs[vehNetID].secPattern = 1
+                    elsVehs[vehNetID].advisorPattern = 1
+                end
 
-            if elsVehs[vehNetID] ~= nil then
-                elsVehs[vehNetID].secPattern = pat
-            else
-                elsVehs[vehNetID] = {}
-                elsVehs[vehNetID].secPattern = pat
+                if elsVehs[vehNetID] ~= nil then
+                    elsVehs[vehNetID].secPattern = pat
+                else
+                    elsVehs[vehNetID] = {}
+                    elsVehs[vehNetID].secPattern = pat
+                end
             end
         end
-    end
+    end 
 end)
 
 RegisterNetEvent("els:changePrimaryPattern_c")
 AddEventHandler("els:changePrimaryPattern_c", function(sender, pat)
     local player_s = GetPlayerFromServerId(sender)
     local ped_s = GetPlayerPed(player_s)
-    if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
-        if IsPedInAnyVehicle(ped_s, false) then
+    if player_s ~= -1 then 
+        if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
+            if IsPedInAnyVehicle(ped_s, false) then
 
-            local vehNetID = GetVehiclePedIsUsing(ped_s)
+                local vehNetID = GetVehiclePedIsUsing(ped_s)
 
-            if elsVehs[vehNetID] == nil then
-                elsVehs[vehNetID] = {}
-                elsVehs[vehNetID].stage = 0
-                elsVehs[vehNetID].primPattern = 1
-                elsVehs[vehNetID].secPattern = 1
-                elsVehs[vehNetID].advisorPattern = 1
-            end
+                if elsVehs[vehNetID] == nil then
+                    elsVehs[vehNetID] = {}
+                    elsVehs[vehNetID].stage = 0
+                    elsVehs[vehNetID].primPattern = 1
+                    elsVehs[vehNetID].secPattern = 1
+                    elsVehs[vehNetID].advisorPattern = 1
+                end
 
-            if elsVehs[vehNetID] ~= nil then
-                elsVehs[vehNetID].primPattern = pat
-            else
-                elsVehs[vehNetID] = {}
-                elsVehs[vehNetID].primPattern = pat
+                if elsVehs[vehNetID] ~= nil then
+                    elsVehs[vehNetID].primPattern = pat
+                else
+                    elsVehs[vehNetID] = {}
+                    elsVehs[vehNetID].primPattern = pat
+                end
             end
         end
-    end
+    end 
 end)
 
 RegisterNetEvent("els:setSirenState_c")
 AddEventHandler("els:setSirenState_c", function(sender, newstate)
     local player_s = GetPlayerFromServerId(sender)
-    local ped_s = GetPlayerPed(player_s)
-    if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
-        if IsPedInAnyVehicle(ped_s, false) then
-            local veh = GetVehiclePedIsUsing(ped_s)
-            setSirenState(veh, newstate)
+    if player_s ~= -1 then 
+        local ped_s = GetPlayerPed(player_s)
+        if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
+            if IsPedInAnyVehicle(ped_s, false) then
+                local veh = GetVehiclePedIsUsing(ped_s)
+                setSirenState(veh, newstate)
+            end
         end
-    end
+    end 
 end)
 
 RegisterNetEvent("els:setHornState_c")
 AddEventHandler("els:setHornState_c", function(sender, newstate)
     local player_s = GetPlayerFromServerId(sender)
     local ped_s = GetPlayerPed(player_s)
-    if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
-        if IsPedInAnyVehicle(ped_s, false) then
-            local veh = GetVehiclePedIsUsing(ped_s)
-            setHornState(veh, newstate)
+    if player_s ~= -1 then 
+        if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
+            if IsPedInAnyVehicle(ped_s, false) then
+                local veh = GetVehiclePedIsUsing(ped_s)
+                setHornState(veh, newstate)
+            end
         end
-    end
+    end        
 end)
 
 RegisterNetEvent("els:setSceneLightState_c")
 AddEventHandler("els:setSceneLightState_c", function(sender)
     local player_s = GetPlayerFromServerId(sender)
     local ped_s = GetPlayerPed(player_s)
-    if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
-        if IsPedInAnyVehicle(ped_s, false) then
-            local veh = GetVehiclePedIsUsing(ped_s)
-            if(elsVehs[veh] == nil) then
-                changeLightStage(0, 1, 1, 1)
-            end
-            if IsVehicleExtraTurnedOn(veh, 12) then
-                setExtraState(veh, 12, 1)
-            else
-                setExtraState(veh, 12, 0)
+    if player_s ~= -1 then 
+        if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
+            if IsPedInAnyVehicle(ped_s, false) then
+                local veh = GetVehiclePedIsUsing(ped_s)
+                if(elsVehs[veh] == nil) then
+                    changeLightStage(0, 1, 1, 1)
+                end
+                if IsVehicleExtraTurnedOn(veh, 12) then
+                    setExtraState(veh, 12, 1)
+                else
+                    setExtraState(veh, 12, 0)
+                end
             end
         end
     end
@@ -220,18 +236,20 @@ RegisterNetEvent("els:setCruiseLights_c")
 AddEventHandler("els:setCruiseLights_c", function(sender)
     local player_s = GetPlayerFromServerId(sender)
     local ped_s = GetPlayerPed(player_s)
-    if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
-        if IsPedInAnyVehicle(ped_s, false) then
-            local veh = GetVehiclePedIsUsing(ped_s)
-            if elsVehs[veh] ~= nil then
-                if elsVehs[veh].cruise then
-                    elsVehs[veh].cruise = false
+    if player_s ~= -1 then 
+        if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
+            if IsPedInAnyVehicle(ped_s, false) then
+                local veh = GetVehiclePedIsUsing(ped_s)
+                if elsVehs[veh] ~= nil then
+                    if elsVehs[veh].cruise then
+                        elsVehs[veh].cruise = false
+                    else
+                        elsVehs[veh].cruise = true
+                    end
                 else
+                    elsVehs[veh] = {}
                     elsVehs[veh].cruise = true
                 end
-            else
-                elsVehs[veh] = {}
-                elsVehs[veh].cruise = true
             end
         end
     end
@@ -241,19 +259,21 @@ RegisterNetEvent("els:setTakedownState_c")
 AddEventHandler("els:setTakedownState_c", function(sender)
     local player_s = GetPlayerFromServerId(sender)
     local ped_s = GetPlayerPed(player_s)
-    if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
-        if IsPedInAnyVehicle(ped_s, false) then
-            local veh = GetVehiclePedIsUsing(ped_s)
-            if(elsVehs[veh] == nil) then
-                changeLightStage(0, 1, 1, 1)
-            end
-            if IsVehicleExtraTurnedOn(veh, 11) then
-                setExtraState(veh, 11, 1)
-            else
-                setExtraState(veh, 11, 0)
+    if player_s ~= -1 then 
+        if DoesEntityExist(ped_s) and not IsEntityDead(ped_s) then
+            if IsPedInAnyVehicle(ped_s, false) then
+                local veh = GetVehiclePedIsUsing(ped_s)
+                if(elsVehs[veh] == nil) then
+                    changeLightStage(0, 1, 1, 1)
+                end
+                if IsVehicleExtraTurnedOn(veh, 11) then
+                    setExtraState(veh, 11, 1)
+                else
+                    setExtraState(veh, 11, 0)
+                end
             end
         end
-    end
+    end 
 end)
 
 function toggleSirenMute(veh, toggle)
