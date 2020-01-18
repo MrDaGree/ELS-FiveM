@@ -672,7 +672,7 @@ function formatPatternNumber(num)
 end
 
 function getVehicleVCFInfo(veh)
-    return els_Vehicles[checkCarHash(veh)]
+    return els_Vehicles[checkCarHash(veh)] or {}
 end
 
 Citizen.CreateThread(function()
