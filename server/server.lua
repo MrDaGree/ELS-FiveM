@@ -828,3 +828,15 @@ RegisterNetEvent("els:setCruiseLights_s")
 AddEventHandler("els:setCruiseLights_s", function(state)
 	TriggerClientEvent("els:setCruiseLights_c", -1, source)
 end)
+
+RegisterNetEvent("els:catchError")
+AddEventHandler("els:catchError", function(data, vehicle)
+	local player = source
+	print("\n^1ELS ERROR FROM CLIENT^0")
+	print("PLAYER NAME: " .. GetPlayerName(player))
+	print("PLAYER ID: " .. player)
+	if vehicle and vehicle ~= 0 then
+		print("VEHICLE MODEL: " .. vehicle)
+	end
+	print("ERROR: " .. data)
+end)

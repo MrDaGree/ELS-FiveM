@@ -737,3 +737,11 @@ AddEventHandler("els:setPanelType", function(pType)
 
     ShowNotification("~r~ELS~s~~n~Invalid panel type (" .. pType .. ")")
 end)
+
+local orig = _G.Citizen.Trace
+_G.Citizen.Trace = function(data)
+    orig(data)
+    if string.match(data, "SCRIPT ERROR") then
+        TriggerServerEvent("els:catchError", data, IsPedInAnyVehicle(PlayerPedId(), false) ~= 0 and checkCarHash(GetVehiclePedIsIn(PlayerPedId(), false)) or 0)
+    end
+end
