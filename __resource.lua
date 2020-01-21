@@ -7,12 +7,7 @@ version '1.7'
 client_script {
 	'vcf.lua',
 	'config.lua',
-	'client/util.lua',
-	'client/client.lua',
-	'client/_patternTypes/leds.lua',
-	'client/_patternTypes/traf.lua',
-	'client/_patternTypes/chp.lua',
-	'client/patterns.lua'
+	'client/**/*.lua'
 }
 
 server_script {
