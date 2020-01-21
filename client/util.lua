@@ -403,10 +403,6 @@ function setExtraState(veh, extra, state)
     end
 end
 
-function isVehicleELS(veh)
-    return vehInTable(els_Vehicles, checkCarHash(veh))
-end
-
 function getVehicleLightStage(veh)
 
     if (elsVehs[veh] ~= nil) then
@@ -672,7 +668,7 @@ function formatPatternNumber(num)
 end
 
 function getVehicleVCFInfo(veh)
-    return els_Vehicles[checkCarHash(veh)] or {}
+    return els_Vehicles[checkCarHash(veh)] or false
 end
 
 Citizen.CreateThread(function()
