@@ -226,7 +226,7 @@ Citizen.CreateThread(function()
                 DisableControlAction(0, controller.siren.tone_two, true)
                 DisableControlAction(0, controller.siren.tone_three, true)
 
-                if els_Vehicles[checkCarHash(GetVehiclePedIsUsing(PlayerPedId()))].activateUp then
+                if els_Vehicles[checkCarHash(GetVehiclePedIsUsing(PlayerPedId()))] ~= nil and els_Vehicles[checkCarHash(GetVehiclePedIsUsing(PlayerPedId()))].activateUp then
                     if IsDisabledControlPressed(0, controller.modifyKey) and IsDisabledControlJustReleased(0, controller.stageChange) then
                         downOneStage()
                     elseif IsDisabledControlJustReleased(0, controller.stageChange) then
@@ -372,6 +372,21 @@ Citizen.CreateThread(function()
             end
         end
         Wait(150)
+    end
+end)
+
+local log = false
+RegisterCommand('tlog', function()
+    log = not log
+    if log then print('now logging stuff') end
+end)
+
+CreateThread(function()
+    while true do Wait(500)
+        if log then
+            print("elsVehs:" .. json.encode(elsVehs))
+            print("els_Vehicles:" .. json.encode(els_Vehicles))
+        end
     end
 end)
 
@@ -581,15 +596,6 @@ Citizen.CreateThread(function()
     end
 end)
 
--- Citizen.CreateThread(function()
-
---     while true do
---         LghtSoundCleaner()
-
---         Wait(800)
---     end
--- end)
-
 Citizen.CreateThread(function()
     while true do
         for k,v in pairs(elsVehs) do
@@ -603,8 +609,8 @@ Citizen.CreateThread(function()
 
                     for i=11,12 do
                         if (not IsEntityDead(k) and DoesEntityExist(k)) then
-                            if (els_Vehicles[vehN] == nil or els_Vehicles[vehN].extras == nil or els_Vehicles[i].enabled == nil) then
-                                debugPrint("Index for current vehicle was nil (invalid), returning.", true, true)
+                            if (els_Vehicles[vehN] == nil or els_Vehicles[vehN].extras == nil) then
+                                debugPrint("Index for current vehicle (".. vehN .. ") was nil (invalid), returning.", true, true)
                                 return
                             end
 
@@ -647,7 +653,7 @@ Citizen.CreateThread(function()
             if (v ~= nil and DoesEntityExist(k) and GetDistanceBetweenCoords(GetEntityCoords(k, true), GetEntityCoords(GetPlayerPed(-1), true), true) <= vehicleSyncDistance) then
                 SetVehicleAutoRepairDisabled(k, true)
 
-                if #getVehicleVCFInfo(k) == 0 then
+                if getVehicleVCFInfo(k) == false then
                     debugPrint("Insufficient VCF information obtained for " .. k .. ", returning.", true, true)
                     return
                 end
