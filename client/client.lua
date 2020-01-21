@@ -390,12 +390,38 @@ CreateThread(function()
     end
 end)
 
+local allowedPanel = false
+local panelTypeChecked = false
+panelTypeChanged = false
 Citizen.CreateThread(function()
     while true do
         if panelOffsetX ~= nil and panelOffsetY ~= nil then
             if panelEnabled and isVehicleELS then
                 if canControlELS then
                     local vehN = GetVehiclePedIsUsing(GetPlayerPed(-1))
+
+                    if panelTypeChanged then
+                        local panelT = GetResourceKvpString("els:panelType")
+                        if panelT then
+                            panelType = panelT
+                            panelTypeChecked = false
+                        end
+                        panelTypeChanged = false
+                    end
+
+                    if not panelTypeChecked then
+                        for _, v in pairs(allowedPanelTypes) do
+                            if v == panelType then
+                                allowedPanel = true
+                                break
+                            end
+                        end
+                        panelTypeChecked = true
+                    end
+
+                    if not allowedPanel then
+                        error(string.format("This panel type (%s) is not supported. If you did not do anything to invoke this error, contact the server owner.", panelType))
+                    end
 
                     if vehN ~= 0 then
                         if (panelType == "original") then

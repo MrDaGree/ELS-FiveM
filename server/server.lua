@@ -5,6 +5,7 @@ local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
 local curVersion = json.decode(verFile).version
 local resourceName = "ELS-FiveM" .. (GetCurrentResourceName() ~= "ELS-FiveM" and " (" .. GetCurrentResourceName() .. ")" or "")
 local latestVersionPath = "https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/master/version.json"
+local curVerCol = "~v~" -- black, since unknown ig
 
 function checkVersion()
 	PerformHttpRequest(latestVersionPath, function(err, response, headers)
@@ -15,10 +16,13 @@ function checkVersion()
 			print(resourceName .. " is outdated.\nCurrent Version: " .. data.version .. "\nYour Version: " .. curVersion .. "\nPlease update it from https://github.com/MrDaGree/ELS-FiveM")
 			print("\nUpdate Changelog:\n"..data.changelog)
 			print("\n--------------------------------------------------------------------------")
+			curVerCol = "~r~"
 		elseif tonumber(curVersion) > tonumber(data.version) then
 			print("Your version of " .. resourceName .. " seems to be higher than the current version. Hax bro?")
+			curVerCol = "~o~"
 		else
 			print(resourceName .. " is up to date!")
+			curVerCol = "~g~"
 		end
 	end, "GET", "", { version = "this" })
 end
@@ -58,6 +62,20 @@ RegisterCommand('els', function(source, args)
 				end
 			end
 		end, "GET", "", {version = 'this'})
+	elseif args[1] == 'panel' then
+		if source == 0 then return end
+		if not args[2] then
+			TriggerClientEvent("chat:addMessage", source, {
+				args = { "ELS-FiveM", "Please input a panel type! " },
+				color = {13, 161, 200}
+			})
+			return
+		end
+
+		TriggerClientEvent('els:setPanelType', source, args[2])
+	elseif not args[1] or args[1] == 'help' then
+		TriggerClientEvent("els:notify", source, "~r~ELS~s~~n~Version " .. curVerCol .. curVersion)
+		TriggerClientEvent("els:notify", source, "~b~Sub-Commands~s~~n~" .. "~p~panel~s~ - Sets the panel type, options: " .. table.concat(allowedPanelTypes, ", ") .. "~n~~p~version~s~ - Shows current version and if the owner should update or not.~n~~p~help~s~ - Displays this notification.")
 	end
 end)
 

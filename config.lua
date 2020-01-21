@@ -25,6 +25,11 @@ panelType = "original"
 panelOffsetX = 0.0
 panelOffsetY = 0.0
 
+allowedPanelTypes = {
+	"original",
+	"old"
+}
+
 -- https://docs.fivem.net/game-references/controls
 
 shared = {

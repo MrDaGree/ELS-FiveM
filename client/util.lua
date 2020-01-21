@@ -704,3 +704,36 @@ Citizen.CreateThread(function()
         Citizen.Wait(500)
     end
 end)
+
+function ShowNotification(text)
+    local eName = 'HUD_NOTIFICATION_' .. string.sub(text, string.len(text) - 4) .. ' - ' .. GetGameTimer()
+    AddTextEntry(eName, text)
+    SetNotificationTextEntry(eName)
+    DrawNotification(false, false)
+end
+
+RegisterNetEvent("els:notify")
+AddEventHandler("els:notify", function(text)
+    ShowNotification(text)
+end)
+
+RegisterNetEvent("els:setPanelType")
+AddEventHandler("els:setPanelType", function(pType)
+    local validPanel = false
+    for _, panel in pairs(allowedPanelTypes) do
+        if panel == pType then
+            validPanel = true
+            break
+        end
+    end
+
+    if validPanel then
+        SetResourceKvp("els:panelType", pType)
+        debugPrint("Set panel type to " .. pType)
+        ShowNotification("~r~ELS~s~~n~Set panel type to " .. pType)
+        panelTypeChanged = true
+        return
+    end
+
+    ShowNotification("~r~ELS~s~~n~Invalid panel type (" .. pType .. ")")
+end)
