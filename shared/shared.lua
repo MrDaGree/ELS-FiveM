@@ -7,3 +7,7 @@ function debugPrint(msg, force, inLoop)
         end
     end
 end
+
+function EGetConvarBool(convar)
+    return GetConvar(tostring(convar), "false") == "true"
+end
