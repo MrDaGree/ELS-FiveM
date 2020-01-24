@@ -738,8 +738,12 @@ AddEventHandler("els:setPanelType", function(pType)
     ShowNotification("~r~ELS~s~~n~Invalid panel type (" .. pType .. ")")
 end)
 
+local firstSpawn = true
 AddEventHandler("playerSpawned", function()
-    TriggerServerEvent("els:playerSpawned") -- for stuff on server
+    if firstSpawn then
+        TriggerServerEvent("els:playerSpawned")
+        firstSpawn = false
+    end
 end)
 
 local orig = _G.Citizen.Trace

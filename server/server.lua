@@ -8,7 +8,6 @@ local resourceName = "ELS-FiveM" .. (GetCurrentResourceName() ~= "ELS-FiveM" and
 local latestVersionPath = "https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/master/version.json"
 local curVerCol = (curVersion < latestVersion and "~r~") or (curVersion > latestVersion and "~o~") or "~g~"
 local warnOnJoin = false
-local firstSpawn = {}
 
 function checkVersion()
 	PerformHttpRequest(latestVersionPath, function(err, response, headers)
@@ -88,8 +87,6 @@ end)
 RegisterNetEvent("els:playerSpawned")
 AddEventHandler("els:playerSpawned", function()
 	if not warnOnJoin then return end
-	if not firstSpawn[source] then return end
-	firstSpawn[source] = false
 
 	if curVersion < latestVersion then
 		TriggerClientEvent("els:notify", source, curVerCol .. "ELS-FiveM~s~~n~Outdated version! Please update as soon as possible.")
