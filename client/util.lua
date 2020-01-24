@@ -740,6 +740,7 @@ end)
 
 local firstSpawn = true
 AddEventHandler("playerSpawned", function()
+    if GetConvar("els_developer", "false") ~= "true" then return end
     if firstSpawn then
         TriggerServerEvent("els:playerSpawned")
         firstSpawn = false
