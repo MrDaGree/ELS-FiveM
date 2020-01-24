@@ -1,6 +1,6 @@
-outputLoading = GetConvar("els_outputLoading", "false") == "true"
+outputLoading = false
 playButtonPressSounds = true
-printDebugInformation = GetConvar("els_debug", "false") == "true"
+printDebugInformation = false
 
 --[[
 	READ!
@@ -13,7 +13,7 @@ printDebugInformation = GetConvar("els_debug", "false") == "true"
 	  will not be granted for those who enable this without knowing what it does or what the consequences of using it
 	  are.
 ]]
-developerMode = GetConvar("els_developer", "false") == "true"
+developerMode = false
 
 vehicleSyncDistance = 150
 envirementLightBrightness = 0.006

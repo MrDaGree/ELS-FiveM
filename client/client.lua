@@ -36,7 +36,7 @@ Citizen.CreateThread(function()
 
     while true do
 
-        if developerMode then
+        if EGetConvarBool("els_developer") then
 
             -- a temporary condition for split session handling
             if not NetworkIsSessionActive() then

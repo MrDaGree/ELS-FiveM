@@ -454,7 +454,7 @@ function parseVehData(xml, fileName)
 
     vehicleInfoTable[fileName] = a
 
-	if outputLoading then
+	if EGetConvarBool("els_outputLoading") then
 		debugPrint("Done with vehicle: " .. fileName)
 	end
 end
@@ -709,7 +709,7 @@ function parsePatternData(xml, fileName)
     end
     patternInfoTable[#patternInfoTable + 1] = a
 
-	if outputLoading then
+	if EGetConvarBool("els_outputLoading") then
 		debugPrint("Done with pattern: " .. fileName)
 	end
 end

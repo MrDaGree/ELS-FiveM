@@ -740,7 +740,7 @@ end)
 
 local firstSpawn = true
 AddEventHandler("playerSpawned", function()
-    if GetConvar("els_developer", "false") ~= "true" then return end
+    if not EGetConvarBool("els_developer") then return end
     if firstSpawn then
         TriggerServerEvent("els:playerSpawned")
         firstSpawn = false
@@ -753,4 +753,8 @@ _G.Citizen.Trace = function(data)
     if string.match(data, "SCRIPT ERROR") then
         TriggerServerEvent("els:catchError", data, IsPedInAnyVehicle(PlayerPedId(), false) ~= 0 and checkCarHash(GetVehiclePedIsIn(PlayerPedId(), false)) or 0)
     end
+end
+
+function EGetConvarBool(convar)
+    return GetConvar(tostring(convar), "false") == "true"
 end
