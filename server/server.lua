@@ -2,12 +2,19 @@ vehicleInfoTable = {}
 patternInfoTable = {}
 
 local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
-local curVersion = (json.decode(verFile).version) or 000
+local curVersion = tonumber(json.decode(verFile).version) or 000
 local latestVersion = curVersion
 local resourceName = "ELS-FiveM" .. (GetCurrentResourceName() ~= "ELS-FiveM" and " (" .. GetCurrentResourceName() .. ")" or "")
 local latestVersionPath = "https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/master/version.json"
-local curVerCol = (curVersion < latestVersion and "~r~") or (curVersion > latestVersion and "~o~") or "~g~"
-local warnOnJoin = false
+local curVerCol = function()
+	if curVersion < latestVersion then
+		return "~r~"
+	elseif curVersion > latestVersion then
+		return "~o~"
+	end
+	return "~g~"
+end
+local warnOnJoin = true
 
 function checkVersion()
 	PerformHttpRequest(latestVersionPath, function(err, response, headers)
@@ -89,9 +96,9 @@ AddEventHandler("els:playerSpawned", function()
 	if not warnOnJoin then return end
 
 	if curVersion < latestVersion then
-		TriggerClientEvent("els:notify", source, curVerCol .. "ELS-FiveM~s~~n~Outdated version! Please update as soon as possible.")
+		TriggerClientEvent("els:notify", source, "~r~ELS-FiveM~s~~n~Outdated version! Please update as soon as possible.")
 	elseif curVersion > latestVersion then
-		TriggerClientEvent("els:notify", source, curVerCol .. "ELS-FiveM~s~~n~The current version is higher than latest! Please downgrade or check for updates.")
+		TriggerClientEvent("els:notify", source, "~o~ELS-FiveM~s~~n~The current version is higher than latest! Please downgrade or check for updates.")
 	else
 		return
 	end
@@ -454,7 +461,7 @@ function parseVehData(xml, fileName)
 
     vehicleInfoTable[fileName] = a
 
-	if GetConvar("els_outputLoading", "false") == "true" then
+	if EGetConvarBool("els_outputLoading") then
 		debugPrint("Done with vehicle: " .. fileName)
 	end
 end
@@ -709,7 +716,7 @@ function parsePatternData(xml, fileName)
     end
     patternInfoTable[#patternInfoTable + 1] = a
 
-	if GetConvar("els_outputLoading", "false") == "true" then
+	if EGetConvarBool("els_outputLoading") then
 		debugPrint("Done with pattern: " .. fileName)
 	end
 end
