@@ -13,18 +13,18 @@ SLAXML = {
 			print(string.format("<!-- %s -->",content))
 		end,
 		startElement = function(name,nsURI,nsPrefix)
-			                 io.write("<")
+							 io.write("<")
 			if nsPrefix then io.write(nsPrefix,":") end
-			                 io.write(name)
+							 io.write(name)
 			if nsURI    then io.write(" (ns='",nsURI,"')") end
-			                 print(">")
+							 print(">")
 		end,
 		attribute = function(name,value,nsURI,nsPrefix)
-			                 io.write('  ')
+							 io.write('  ')
 			if nsPrefix then io.write(nsPrefix,":") end
-			                 io.write(name,'=',string.format('%q',value))
+							 io.write(name,'=',string.format('%q',value))
 			if nsURI    then io.write(" (ns='",nsURI,"')") end
-			                 io.write("\n")
+							 io.write("\n")
 		end,
 		text = function(text)
 			print(string.format("  text: %q",text))
@@ -72,7 +72,7 @@ function SLAXML:parse(xml, fileName, options)
 		end
 	end
 	local entityMap  = { ["lt"]="<", ["gt"]=">", ["amp"]="&", ["quot"]='"', ["apos"]="'" }
-	local entitySwap = function(orig,n,s) return entityMap[s] or n=="#" and utf8(tonumber('0'..s)) or orig end  
+	local entitySwap = function(orig,n,s) return entityMap[s] or n=="#" and utf8(tonumber('0'..s)) or orig end
 	local function unescape(str) return gsub( str, '(&(#?)([%d%a]+);)', entitySwap ) end
 
 	local function finishText()
@@ -234,7 +234,7 @@ function SLAXML:parse(xml, fileName, options)
 
 	while pos<#xml do
 		if state=="text" then
-			if not (findPI() or findComment() or findCDATA() or findElementClose()) then		
+			if not (findPI() or findComment() or findCDATA() or findElementClose()) then
 				if startElement() then
 					state = "attributes"
 				else

@@ -105,46 +105,46 @@ AddEventHandler("els:playerSpawned", function()
 end)
 
 local function processXml(el)
-    local v = {}
-    local text
+	local v = {}
+	local text
 
-    for _,kid in ipairs(el.kids) do
-        if kid.type == 'text' then
-            text = kid.value
-        elseif kid.type == 'element' then
-            if not v[kid.name] then
-                v[kid.name] = {}
-            end
+	for _,kid in ipairs(el.kids) do
+		if kid.type == 'text' then
+			text = kid.value
+		elseif kid.type == 'element' then
+			if not v[kid.name] then
+				v[kid.name] = {}
+			end
 
-            table.insert(v[kid.name], processXml(kid))
-        end
-    end
+			table.insert(v[kid.name], processXml(kid))
+		end
+	end
 
-    v._ = el.attr
+	v._ = el.attr
 
-    if #el.attr == 0 and #el.el == 0 then
-        v = text
-    end
+	if #el.attr == 0 and #el.el == 0 then
+		v = text
+	end
 
-    return v
+	return v
 end
 
 function parseVehData(xml, fileName)
 
-    local a = {}
-    fileName = string.sub(fileName, 1, -5)
+	local a = {}
+	fileName = string.sub(fileName, 1, -5)
 
-    a = {}
-    a.interface = {}
-    a.extras = {}
-    a.misc = {}
-    a.cruise = {}
-    a.sounds = {}
-    a.wrnl = {}
-    a.priml = {}
-    a.secl = {}
+	a = {}
+	a.interface = {}
+	a.extras = {}
+	a.misc = {}
+	a.cruise = {}
+	a.sounds = {}
+	a.wrnl = {}
+	a.priml = {}
+	a.secl = {}
 
-    for i=1,#xml.root.el do
+	for i=1,#xml.root.el do
 		if(xml.root.el[i].name == "INTERFACE") then
 			for ex=1,#xml.root.el[i].kids do
 				if(xml.root.el[i].kids[ex].name== "LstgActivationType") then
@@ -457,9 +457,9 @@ function parseVehData(xml, fileName)
 			end
 		end
 
-    end
+	end
 
-    vehicleInfoTable[fileName] = a
+	vehicleInfoTable[fileName] = a
 
 	if EGetConvarBool("els_outputLoading") then
 		debugPrint("Done with vehicle: " .. fileName)
@@ -468,14 +468,14 @@ end
 
 function parsePatternData(xml, fileName)
 
-    local primary = {}
-    local secondary = {}
-    local advisor = {}
-    local patternError = false
+	local primary = {}
+	local secondary = {}
+	local advisor = {}
+	local patternError = false
 
-    fileName = string.sub(fileName, 1, -5)
+	fileName = string.sub(fileName, 1, -5)
 
-    for i=1,#xml.root.el do
+	for i=1,#xml.root.el do
 		if(xml.root.el[i].name == "PRIMARY") then
 			primary.stages = {}
 			primary.speed = tonumber(xml.root.el[i].attr["speed"])
@@ -703,18 +703,18 @@ function parsePatternData(xml, fileName)
 				end
 			end
 		end
-    end
+	end
 
-    if primary.stages ~= nil then
+	if primary.stages ~= nil then
 		patternInfoTable.primarys[#patternInfoTable.primarys + 1] = primary
 	end
-    if secondary.stages ~= nil then
+	if secondary.stages ~= nil then
 		patternInfoTable.secondarys[#patternInfoTable.secondarys + 1] = secondary
-    end
-    if advisor.stages ~= nil then
+	end
+	if advisor.stages ~= nil then
 		patternInfoTable.advisors[#patternInfoTable.advisors + 1] = advisor
-    end
-    patternInfoTable[#patternInfoTable + 1] = a
+	end
+	patternInfoTable[#patternInfoTable + 1] = a
 
 	if EGetConvarBool("els_outputLoading") then
 		debugPrint("Done with pattern: " .. fileName)
@@ -722,14 +722,14 @@ function parsePatternData(xml, fileName)
 end
 
 function parseObjSet(data, fileName)
-    local xml = SLAXML:dom(data, fileName)
-    if xml and xml.root then
-        if xml.root.name == "vcfroot" then
-            parseVehData(xml, fileName)
-        elseif xml.root.name == "pattern" then
+	local xml = SLAXML:dom(data, fileName)
+	if xml and xml.root then
+		if xml.root.name == "vcfroot" then
+			parseVehData(xml, fileName)
+		elseif xml.root.name == "pattern" then
 			parsePatternData(xml, fileName)
-        end
-    end
+		end
+	end
 end
 
 function configCheck()
