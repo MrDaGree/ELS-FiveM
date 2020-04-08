@@ -371,7 +371,7 @@ function checkCar(car)
 	end
 end
 
-function checkCarHash(car)
+function getElsVehicleIndexFromVehicle(car)
 	if car then
 		for k,v in pairs(els_Vehicles) do
 			if GetEntityModel(car) == GetHashKey(k) then
@@ -381,7 +381,7 @@ function checkCarHash(car)
 	end
 end
 
-function vehInTable (tab, val)
+function vehInTable(tab, val)
 	for index in pairs(tab) do
 		if index == val then
 			return true
@@ -392,9 +392,10 @@ function vehInTable (tab, val)
 end
 
 function setExtraState(veh, extra, state)
-	if (not IsEntityDead(veh) and DoesEntityExist(veh)) then
-		if els_Vehicles[checkCarHash(veh)].extras[extra] ~= nil then
-			if(els_Vehicles[checkCarHash(veh)].extras[extra].enabled) then
+	if (DoesEntityExist(veh) and not IsEntityDead(veh)) then
+		local elsVehicle = els_Vehicles[getElsVehicleIndexFromVehicle(veh)]
+		if elsVehicle.extras[extra] ~= nil then
+			if(elsVehicle.extras[extra].enabled) then
 				if DoesExtraExist(veh, extra) then
 					SetVehicleExtra(veh, extra, state)
 				end
@@ -477,12 +478,8 @@ end
 function vehicleLightCleanup()
 	Citizen.CreateThread(function()
 		for vehicle,_ in pairs(elsVehs) do
-			if elsVehs[vehicle] then
-				if not DoesEntityExist(vehicle) or IsEntityDead(vehicle) then
-					if elsVehs[vehicle] ~= nil then
-						elsVehs[vehicle] = nil
-					end
-				end
+			if not DoesEntityExist(vehicle) or IsEntityDead(vehicle) then
+				elsVehs[vehicle] = nil
 			end
 		end
 		return
@@ -499,7 +496,7 @@ function changePrimaryPatternMath(way)
 	if playButtonPressSounds then
 		PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 	end
-	local primMax = getNumberOfPrimaryPatterns(GetVehiclePedIsUsing(GetPlayerPed(-1)))
+	local primMax = getNumberOfPrimaryPatterns(currentVehicle)
 	local primMin = 1
 	local temp = lightPatternPrim
 
@@ -523,7 +520,7 @@ function changeSecondaryPatternMath(way)
 	if playButtonPressSounds then
 		PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 	end
-	local primMax = getNumberOfSecondaryPatterns(GetVehiclePedIsUsing(GetPlayerPed(-1)))
+	local primMax = getNumberOfSecondaryPatterns(currentVehicle)
 	local primMin = 1
 	local temp = lightPatternSec
 
@@ -546,7 +543,7 @@ function changeAdvisorPatternMath(way)
 		PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 	end
 
-	local primMax = getNumberOfAdvisorPatterns(GetVehiclePedIsUsing(GetPlayerPed(-1)))
+	local primMax = getNumberOfAdvisorPatterns(currentVehicle)
 
 	local primMin = 1
 	local temp = advisorPatternSelectedIndex
@@ -569,9 +566,9 @@ function setSirenStateButton(state)
 	if playButtonPressSounds then
 		PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 	end
-	if m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] ~= state then
+	if m_siren_state[currentVehicle] ~= state then
 		TriggerServerEvent("els:setSirenState_s", state)
-	elseif m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == state then
+	elseif m_siren_state[currentVehicle] == state then
 		TriggerServerEvent("els:setSirenState_s", 0)
 	end
 end
@@ -580,12 +577,11 @@ function upOneStage()
 	if playButtonPressSounds then
 		PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 	end
-	local vehNetID = GetVehiclePedIsUsing(GetPlayerPed(-1))
 
 	local newStage = 1
 
-	if (elsVehs[vehNetID] ~= nil and elsVehs[vehNetID].stage ~= nil) then
-		newStage = elsVehs[vehNetID].stage + 1
+	if (elsVehs[currentVehicle] ~= nil and elsVehs[currentVehicle].stage ~= nil) then
+		newStage = elsVehs[currentVehicle].stage + 1
 	end
 
 	if newStage == 4 then
@@ -594,16 +590,16 @@ function upOneStage()
 
 	changeLightStage(newStage, advisorPatternSelectedIndex, lightPatternPrim, lightPatternSec)
 
-	if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
-		if newStage == getVehicleVCFInfo(GetVehiclePedIsUsing(GetPlayerPed(-1))).misc.dfltsirenltsactivateatlstg then
-			toggleSirenMute(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
-			SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
+	if GetVehicleClass(currentVehicle) == 18 then
+		if newStage == getVehicleVCFInfo(currentVehicle).misc.dfltsirenltsactivateatlstg then
+			toggleSirenMute(currentVehicle, true)
+			SetVehicleSiren(currentVehicle, true)
 		else
-			SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
+			SetVehicleSiren(currentVehicle, false)
 		end
 
 		if(newStage == 0) then
-			SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
+			SetVehicleSiren(currentVehicle, false)
 			TriggerServerEvent("els:setSirenState_s", 0)
 			TriggerServerEvent("els:setDualSirenState_s", 0)
 			TriggerServerEvent("els:setDualSiren_s", false)
@@ -615,12 +611,11 @@ function downOneStage()
 	if playButtonPressSounds then
 		PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 	end
-	local vehNetID = GetVehiclePedIsUsing(GetPlayerPed(-1))
 
 	local newStage = 3
 
-	if(elsVehs[vehNetID] ~= nil and elsVehs[vehNetID].stage ~= nil) then
-		newStage = elsVehs[vehNetID].stage - 1
+	if(elsVehs[currentVehicle] ~= nil and elsVehs[currentVehicle].stage ~= nil) then
+		newStage = elsVehs[currentVehicle].stage - 1
 	end
 
 	if newStage == -1 then
@@ -629,16 +624,16 @@ function downOneStage()
 
 	changeLightStage(newStage, advisorPatternSelectedIndex, lightPatternPrim, lightPatternSec)
 
-	if GetVehicleClass(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 18 then
-		if newStage == getVehicleVCFInfo(GetVehiclePedIsUsing(GetPlayerPed(-1))).misc.dfltsirenltsactivateatlstg then
-			toggleSirenMute(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
-			SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
+	if GetVehicleClass(currentVehicle) == 18 then
+		if newStage == getVehicleVCFInfo(currentVehicle).misc.dfltsirenltsactivateatlstg then
+			toggleSirenMute(currentVehicle, true)
+			SetVehicleSiren(currentVehicle, true)
 		else
-			SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
+			SetVehicleSiren(currentVehicle, false)
 		end
 
 		if (newStage == 0) then
-			SetVehicleSiren(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
+			SetVehicleSiren(currentVehicle, false)
 			TriggerServerEvent("els:setSirenState_s", 0)
 			TriggerServerEvent("els:setDualSirenState_s", 0)
 			TriggerServerEvent("els:setDualSiren_s", false)
@@ -668,7 +663,7 @@ function formatPatternNumber(num)
 end
 
 function getVehicleVCFInfo(veh)
-	return els_Vehicles[checkCarHash(veh)] or false
+	return els_Vehicles[getElsVehicleIndexFromVehicle(veh)] or false
 end
 
 Citizen.CreateThread(function()
@@ -676,12 +671,13 @@ Citizen.CreateThread(function()
 	while true do
 		isVehicleELS = false
 		canControlELS = false
-		if current_vehicle ~= 0 then
+
+		if currentVehicle then
 			if (els_Vehicles ~= nil) then
-				isVehicleELS = vehInTable(els_Vehicles, checkCarHash(current_vehicle))
+				isVehicleELS = vehInTable(els_Vehicles, getElsVehicleIndexFromVehicle(currentVehicle))
 			end
 			if isVehicleELS then
-				if GetPedInVehicleSeat(current_vehicle, -1) == ped or GetPedInVehicleSeat(current_vehicle, 0) == ped then
+				if GetPedInVehicleSeat(currentVehicle, -1) == playerPed or GetPedInVehicleSeat(currentVehicle, 0) == playerPed then
 					canControlELS = true
 				end
 				debugPrint('isVehicleELS = ' .. tostring(isVehicleELS), false, true)
@@ -699,8 +695,15 @@ end)
 
 Citizen.CreateThread(function()
 	while true do
-		ped = PlayerPedId()
-		current_vehicle = GetVehiclePedIsIn(ped, false)
+		playerPed = PlayerPedId()
+		playerCoords = GetEntityCoords(playerPed)
+
+		if IsPedInAnyVehicle(playerPed, false) then
+			currentVehicle = GetVehiclePedIsIn(playerPed, false)
+		else
+			currentVehicle = nil
+		end
+
 		Citizen.Wait(500)
 	end
 end)
@@ -752,6 +755,6 @@ local orig = _G.Citizen.Trace
 _G.Citizen.Trace = function(data)
 	orig(data)
 	if string.match(data, "SCRIPT ERROR") then
-		TriggerServerEvent("els:catchError", data, IsPedInAnyVehicle(PlayerPedId(), false) ~= 0 and checkCarHash(GetVehiclePedIsIn(PlayerPedId(), false)) or 0)
+		TriggerServerEvent("els:catchError", data, IsPedInAnyVehicle(PlayerPedId(), false) ~= 0 and getElsVehicleIndexFromVehicle(GetVehiclePedIsIn(PlayerPedId(), false)) or 0)
 	end
 end

@@ -1,22 +1,12 @@
 els_Vehicles = {}
+elsVehs = {}
 
-k = nil
-vehName = nil
-lightingStage = 0
-fps = 0
-prevframes = 0
-curframes = 0
-prevtime = 0
-curtime = 0
 advisorPatternSelectedIndex = 1
 advisorPatternIndex = 1
 
 lightPatternPrim = 0
 lightPatternsPrim = 1
 lightPatternSec = 1
-
-guiEnabled = true
-elsVehs = {}
 
 m_siren_state = {}
 m_soundID_veh = {}
@@ -26,9 +16,9 @@ d_soundID_veh = {}
 h_horn_state = {}
 h_soundID_veh = {}
 
-curCleanupTime = 0
-
-
+playerPed = nil
+playerCoords = nil
+currentVehicle = nil
 
 Citizen.CreateThread(function()
 
@@ -45,9 +35,9 @@ Citizen.CreateThread(function()
 			end
 		end
 
-		if isVehicleELS and canControlELS then
+		if isVehicleELS and canControlELS and currentVehicle then
 
-			if GetVehicleClass(GetVehiclePedIsUsing(PlayerPedId())) == 18 then
+			if GetVehicleClass(currentVehicle) == 18 then
 				DisableControlAction(0, shared.horn, true)
 			end
 
@@ -57,8 +47,8 @@ Citizen.CreateThread(function()
 			DisableControlAction(0, 82, true) -- INPUT_VEH_PREV_RADIO
 			DisableControlAction(0, 85, true) -- INPUT_VEH_PREV_RADIO
 
-			SetVehRadioStation(GetVehiclePedIsUsing(PlayerPedId()), "OFF")
-			SetVehicleRadioEnabled(GetVehiclePedIsUsing(PlayerPedId()), false)
+			SetVehRadioStation(currentVehicle, "OFF")
+			SetVehicleRadioEnabled(currentVehicle, false)
 
 			if(GetLastInputMethod(0)) then
 				DisableControlAction(0, keyboard.stageChange, true)
@@ -71,6 +61,7 @@ Citizen.CreateThread(function()
 				DisableControlAction(0, keyboard.siren.tone_one, true)
 				DisableControlAction(0, keyboard.siren.tone_two, true)
 				DisableControlAction(0, keyboard.siren.tone_three, true)
+				local vehicleVCFInfo = getVehicleVCFInfo(currentVehicle)
 
 				if IsDisabledControlPressed(0, keyboard.modifyKey) then
 
@@ -86,7 +77,7 @@ Citizen.CreateThread(function()
 					end
 
 					if IsDisabledControlJustReleased(0, keyboard.stageChange) then
-						if getVehicleVCFInfo(GetVehiclePedIsUsing(PlayerPedId())).interface.activationType == "invert" or getVehicleVCFInfo(GetVehiclePedIsUsing(PlayerPedId())).interface.activationType == "euro" then
+						if vehicleVCFInfo.interface.activationType == "invert" or vehicleVCFInfo.interface.activationType == "euro" then
 							upOneStage()
 						else
 							downOneStage()
@@ -100,7 +91,7 @@ Citizen.CreateThread(function()
 					end
 				else
 					if IsDisabledControlJustReleased(0, keyboard.stageChange) then
-						if getVehicleVCFInfo(GetVehiclePedIsUsing(PlayerPedId())).interface.activationType == "invert" or getVehicleVCFInfo(GetVehiclePedIsUsing(PlayerPedId())).interface.activationType == "euro" then
+						if vehicleVCFInfo.interface.activationType == "invert" or vehicleVCFInfo.interface.activationType == "euro" then
 							downOneStage()
 						else
 							upOneStage()
@@ -122,8 +113,8 @@ Citizen.CreateThread(function()
 						if playButtonPressSounds then
 							PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 						end
-						if elsVehs[GetVehiclePedIsUsing(PlayerPedId())] ~= nil then
-							if elsVehs[GetVehiclePedIsUsing(PlayerPedId())].warning then
+						if elsVehs[currentVehicle] ~= nil then
+							if elsVehs[currentVehicle].warning then
 								TriggerServerEvent("els:changePartState_s", "warning", false)
 							else
 								TriggerServerEvent("els:changePartState_s", "warning", true)
@@ -136,8 +127,8 @@ Citizen.CreateThread(function()
 						if playButtonPressSounds then
 							PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 						end
-						if elsVehs[GetVehiclePedIsUsing(PlayerPedId())] ~= nil then
-							if elsVehs[GetVehiclePedIsUsing(PlayerPedId())].secondary then
+						if elsVehs[currentVehicle] ~= nil then
+							if elsVehs[currentVehicle].secondary then
 								TriggerServerEvent("els:changePartState_s", "secondary", false)
 							else
 								TriggerServerEvent("els:changePartState_s", "secondary", true)
@@ -150,8 +141,8 @@ Citizen.CreateThread(function()
 						if playButtonPressSounds then
 							PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 						end
-						if elsVehs[GetVehiclePedIsUsing(PlayerPedId())] ~= nil then
-							if elsVehs[GetVehiclePedIsUsing(PlayerPedId())].primary then
+						if elsVehs[currentVehicle] ~= nil then
+							if elsVehs[currentVehicle].primary then
 								TriggerServerEvent("els:changePartState_s", "primary", false)
 							else
 								TriggerServerEvent("els:changePartState_s", "primary", true)
@@ -163,9 +154,9 @@ Citizen.CreateThread(function()
 				end
 
 
-				if GetVehicleClass(GetVehiclePedIsUsing(PlayerPedId())) == 18 then
-					if (elsVehs[GetVehiclePedIsUsing(PlayerPedId())] ~= nil) then
-						if elsVehs[GetVehiclePedIsUsing(PlayerPedId())].stage == 3 then
+				if GetVehicleClass(currentVehicle) == 18 then
+					if (elsVehs[currentVehicle] ~= nil) then
+						if elsVehs[currentVehicle].stage == 3 then
 							if IsDisabledControlJustReleased(0, keyboard.siren.tone_one) then
 								setSirenStateButton(1)
 							end
@@ -176,7 +167,7 @@ Citizen.CreateThread(function()
 								setSirenStateButton(3)
 							end
 						end
-						if elsVehs[GetVehiclePedIsUsing(PlayerPedId())].stage == 2 then
+						if elsVehs[currentVehicle].stage == 2 then
 							if IsDisabledControlJustReleased(0, keyboard.siren.tone_one) then
 								if playButtonPressSounds then
 									PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
@@ -225,8 +216,9 @@ Citizen.CreateThread(function()
 				DisableControlAction(0, controller.siren.tone_one, true)
 				DisableControlAction(0, controller.siren.tone_two, true)
 				DisableControlAction(0, controller.siren.tone_three, true)
+				local vehicleIndex = getElsVehicleIndexFromVehicle(currentVehicle)
 
-				if els_Vehicles[checkCarHash(GetVehiclePedIsUsing(PlayerPedId()))] ~= nil and els_Vehicles[checkCarHash(GetVehiclePedIsUsing(PlayerPedId()))].activateUp then
+				if els_Vehicles[vehicleIndex] and els_Vehicles[vehicleIndex].activateUp then
 					if IsDisabledControlPressed(0, controller.modifyKey) and IsDisabledControlJustReleased(0, controller.stageChange) then
 						downOneStage()
 					elseif IsDisabledControlJustReleased(0, controller.stageChange) then
@@ -250,9 +242,9 @@ Citizen.CreateThread(function()
 					end
 				end
 
-				if GetVehicleClass(GetVehiclePedIsUsing(PlayerPedId())) == 18 then
-					if (elsVehs[GetVehiclePedIsUsing(PlayerPedId())] ~= nil) then
-						if elsVehs[GetVehiclePedIsUsing(PlayerPedId())].stage == 3 then
+				if GetVehicleClass(currentVehicle) == 18 then
+					if (elsVehs[currentVehicle] ~= nil) then
+						if elsVehs[currentVehicle].stage == 3 then
 							if not IsDisabledControlPressed(0, controller.modifyKey) then
 								if IsDisabledControlJustReleased(0, controller.siren.tone_one) then
 									setSirenStateButton(1)
@@ -266,7 +258,7 @@ Citizen.CreateThread(function()
 							end
 
 						end
-						if elsVehs[GetVehiclePedIsUsing(PlayerPedId())].stage == 2 then
+						if elsVehs[currentVehicle].stage == 2 then
 							if IsDisabledControlJustReleased(0, controller.siren.tone_one) then
 								if playButtonPressSounds then
 									PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
@@ -310,7 +302,7 @@ Citizen.CreateThread(function()
 				end
 			end
 
-			if GetVehicleClass(GetVehiclePedIsUsing(PlayerPedId())) == 18 then
+			if GetVehicleClass(currentVehicle) == 18 then
 				if not IsDisabledControlPressed(0, controller.modifyKey) then
 					if (IsDisabledControlJustPressed(0, shared.horn)) then
 						TriggerServerEvent("els:setHornState_s", 1)
@@ -386,6 +378,8 @@ CreateThread(function()
 		if log then
 			print("elsVehs:" .. json.encode(elsVehs))
 			print("els_Vehicles:" .. json.encode(els_Vehicles))
+		else
+			Wait(500)
 		end
 	end
 end)
@@ -393,13 +387,12 @@ end)
 local allowedPanel = false
 local panelTypeChecked = false
 panelTypeChanged = false
+
 Citizen.CreateThread(function()
 	while true do
 		if panelOffsetX ~= nil and panelOffsetY ~= nil then
 			if panelEnabled and isVehicleELS then
 				if canControlELS then
-					local vehN = GetVehiclePedIsUsing(GetPlayerPed(-1))
-
 					if panelTypeChanged then
 						local panelT = GetResourceKvpString("els:panelType")
 						if panelT then
@@ -423,19 +416,24 @@ Citizen.CreateThread(function()
 						error(string.format("This panel type (%s) is not supported. If you did not do anything to invoke this error, contact the server owner.", panelType))
 					end
 
-					if vehN ~= 0 then
+					if currentVehicle then
+						local vehicleVCFInfo = getVehicleVCFInfo(currentVehicle)
+						local currentELSInfo = elsVehs[currentVehicle]
+
 						if (panelType == "original") then
 							_DrawRect(0.85 + panelOffsetX, 0.89 + panelOffsetY, 0.26, 0.16, 16, 16, 16, 225, 0)
 
 							_DrawRect(0.85 + panelOffsetX, 0.835 + panelOffsetY, 0.245, 0.035, 0, 0, 0, 225, 0)
-							_DrawRect(0.85 + panelOffsetX, 0.835 + panelOffsetY, 0.24, 0.03, getVehicleVCFInfo(vehN).interface.headerColor.r, getVehicleVCFInfo(vehN).interface.headerColor.g, getVehicleVCFInfo(vehN).interface.headerColor.b, 225, 0)
+							_DrawRect(0.85 + panelOffsetX, 0.835 + panelOffsetY, 0.24, 0.03, vehicleVCFInfo.interface.headerColor.r, vehicleVCFInfo.interface.headerColor.g, vehicleVCFInfo.interface.headerColor.b, 225, 0)
 							Draw("MAIN", 0, 0, 0, 255, 0.745 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 							Draw("MRDAGREE SYSTEMS", 0, 0, 0, 255, 0.92 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 
 
 							_DrawRect(0.78 + panelOffsetX, 0.835 + panelOffsetY, 0.033, 0.025, 0, 0, 0, 225, 0)
-							if (getVehicleLightStage(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 1) then
-								_DrawRect(0.78 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 225, 0)
+							local vehicleLightStage = getVehicleLightStage(currentVehicle)
+
+							if (vehicleLightStage == 1) then
+								_DrawRect(0.78 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
 								Draw("S-1", 0, 0, 0, 255, 0.78 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 							else
 								_DrawRect(0.78 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
@@ -443,8 +441,8 @@ Citizen.CreateThread(function()
 							end
 
 							_DrawRect(0.815 + panelOffsetX, 0.835 + panelOffsetY, 0.033, 0.025, 0, 0, 0, 225, 0)
-							if (getVehicleLightStage(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 2) then
-								_DrawRect(0.815 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 225, 0)
+							if (vehicleLightStage == 2) then
+								_DrawRect(0.815 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
 								Draw("S-2", 0, 0, 0, 255, 0.815 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 							else
 								_DrawRect(0.815 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
@@ -452,8 +450,8 @@ Citizen.CreateThread(function()
 							end
 
 							_DrawRect(0.850 + panelOffsetX, 0.835 + panelOffsetY, 0.033, 0.025, 0, 0, 0, 225, 0)
-							if (getVehicleLightStage(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 3) then
-								_DrawRect(0.850 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 225, 0)
+							if (vehicleLightStage == 3) then
+								_DrawRect(0.850 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
 								Draw("S-3", 0, 0, 0, 255, 0.850 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 							else
 								_DrawRect(0.850 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
@@ -463,10 +461,10 @@ Citizen.CreateThread(function()
 
 
 							_DrawRect(0.742 + panelOffsetX, 0.88 + panelOffsetY, 0.028, 0.045, 0, 0, 0, 225, 0)
-							if elsVehs[GetVehiclePedIsUsing(GetPlayerPed(-1))] ~= nil then
-								if elsVehs[GetVehiclePedIsUsing(GetPlayerPed(-1))].warning then
-									_DrawRect(0.7421 + panelOffsetX, 0.871 + panelOffsetY, 0.026, 0.02, getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 225, 0)
-									Draw("E-" .. formatPatternNumber(advisorPatternSelectedIndex), getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 255, 0.7423 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+							if currentELSInfo then
+								if currentELSInfo.warning then
+									_DrawRect(0.7421 + panelOffsetX, 0.871 + panelOffsetY, 0.026, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+									Draw("E-" .. formatPatternNumber(advisorPatternSelectedIndex), vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 255, 0.7423 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 								else
 									_DrawRect(0.7421 + panelOffsetX, 0.871 + panelOffsetY, 0.026, 0.02, 186, 186, 186, 225, 0)
 									Draw("E-" .. formatPatternNumber(advisorPatternSelectedIndex), 255, 255, 255, 255, 0.7423 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
@@ -478,10 +476,10 @@ Citizen.CreateThread(function()
 							Draw("WRN", 0, 0, 0, 255, 0.7423 + panelOffsetX, 0.86 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 
 							_DrawRect(0.774 + panelOffsetX, 0.88 + panelOffsetY, 0.028, 0.045, 0, 0, 0, 225, 0)
-							if elsVehs[GetVehiclePedIsUsing(GetPlayerPed(-1))] ~= nil then
-								if elsVehs[GetVehiclePedIsUsing(GetPlayerPed(-1))].secondary then
-									_DrawRect(0.774 + panelOffsetX, 0.871 + panelOffsetY, 0.025, 0.02, getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 225, 0)
-									Draw("E-" .. formatPatternNumber(lightPatternSec), getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 255, 0.774 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+							if currentELSInfo then
+								if currentELSInfo.secondary then
+									_DrawRect(0.774 + panelOffsetX, 0.871 + panelOffsetY, 0.025, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+									Draw("E-" .. formatPatternNumber(lightPatternSec), vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 255, 0.774 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 								else
 									_DrawRect(0.774 + panelOffsetX, 0.871 + panelOffsetY, 0.025, 0.02, 186, 186, 186, 225, 0)
 									Draw("E-" .. formatPatternNumber(lightPatternSec), 255, 255, 255, 255, 0.774 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
@@ -493,10 +491,10 @@ Citizen.CreateThread(function()
 							Draw("SEC", 0, 0, 0, 255, 0.774 + panelOffsetX, 0.86 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 
 							_DrawRect(0.806 + panelOffsetX, 0.88 + panelOffsetY, 0.028, 0.045, 0, 0, 0, 225, 0)
-							if elsVehs[GetVehiclePedIsUsing(GetPlayerPed(-1))] ~= nil then
-								if elsVehs[GetVehiclePedIsUsing(GetPlayerPed(-1))].primary then
-									_DrawRect(0.806 + panelOffsetX, 0.871 + panelOffsetY, 0.025, 0.02, getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 225, 0)
-									Draw("E-" .. formatPatternNumber(lightPatternPrim), getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 255, 0.806 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+							if currentELSInfo then
+								if currentELSInfo.primary then
+									_DrawRect(0.806 + panelOffsetX, 0.871 + panelOffsetY, 0.025, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+									Draw("E-" .. formatPatternNumber(lightPatternPrim), vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 255, 0.806 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 								else
 									_DrawRect(0.806 + panelOffsetX, 0.871 + panelOffsetY, 0.025, 0.02, 186, 186, 186, 225, 0)
 									Draw("E-" .. formatPatternNumber(lightPatternPrim), 255, 255, 255, 255, 0.806 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
@@ -515,7 +513,7 @@ Citizen.CreateThread(function()
 
 							_DrawRect(0.86 + panelOffsetX, 0.911 + panelOffsetY, 0.06, 0.09, 0, 0, 0, 225, 0)
 
-							if (IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 11)) then
+							if (IsVehicleExtraTurnedOn(currentVehicle, 11)) then
 								_DrawRect(0.853 + panelOffsetX, 0.895 + panelOffsetY, 0.01, 0.005, 255, 255, 255, 225, 0)
 								_DrawRect(0.866 + panelOffsetX, 0.895 + panelOffsetY, 0.01, 0.005, 255, 255, 255, 225, 0)
 							else
@@ -527,67 +525,67 @@ Citizen.CreateThread(function()
 
 							_DrawRect(0.882 + panelOffsetX, 0.9 + panelOffsetY, 0.0029, 0.015, 54, 54, 54, 225, 0)
 
-							if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 7)) then
-								_DrawRect(0.848 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, getVehicleVCFInfo(vehN).extras[7].env_color.r, getVehicleVCFInfo(vehN).extras[7].env_color.g, getVehicleVCFInfo(vehN).extras[7].env_color.b, 225, 0)
+							if(IsVehicleExtraTurnedOn(currentVehicle, 7)) then
+								_DrawRect(0.848 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[7].env_color.r, vehicleVCFInfo.extras[7].env_color.g, vehicleVCFInfo.extras[7].env_color.b, 225, 0)
 							else
 								_DrawRect(0.848 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
 							end
 
-							if getVehicleVCFInfo(vehN).secl.type == "traf" or getVehicleVCFInfo(vehN).secl.type == "chp" then
-								if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 8)) then
-									_DrawRect(0.8598 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, getVehicleVCFInfo(vehN).extras[8].env_color.r, getVehicleVCFInfo(vehN).extras[8].env_color.g, getVehicleVCFInfo(vehN).extras[8].env_color.b, 225, 0)
+							if vehicleVCFInfo.secl.type == "traf" or vehicleVCFInfo.secl.type == "chp" then
+								if(IsVehicleExtraTurnedOn(currentVehicle, 8)) then
+									_DrawRect(0.8598 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[8].env_color.r, vehicleVCFInfo.extras[8].env_color.g, vehicleVCFInfo.extras[8].env_color.b, 225, 0)
 								else
 									_DrawRect(0.8598 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
 								end
 							end
 
-							if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 9)) then
-								_DrawRect(0.872 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, getVehicleVCFInfo(vehN).extras[9].env_color.r, getVehicleVCFInfo(vehN).extras[9].env_color.g, getVehicleVCFInfo(vehN).extras[9].env_color.b, 225, 0)
+							if(IsVehicleExtraTurnedOn(currentVehicle, 9)) then
+								_DrawRect(0.872 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[9].env_color.r, vehicleVCFInfo.extras[9].env_color.g, vehicleVCFInfo.extras[9].env_color.b, 225, 0)
 							else
 								_DrawRect(0.872 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
 							end
 
-							if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 1)) then
-								_DrawRect(0.84 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, getVehicleVCFInfo(vehN).extras[1].env_color.r, getVehicleVCFInfo(vehN).extras[1].env_color.g, getVehicleVCFInfo(vehN).extras[1].env_color.b, 225, 0)
+							if(IsVehicleExtraTurnedOn(currentVehicle, 1)) then
+								_DrawRect(0.84 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[1].env_color.r, vehicleVCFInfo.extras[1].env_color.g, vehicleVCFInfo.extras[1].env_color.b, 225, 0)
 							else
 								_DrawRect(0.84 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
 							end
 
-							if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 2)) then
-								_DrawRect(0.853 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, getVehicleVCFInfo(vehN).extras[2].env_color.r, getVehicleVCFInfo(vehN).extras[2].env_color.g, getVehicleVCFInfo(vehN).extras[2].env_color.b, 225, 0)
+							if(IsVehicleExtraTurnedOn(currentVehicle, 2)) then
+								_DrawRect(0.853 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[2].env_color.r, vehicleVCFInfo.extras[2].env_color.g, vehicleVCFInfo.extras[2].env_color.b, 225, 0)
 							else
 								_DrawRect(0.853 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
 							end
 
-							if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 3)) then
-								_DrawRect(0.866 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, getVehicleVCFInfo(vehN).extras[3].env_color.r, getVehicleVCFInfo(vehN).extras[3].env_color.g, getVehicleVCFInfo(vehN).extras[3].env_color.b, 225, 0)
+							if(IsVehicleExtraTurnedOn(currentVehicle, 3)) then
+								_DrawRect(0.866 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[3].env_color.r, vehicleVCFInfo.extras[3].env_color.g, vehicleVCFInfo.extras[3].env_color.b, 225, 0)
 							else
 								_DrawRect(0.866 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
 							end
 
-							if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 4)) then
-								_DrawRect(0.879 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, getVehicleVCFInfo(vehN).extras[4].env_color.r, getVehicleVCFInfo(vehN).extras[4].env_color.g, getVehicleVCFInfo(vehN).extras[4].env_color.b, 225, 0)
+							if(IsVehicleExtraTurnedOn(currentVehicle, 4)) then
+								_DrawRect(0.879 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[4].env_color.r, vehicleVCFInfo.extras[4].env_color.g, vehicleVCFInfo.extras[4].env_color.b, 225, 0)
 							else
 								_DrawRect(0.879 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
 							end
 
-							if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 5)) then
-								_DrawRect(0.853 + panelOffsetX, 0.88 + panelOffsetY, 0.01, 0.015, getVehicleVCFInfo(vehN).extras[5].env_color.r, getVehicleVCFInfo(vehN).extras[5].env_color.g, getVehicleVCFInfo(vehN).extras[5].env_color.b, 225, 0)
+							if(IsVehicleExtraTurnedOn(currentVehicle, 5)) then
+								_DrawRect(0.853 + panelOffsetX, 0.88 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[5].env_color.r, vehicleVCFInfo.extras[5].env_color.g, vehicleVCFInfo.extras[5].env_color.b, 225, 0)
 							else
 								_DrawRect(0.853 + panelOffsetX, 0.88 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
 							end
 
-							if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 6)) then
-								_DrawRect(0.866 + panelOffsetX, 0.88 + panelOffsetY, 0.01, 0.015, getVehicleVCFInfo(vehN).extras[6].env_color.r, getVehicleVCFInfo(vehN).extras[6].env_color.g, getVehicleVCFInfo(vehN).extras[6].env_color.b, 225, 0)
+							if(IsVehicleExtraTurnedOn(currentVehicle, 6)) then
+								_DrawRect(0.866 + panelOffsetX, 0.88 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[6].env_color.r, vehicleVCFInfo.extras[6].env_color.g, vehicleVCFInfo.extras[6].env_color.b, 225, 0)
 							else
 								_DrawRect(0.866 + panelOffsetX, 0.88 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
 							end
 
 
 							_DrawRect(0.91 + panelOffsetX, 0.94 + panelOffsetY, 0.024, 0.023, 0, 0, 0, 225, 0)
-							if elsVehs[GetVehiclePedIsUsing(GetPlayerPed(-1))] ~= nil then
-								if elsVehs[GetVehiclePedIsUsing(GetPlayerPed(-1))].cruise then
-									_DrawRect(0.91 + panelOffsetX, 0.94 + panelOffsetY, 0.022, 0.02, getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 225, 0)
+							if currentELSInfo then
+								if currentELSInfo.cruise then
+									_DrawRect(0.91 + panelOffsetX, 0.94 + panelOffsetY, 0.022, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
 								else
 									_DrawRect(0.91 + panelOffsetX, 0.94 + panelOffsetY, 0.022, 0.02, 186, 186, 186, 225, 0)
 								end
@@ -597,24 +595,25 @@ Citizen.CreateThread(function()
 							Draw("CRS", 0, 0, 0, 255, 0.91 + panelOffsetX, 0.93 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 
 							_DrawRect(0.935 + panelOffsetX, 0.94 + panelOffsetY, 0.024, 0.023, 0, 0, 0, 225, 0)
-							if IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 11) then
-								_DrawRect(0.935 + panelOffsetX, 0.94 + panelOffsetY, 0.022, 0.02, getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 225, 0)
+							if IsVehicleExtraTurnedOn(currentVehicle, 11) then
+								_DrawRect(0.935 + panelOffsetX, 0.94 + panelOffsetY, 0.022, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
 							else
 								_DrawRect(0.935 + panelOffsetX, 0.94 + panelOffsetY, 0.0215, 0.02, 186, 186, 186, 225, 0)
 							end
 							Draw("TKD", 0, 0, 0, 255, 0.935 + panelOffsetX, 0.93 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 
 							_DrawRect(0.96 + panelOffsetX, 0.94 + panelOffsetY, 0.024, 0.023, 0, 0, 0, 225, 0)
-							if IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 12) then
-								_DrawRect(0.96 + panelOffsetX, 0.94 + panelOffsetY, 0.022, 0.02, getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 225, 0)
+							if IsVehicleExtraTurnedOn(currentVehicle, 12) then
+								_DrawRect(0.96 + panelOffsetX, 0.94 + panelOffsetY, 0.022, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
 							else
 								_DrawRect(0.96 + panelOffsetX, 0.94 + panelOffsetY, 0.0215, 0.02, 186, 186, 186, 225, 0)
 							end
 							Draw("SCL", 0, 0, 0, 255, 0.96 + panelOffsetX, 0.93 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 						elseif panelType == "old" then
 							_DrawRect(0.85, 0.91, 0.24, 0.11, 0, 0, 0, 200, 0)
+							local vehicleLightStage = getVehicleLightStage(currentVehicle)
 
-							if (getVehicleLightStage(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 1) then
+							if (vehicleLightStage == 1) then
 								_DrawRect(0.75, 0.88, 0.03, 0.02, 173, 0, 0, 225, 0)
 								Draw("1", 0, 0, 0, 255, 0.75, 0.87, 0.25, 0.25, 1, true, 0)
 							else
@@ -622,7 +621,7 @@ Citizen.CreateThread(function()
 								Draw("1", 0, 0, 0, 255, 0.75, 0.87, 0.25, 0.25, 1, true, 0)
 							end
 
-							if (getVehicleLightStage(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 2) then
+							if (vehicleLightStage == 2) then
 								_DrawRect(0.784, 0.88, 0.03, 0.02, 173, 0, 0, 225, 0)
 								Draw("2", 0, 0, 0, 255, 0.784, 0.87, 0.25, 0.25, 1, true, 0)
 							else
@@ -630,7 +629,7 @@ Citizen.CreateThread(function()
 								Draw("2", 0, 0, 0, 255, 0.784, 0.87, 0.25, 0.25, 1, true, 0)
 							end
 
-							if (getVehicleLightStage(GetVehiclePedIsUsing(GetPlayerPed(-1))) == 3) then
+							if (vehicleLightStage == 3) then
 								_DrawRect(0.817, 0.88, 0.03, 0.02, 173, 0, 0, 225, 0)
 								Draw("3", 0, 0, 0, 255, 0.817, 0.87, 0.25, 0.25, 1, true, 0)
 							else
@@ -644,12 +643,12 @@ Citizen.CreateThread(function()
 							_DrawRect(0.854, 0.91, 0.035, 0.02, 186, 186, 186, 225, 0)
 							Draw("SEC " .. tostring(lightPatternSec), 0, 0, 0, 255, 0.854, 0.9, 0.25, 0.25, 1, true, 0)
 
-							if (getVehicleVCFInfo(vehN).secl.type == "traf" or getVehicleVCFInfo(vehN).secl.type == "chp") then
+							if (vehicleVCFInfo.secl.type == "traf" or vehicleVCFInfo.secl.type == "chp") then
 								_DrawRect(0.854, 0.94, 0.035, 0.02, 186, 186, 186, 225, 0)
 								Draw("ADV " .. tostring(advisorPatternSelectedIndex), 0, 0, 0, 255, 0.854, 0.93, 0.25, 0.25, 1, true, 0)
 							end
 
-							if (h_horn_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 1) then
+							if (h_horn_state[currentVehicle] == 1) then
 								_DrawRect(0.75, 0.91, 0.03, 0.02, 0, 173, 0, 225, 0)
 								Draw("HORN", 0, 0, 0, 255, 0.75, 0.9, 0.25, 0.25, 1, true, 0)
 							else
@@ -657,7 +656,7 @@ Citizen.CreateThread(function()
 								Draw("HORN", 0, 0, 0, 255, 0.75, 0.9, 0.25, 0.25, 1, true, 0)
 							end
 
-							if (dualEnable[GetVehiclePedIsUsing(GetPlayerPed(-1))]) then
+							if (dualEnable[currentVehicle]) then
 								_DrawRect(0.784, 0.91, 0.03, 0.02, 0, 213, 255, 225, 0)
 								Draw("DUAL", 0, 0, 0, 255, 0.784, 0.9, 0.25, 0.25, 1, true, 0)
 							else
@@ -665,7 +664,7 @@ Citizen.CreateThread(function()
 								Draw("DUAL", 0, 0, 0, 255, 0.784, 0.9, 0.25, 0.25, 1, true, 0)
 							end
 
-							if (IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 11)) then
+							if (IsVehicleExtraTurnedOn(currentVehicle, 11)) then
 								_DrawRect(0.817, 0.91, 0.03, 0.02, 255, 0, 0, 255, 0)
 								Draw("TKD", 0, 0, 0, 255, 0.817, 0.9, 0.25, 0.25, 1, true, 0)
 							else
@@ -673,8 +672,8 @@ Citizen.CreateThread(function()
 								Draw("TKD", 0, 0, 0, 255, 0.817, 0.9, 0.25, 0.25, 1, true, 0)
 							end
 
-							if (m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 1) then
-								if (d_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 1) then
+							if (m_siren_state[currentVehicle] == 1) then
+								if (d_siren_state[currentVehicle] == 1) then
 									_DrawRect(0.743, 0.94, 0.015, 0.02, 0, 173, 0, 225, 0)
 								else
 									_DrawRect(0.75, 0.94, 0.03, 0.02, 0, 173, 0, 225, 0)
@@ -683,8 +682,8 @@ Citizen.CreateThread(function()
 								_DrawRect(0.75, 0.94, 0.03, 0.02, 186, 186, 186, 225, 0)
 							end
 
-							if (d_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 1) then
-								if (m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 1) then
+							if (d_siren_state[currentVehicle] == 1) then
+								if (m_siren_state[currentVehicle] == 1) then
 									_DrawRect(0.758, 0.94, 0.015, 0.02, 0, 213, 255, 225, 2)
 								else
 									_DrawRect(0.75, 0.94, 0.03, 0.02, 0, 213, 255, 225, 0)
@@ -693,8 +692,8 @@ Citizen.CreateThread(function()
 
 							Draw("MAIN", 0, 0, 0, 255, 0.75, 0.93, 0.25, 0.25, 3, true, 0)
 
-							if (m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 2) then
-								if (d_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 2) then
+							if (m_siren_state[currentVehicle] == 2) then
+								if (d_siren_state[currentVehicle] == 2) then
 									_DrawRect(0.777, 0.94, 0.015, 0.02, 0, 173, 0, 225, 0)
 								else
 									_DrawRect(0.784, 0.94, 0.03, 0.02, 0, 173, 0, 225, 0)
@@ -703,8 +702,8 @@ Citizen.CreateThread(function()
 								_DrawRect(0.784, 0.94, 0.03, 0.02, 186, 186, 186, 225, 0)
 							end
 
-							if (d_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 2) then
-								if (m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 2) then
+							if (d_siren_state[currentVehicle] == 2) then
+								if (m_siren_state[currentVehicle] == 2) then
 									_DrawRect(0.792, 0.94, 0.015, 0.02, 0, 213, 255, 225, 2)
 								else
 									_DrawRect(0.784, 0.94, 0.03, 0.02, 0, 213, 255, 255, 0)
@@ -713,8 +712,8 @@ Citizen.CreateThread(function()
 
 							Draw("SEC", 0, 0, 0, 255, 0.784, 0.93, 0.25, 0.25, 3, true, 0)
 
-							if (m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 3) then
-								if (d_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 3) then
+							if (m_siren_state[currentVehicle] == 3) then
+								if (d_siren_state[currentVehicle] == 3) then
 									_DrawRect(0.81, 0.94, 0.015, 0.02, 0, 173, 0, 225, 0)
 								else
 									_DrawRect(0.817, 0.94, 0.03, 0.02, 0, 173, 0, 225, 0)
@@ -723,8 +722,8 @@ Citizen.CreateThread(function()
 								_DrawRect(0.817, 0.94, 0.03, 0.02, 186, 186, 186, 225, 0)
 							end
 
-							if (d_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 3) then
-								if (m_siren_state[GetVehiclePedIsUsing(GetPlayerPed(-1))] == 3) then
+							if (d_siren_state[currentVehicle] == 3) then
+								if (m_siren_state[currentVehicle] == 3) then
 									_DrawRect(0.823, 0.94, 0.015, 0.02, 0, 213, 255, 225, 2)
 								else
 									_DrawRect(0.817, 0.94, 0.03, 0.02, 0, 213, 255, 255, 0)
@@ -733,56 +732,56 @@ Citizen.CreateThread(function()
 
 							Draw("AUX", 0, 0, 0, 255, 0.817, 0.93, 0.25, 0.25, 3, true, 0)
 
-							if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 7)) then
-								_DrawRect(0.9, 0.94, 0.015, 0.015, getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 225, 0)
+							if(IsVehicleExtraTurnedOn(currentVehicle, 7)) then
+								_DrawRect(0.9, 0.94, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
 							else
 								_DrawRect(0.9, 0.94, 0.015, 0.015, 186, 186, 186, 225, 0)
 							end
 
-							if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 8)) then
-								_DrawRect(0.92, 0.94, 0.015, 0.015, getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 225, 0)
+							if(IsVehicleExtraTurnedOn(currentVehicle, 8)) then
+								_DrawRect(0.92, 0.94, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
 							else
 								_DrawRect(0.92, 0.94, 0.015, 0.015, 186, 186, 186, 225, 0)
 							end
 
-							if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 9)) then
-								_DrawRect(0.94, 0.94, 0.015, 0.015, getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 225, 0)
+							if(IsVehicleExtraTurnedOn(currentVehicle, 9)) then
+								_DrawRect(0.94, 0.94, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
 							else
 								_DrawRect(0.94, 0.94, 0.015, 0.015, 186, 186, 186, 225, 0)
 							end
 
-							if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 1)) then
-								_DrawRect(0.89, 0.92, 0.015, 0.015, getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 225, 0)
+							if(IsVehicleExtraTurnedOn(currentVehicle, 1)) then
+								_DrawRect(0.89, 0.92, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
 							else
 								_DrawRect(0.89, 0.92, 0.015, 0.015, 186, 186, 186, 225, 0)
 							end
 
-							if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 2)) then
-								_DrawRect(0.91, 0.92, 0.015, 0.015, getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 225, 0)
+							if(IsVehicleExtraTurnedOn(currentVehicle, 2)) then
+								_DrawRect(0.91, 0.92, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
 							else
 								_DrawRect(0.91, 0.92, 0.015, 0.015, 186, 186, 186, 225, 0)
 							end
 
-							if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 3)) then
-								_DrawRect(0.93, 0.92, 0.015, 0.015, getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 225, 0)
+							if(IsVehicleExtraTurnedOn(currentVehicle, 3)) then
+								_DrawRect(0.93, 0.92, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
 							else
 								_DrawRect(0.93, 0.92, 0.015, 0.015, 186, 186, 186, 225, 0)
 							end
 
-							if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 4)) then
-								_DrawRect(0.95, 0.92, 0.015, 0.015, getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 225, 0)
+							if(IsVehicleExtraTurnedOn(currentVehicle, 4)) then
+								_DrawRect(0.95, 0.92, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
 							else
 								_DrawRect(0.95, 0.92, 0.015, 0.015, 186, 186, 186, 225, 0)
 							end
 
-							if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 5)) then
-								_DrawRect(0.91, 0.885, 0.015, 0.015, getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 225, 0)
+							if(IsVehicleExtraTurnedOn(currentVehicle, 5)) then
+								_DrawRect(0.91, 0.885, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
 							else
 								_DrawRect(0.91, 0.885, 0.015, 0.015, 186, 186, 186, 225, 0)
 							end
 
-							if(IsVehicleExtraTurnedOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), 6)) then
-								_DrawRect(0.93, 0.885, 0.015, 0.015, getVehicleVCFInfo(vehN).interface.buttonColor.r, getVehicleVCFInfo(vehN).interface.buttonColor.g, getVehicleVCFInfo(vehN).interface.buttonColor.b, 225, 0)
+							if(IsVehicleExtraTurnedOn(currentVehicle, 6)) then
+								_DrawRect(0.93, 0.885, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
 							else
 								_DrawRect(0.93, 0.885, 0.015, 0.015, 186, 186, 186, 225, 0)
 							end
@@ -800,18 +799,18 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		for k,v in pairs(elsVehs) do
-			if(v ~= nil or DoesEntityExist(k)) then
-				if #(GetEntityCoords(k)-GetEntityCoords(GetPlayerPed(-1))) <= vehicleSyncDistance then
-					if elsVehs[k].warning or elsVehs[k].secondary or elsVehs[k].primary then
+			if(DoesEntityExist(k)) then
+				if #(GetEntityCoords(k)-playerCoords) <= vehicleSyncDistance then
+					if v.warning or v.secondary or v.primary then
 						SetVehicleEngineOn(k, true, true, false)
 					end
 
-					local vehN = checkCarHash(k)
+					local vehicleIndex = getElsVehicleIndexFromVehicle(k)
 
 					for i=11,12 do
-						if (not IsEntityDead(k) and DoesEntityExist(k)) then
-							if (els_Vehicles[vehN] == nil or els_Vehicles[vehN].extras == nil) then
-								debugPrint("Index for current vehicle (".. vehN .. ") was nil (invalid), returning.", true, true)
+						if (DoesEntityExist(k) and not IsEntityDead(k)) then
+							if (els_Vehicles[vehicleIndex] == nil or els_Vehicles[vehicleIndex].extras == nil) then
+								debugPrint("Index for current vehicle (".. vehicleIndex .. ") was nil (invalid), returning.", true, true)
 								return
 							end
 
@@ -820,12 +819,12 @@ Citizen.CreateThread(function()
 								local coords = GetWorldPositionOfEntityBone(k, boneIndex)
 								local rotX, rotY, rotZ = table.unpack(RotAnglesToVec(GetEntityRotation(k, 2)))
 
-								if els_Vehicles[vehN].extras[i].env_light then
+								if els_Vehicles[vehicleIndex].extras[i].env_light then
 									if i == 11 then
-										DrawSpotLightWithShadow(coords.x + els_Vehicles[vehN].extras[11].env_pos.x, coords.y + els_Vehicles[vehN].extras[11].env_pos.y, coords.z + els_Vehicles[vehN].extras[11].env_pos.z, rotX, rotY, rotZ, 255, 255, 255, 75.0, 2.0, 10.0, 20.0, 0.0, true)
+										DrawSpotLightWithShadow(coords.x + els_Vehicles[vehicleIndex].extras[11].env_pos.x, coords.y + els_Vehicles[vehicleIndex].extras[11].env_pos.y, coords.z + els_Vehicles[vehicleIndex].extras[11].env_pos.z, rotX, rotY, rotZ, 255, 255, 255, 75.0, 2.0, 10.0, 20.0, 0.0, true)
 									end
 									if i == 12 then
-										DrawLightWithRange(coords.x + els_Vehicles[vehN].extras[12].env_pos.x, coords.y + els_Vehicles[vehN].extras[12].env_pos.y, coords.z + els_Vehicles[vehN].extras[12].env_pos.z, 255, 255, 255, 50.0, envirementLightBrightness)
+										DrawLightWithRange(coords.x + els_Vehicles[vehicleIndex].extras[12].env_pos.x, coords.y + els_Vehicles[vehicleIndex].extras[12].env_pos.y, coords.z + els_Vehicles[vehicleIndex].extras[12].env_pos.z, 255, 255, 255, 50.0, envirementLightBrightness)
 									end
 								else
 									if i == 11 then
@@ -846,19 +845,19 @@ Citizen.CreateThread(function()
 end)
 
 
-
 Citizen.CreateThread(function()
 	while true do
 		for k,v in pairs(elsVehs) do
-			if v ~= nil and DoesEntityExist(k) and #(GetEntityCoords(k)-GetEntityCoords(GetPlayerPed(-1))) <= vehicleSyncDistance then
+			if DoesEntityExist(k) and #(GetEntityCoords(k)-playerCoords) <= vehicleSyncDistance then
 				SetVehicleAutoRepairDisabled(k, true)
+				local vehicleVCFInfo = getVehicleVCFInfo(k)
 
-				if getVehicleVCFInfo(k) == false then
+				if not vehicleVCFInfo then
 					debugPrint("Insufficient VCF information obtained for " .. k .. ", returning.", true, true)
 					return
 				end
 
-				if getVehicleVCFInfo(k).priml.type == string.lower("chp") and getVehicleVCFInfo(k).wrnl.type == string.lower("chp") and getVehicleVCFInfo(k).secl.type == string.lower("chp") then
+				if vehicleVCFInfo.priml.type == string.lower("chp") and vehicleVCFInfo.wrnl.type == string.lower("chp") and vehicleVCFInfo.secl.type == string.lower("chp") then
 
 					if v.stage == 0 then
 						for i=1,10 do
@@ -881,7 +880,7 @@ Citizen.CreateThread(function()
 				else
 
 					if (v.warning) then
-						if getVehicleVCFInfo(k).wrnl.type == string.lower("leds") and v.advisorPattern <= 53 then
+						if vehicleVCFInfo.wrnl.type == string.lower("leds") and v.advisorPattern <= 53 then
 							runLedPatternWarning(k, v.advisorPattern)
 						end
 					else
@@ -890,9 +889,9 @@ Citizen.CreateThread(function()
 					end
 
 					if (v.secondary) then
-						if getVehicleVCFInfo(k).secl.type == string.lower("leds") and v.secPattern <= 140 then
+						if vehicleVCFInfo.secl.type == string.lower("leds") and v.secPattern <= 140 then
 							runLedPatternSecondary(k, v.secPattern, function(cb) vehIsReadySecondary[k] = cb end)
-						elseif getVehicleVCFInfo(k).secl.type == string.lower("traf") and v.secPattern <= 36 then
+						elseif vehicleVCFInfo.secl.type == string.lower("traf") and v.secPattern <= 36 then
 							runTrafPattern(k, v.secPattern)
 						end
 					else
@@ -902,7 +901,7 @@ Citizen.CreateThread(function()
 					end
 
 					if (v.primary) then
-						if getVehicleVCFInfo(k).priml.type == string.lower("leds") and v.primPattern <= 140 then
+						if vehicleVCFInfo.priml.type == string.lower("leds") and v.primPattern <= 140 then
 							runLedPatternPrimary(k, v.primPattern)
 						end
 					else

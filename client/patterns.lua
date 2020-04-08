@@ -56,17 +56,17 @@ end
 
 function runEnvirementLightWithBrightness(k, extra, brightness)
 	Citizen.CreateThread(function()
-		local vehN = checkCarHash(k)
+		local vehicleIndex = getElsVehicleIndexFromVehicle(k)
 
-		if els_Vehicles[vehN].extras[extra] ~= nil then
-			if(els_Vehicles[vehN].extras[extra].env_light) then
+		if els_Vehicles[vehicleIndex].extras[extra] ~= nil then
+			if(els_Vehicles[vehicleIndex].extras[extra].env_light) then
 				local boneIndex = GetEntityBoneIndexByName(k, "extra_" .. extra)
 				local coords = GetWorldPositionOfEntityBone(k, boneIndex)
 
 				for i=1,6 do
 					if(IsVehicleExtraTurnedOn(k, extra) == false) then break end
-					DrawLightWithRangeAndShadow(coords.x + els_Vehicles[vehN].extras[extra].env_pos.x, coords.y + els_Vehicles[vehN].extras[extra].env_pos.y, coords.z + els_Vehicles[vehN].extras[extra].env_pos.z, els_Vehicles[vehN].extras[extra].env_color.r, els_Vehicles[vehN].extras[extra].env_color.g, els_Vehicles[vehN].extras[extra].env_color.b, 50.0, 0.26, 1.0)
-					--DrawLightWithRangeAndShadow(coords.x + els_Vehicles[vehN].extras[extra].env_pos.x, coords.y + els_Vehicles[vehN].extras[extra].env_pos.y, coords.z + els_Vehicles[vehN].extras[extra].env_pos.z, els_Vehicles[vehN].extras[extra].env_color.r, els_Vehicles[vehN].extras[extra].env_color.g, els_Vehicles[vehN].extras[extra].env_color.b, 150 + 0.0, brightness, 1.0)
+					DrawLightWithRangeAndShadow(coords.x + els_Vehicles[vehicleIndex].extras[extra].env_pos.x, coords.y + els_Vehicles[vehicleIndex].extras[extra].env_pos.y, coords.z + els_Vehicles[vehicleIndex].extras[extra].env_pos.z, els_Vehicles[vehicleIndex].extras[extra].env_color.r, els_Vehicles[vehicleIndex].extras[extra].env_color.g, els_Vehicles[vehicleIndex].extras[extra].env_color.b, 50.0, 0.26, 1.0)
+					--DrawLightWithRangeAndShadow(coords.x + els_Vehicles[vehicleIndex].extras[extra].env_pos.x, coords.y + els_Vehicles[vehicleIndex].extras[extra].env_pos.y, coords.z + els_Vehicles[vehicleIndex].extras[extra].env_pos.z, els_Vehicles[vehicleIndex].extras[extra].env_color.r, els_Vehicles[vehicleIndex].extras[extra].env_color.g, els_Vehicles[vehicleIndex].extras[extra].env_color.b, 150 + 0.0, brightness, 1.0)
 					Wait(2)
 				end
 			end
@@ -76,18 +76,18 @@ end
 
 function runEnvirementLight(k, extra)
 	Citizen.CreateThread(function()
-		if not IsEntityDead(k) and k ~= nil then
-			local vehN = checkCarHash(k)
+		if k and not IsEntityDead(k) then
+			local vehicleIndex = getElsVehicleIndexFromVehicle(k)
 
-			if els_Vehicles[vehN].extras[extra] ~= nil then
-				if(els_Vehicles[vehN].extras[extra].env_light) then
+			if els_Vehicles[vehicleIndex].extras[extra] ~= nil then
+				if(els_Vehicles[vehicleIndex].extras[extra].env_light) then
 					local boneIndex = GetEntityBoneIndexByName(k, "extra_" .. extra)
 					local coords = GetWorldPositionOfEntityBone(k, boneIndex)
 
 					for i=1,6 do
 						if(IsVehicleExtraTurnedOn(k, extra) == false) then break end
-						DrawLightWithRangeAndShadow(coords.x + els_Vehicles[vehN].extras[extra].env_pos.x, coords.y + els_Vehicles[vehN].extras[extra].env_pos.y, coords.z + els_Vehicles[vehN].extras[extra].env_pos.z, els_Vehicles[vehN].extras[extra].env_color.r, els_Vehicles[vehN].extras[extra].env_color.g, els_Vehicles[vehN].extras[extra].env_color.b, 50.0, envirementLightBrightness, 5.0)
-						--DrawLightWithRange(coords.x + els_Vehicles[vehN].extras[extra].env_pos.x, coords.y + els_Vehicles[vehN].extras[extra].env_pos.y, coords.z + els_Vehicles[vehN].extras[extra].env_pos.z, els_Vehicles[vehN].extras[extra].env_color.r, els_Vehicles[vehN].extras[extra].env_color.g, els_Vehicles[vehN].extras[extra].env_color.b, 150 + 0.0, envirementLightBrightness)
+						DrawLightWithRangeAndShadow(coords.x + els_Vehicles[vehicleIndex].extras[extra].env_pos.x, coords.y + els_Vehicles[vehicleIndex].extras[extra].env_pos.y, coords.z + els_Vehicles[vehicleIndex].extras[extra].env_pos.z, els_Vehicles[vehicleIndex].extras[extra].env_color.r, els_Vehicles[vehicleIndex].extras[extra].env_color.g, els_Vehicles[vehicleIndex].extras[extra].env_color.b, 50.0, envirementLightBrightness, 5.0)
+						--DrawLightWithRange(coords.x + els_Vehicles[vehicleIndex].extras[extra].env_pos.x, coords.y + els_Vehicles[vehicleIndex].extras[extra].env_pos.y, coords.z + els_Vehicles[vehicleIndex].extras[extra].env_pos.z, els_Vehicles[vehicleIndex].extras[extra].env_color.r, els_Vehicles[vehicleIndex].extras[extra].env_color.g, els_Vehicles[vehicleIndex].extras[extra].env_color.b, 150 + 0.0, envirementLightBrightness)
 						Wait(2)
 					end
 				end
