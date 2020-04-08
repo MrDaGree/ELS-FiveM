@@ -36,8 +36,9 @@ Citizen.CreateThread(function()
 		end
 
 		if isVehicleELS and canControlELS and currentVehicle then
+			local isVehicleClass18 = GetVehicleClass(currentVehicle) == 18
 
-			if GetVehicleClass(currentVehicle) == 18 then
+			if isVehicleClass18 then
 				DisableControlAction(0, shared.horn, true)
 			end
 
@@ -61,7 +62,6 @@ Citizen.CreateThread(function()
 				DisableControlAction(0, keyboard.siren.tone_one, true)
 				DisableControlAction(0, keyboard.siren.tone_two, true)
 				DisableControlAction(0, keyboard.siren.tone_three, true)
-				local vehicleVCFInfo = getVehicleVCFInfo(currentVehicle)
 
 				if IsDisabledControlPressed(0, keyboard.modifyKey) then
 
@@ -77,12 +77,15 @@ Citizen.CreateThread(function()
 					end
 
 					if IsDisabledControlJustReleased(0, keyboard.stageChange) then
+						local vehicleVCFInfo = getVehicleVCFInfo(currentVehicle)
+
 						if vehicleVCFInfo.interface.activationType == "invert" or vehicleVCFInfo.interface.activationType == "euro" then
 							upOneStage()
 						else
 							downOneStage()
 						end
 					end
+
 					if IsDisabledControlJustReleased(0, keyboard.takedown) then
 						if playButtonPressSounds then
 							PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
@@ -91,24 +94,29 @@ Citizen.CreateThread(function()
 					end
 				else
 					if IsDisabledControlJustReleased(0, keyboard.stageChange) then
+						local vehicleVCFInfo = getVehicleVCFInfo(currentVehicle)
+
 						if vehicleVCFInfo.interface.activationType == "invert" or vehicleVCFInfo.interface.activationType == "euro" then
 							downOneStage()
 						else
 							upOneStage()
 						end
 					end
+
 					if IsDisabledControlJustReleased(0, keyboard.takedown) then
 						if playButtonPressSounds then
 							PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 						end
 						TriggerServerEvent("els:setTakedownState_s")
 					end
+
 					if IsDisabledControlJustReleased(0, 84) then
 						if playButtonPressSounds then
 							PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 						end
 						TriggerServerEvent("els:setCruiseLights_s")
 					end
+
 					if IsDisabledControlJustReleased(0, keyboard.warning) then
 						if playButtonPressSounds then
 							PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
@@ -123,6 +131,7 @@ Citizen.CreateThread(function()
 							TriggerServerEvent("els:changePartState_s", "warning", true)
 						end
 					end
+
 					if IsDisabledControlJustReleased(0, keyboard.secondary) then
 						if playButtonPressSounds then
 							PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
@@ -137,6 +146,7 @@ Citizen.CreateThread(function()
 							TriggerServerEvent("els:changePartState_s", "secondary", true)
 						end
 					end
+
 					if IsDisabledControlJustPressed(0, keyboard.primary) then
 						if playButtonPressSounds then
 							PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
@@ -153,20 +163,22 @@ Citizen.CreateThread(function()
 					end
 				end
 
-
-				if GetVehicleClass(currentVehicle) == 18 then
+				if isVehicleClass18 then
 					if (elsVehs[currentVehicle] ~= nil) then
 						if elsVehs[currentVehicle].stage == 3 then
 							if IsDisabledControlJustReleased(0, keyboard.siren.tone_one) then
 								setSirenStateButton(1)
 							end
+
 							if IsDisabledControlJustReleased(0, keyboard.siren.tone_two) then
 								setSirenStateButton(2)
 							end
+
 							if IsDisabledControlJustReleased(0, keyboard.siren.tone_three) then
 								setSirenStateButton(3)
 							end
 						end
+
 						if elsVehs[currentVehicle].stage == 2 then
 							if IsDisabledControlJustReleased(0, keyboard.siren.tone_one) then
 								if playButtonPressSounds then
@@ -174,6 +186,7 @@ Citizen.CreateThread(function()
 								end
 								TriggerServerEvent("els:setSirenState_s", 0)
 							end
+
 							if IsDisabledControlJustPressed(0, keyboard.siren.tone_one) then
 								if playButtonPressSounds then
 									PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
@@ -187,6 +200,7 @@ Citizen.CreateThread(function()
 								end
 								TriggerServerEvent("els:setSirenState_s", 0)
 							end
+
 							if IsDisabledControlJustPressed(0, keyboard.siren.tone_two) then
 								if playButtonPressSounds then
 									PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
@@ -200,6 +214,7 @@ Citizen.CreateThread(function()
 								end
 								TriggerServerEvent("els:setSirenState_s", 0)
 							end
+
 							if IsDisabledControlJustPressed(0, keyboard.siren.tone_three) then
 								if playButtonPressSounds then
 									PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
@@ -242,16 +257,18 @@ Citizen.CreateThread(function()
 					end
 				end
 
-				if GetVehicleClass(currentVehicle) == 18 then
+				if isVehicleClass18 then
 					if (elsVehs[currentVehicle] ~= nil) then
 						if elsVehs[currentVehicle].stage == 3 then
 							if not IsDisabledControlPressed(0, controller.modifyKey) then
 								if IsDisabledControlJustReleased(0, controller.siren.tone_one) then
 									setSirenStateButton(1)
 								end
+
 								if IsDisabledControlJustReleased(0, controller.siren.tone_two) then
 									setSirenStateButton(2)
 								end
+
 								if IsDisabledControlJustReleased(0, controller.siren.tone_three) then
 									setSirenStateButton(3)
 								end
@@ -265,6 +282,7 @@ Citizen.CreateThread(function()
 								end
 								TriggerServerEvent("els:setSirenState_s", 0)
 							end
+
 							if IsDisabledControlJustPressed(0, controller.siren.tone_one) then
 								if playButtonPressSounds then
 									PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
@@ -278,6 +296,7 @@ Citizen.CreateThread(function()
 								end
 								TriggerServerEvent("els:setSirenState_s", 0)
 							end
+
 							if IsDisabledControlJustPressed(0, controller.siren.tone_two) then
 								if playButtonPressSounds then
 									PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
@@ -291,6 +310,7 @@ Citizen.CreateThread(function()
 								end
 								TriggerServerEvent("els:setSirenState_s", 0)
 							end
+
 							if IsDisabledControlJustPressed(0, controller.siren.tone_three) then
 								if playButtonPressSounds then
 									PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
@@ -302,7 +322,7 @@ Citizen.CreateThread(function()
 				end
 			end
 
-			if GetVehicleClass(currentVehicle) == 18 then
+			if isVehicleClass18 then
 				if not IsDisabledControlPressed(0, controller.modifyKey) then
 					if (IsDisabledControlJustPressed(0, shared.horn)) then
 						TriggerServerEvent("els:setHornState_s", 1)
@@ -313,15 +333,6 @@ Citizen.CreateThread(function()
 					end
 				end
 			end
-		end
-
-		Citizen.Wait(0)
-	end
-end)
-
-Citizen.CreateThread(function()
-	while true do
-		if isVehicleELS and canControlELS then
 
 			if IsDisabledControlPressed(0, keyboard.modifyKey) then
 				if IsDisabledControlPressed(0, keyboard.pattern.primary) then
@@ -330,12 +341,14 @@ Citizen.CreateThread(function()
 					end
 					changePrimaryPatternMath(-1)
 				end
+
 				if IsDisabledControlPressed(0, keyboard.pattern.secondary) then
 					if playButtonPressSounds then
 						PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 					end
 					changeSecondaryPatternMath(-1)
 				end
+
 				if IsDisabledControlPressed(0, keyboard.pattern.advisor) then
 					if playButtonPressSounds then
 						PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
@@ -349,12 +362,14 @@ Citizen.CreateThread(function()
 					end
 					changePrimaryPatternMath(1)
 				end
+
 				if IsDisabledControlPressed(0, keyboard.pattern.secondary) then
 					if playButtonPressSounds then
 						PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 					end
 					changeSecondaryPatternMath(1)
 				end
+
 				if IsDisabledControlPressed(0, keyboard.pattern.advisor) then
 					if playButtonPressSounds then
 						PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
@@ -362,8 +377,11 @@ Citizen.CreateThread(function()
 					changeAdvisorPatternMath(1)
 				end
 			end
+		else
+			Citizen.Wait(500)
 		end
-		Wait(150)
+
+		Citizen.Wait(0)
 	end
 end)
 
@@ -389,450 +407,472 @@ local panelTypeChecked = false
 panelTypeChanged = false
 
 Citizen.CreateThread(function()
+	if not panelOffsetX or not panelOffsetY then return end
+
 	while true do
-		if panelOffsetX ~= nil and panelOffsetY ~= nil then
-			if panelEnabled and isVehicleELS then
-				if canControlELS then
-					if panelTypeChanged then
-						local panelT = GetResourceKvpString("els:panelType")
-						if panelT then
-							panelType = panelT
-							panelTypeChecked = false
+		if panelEnabled and isVehicleELS and canControlELS then
+			if panelTypeChanged then
+				local panelT = GetResourceKvpString("els:panelType")
+				if panelT then
+					panelType = panelT
+					panelTypeChecked = false
+				end
+				panelTypeChanged = false
+			end
+
+			if not panelTypeChecked then
+				for _, v in pairs(allowedPanelTypes) do
+					if v == panelType then
+						allowedPanel = true
+						break
+					end
+				end
+				panelTypeChecked = true
+			end
+
+			if not allowedPanel then
+				error(string.format("This panel type (%s) is not supported. If you did not do anything to invoke this error, contact the server owner.", panelType))
+			end
+
+			if currentVehicle then
+				local vehicleVCFInfo = getVehicleVCFInfo(currentVehicle)
+
+				if vehicleVCFInfo then
+					local currentELSInfo = elsVehs[currentVehicle]
+
+					if (panelType == "original") then
+						_DrawRect(0.85 + panelOffsetX, 0.89 + panelOffsetY, 0.26, 0.16, 16, 16, 16, 225, 0)
+
+						_DrawRect(0.85 + panelOffsetX, 0.835 + panelOffsetY, 0.245, 0.035, 0, 0, 0, 225, 0)
+						_DrawRect(0.85 + panelOffsetX, 0.835 + panelOffsetY, 0.24, 0.03, vehicleVCFInfo.interface.headerColor.r, vehicleVCFInfo.interface.headerColor.g, vehicleVCFInfo.interface.headerColor.b, 225, 0)
+						Draw("MAIN", 0, 0, 0, 255, 0.745 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+						Draw("MRDAGREE SYSTEMS", 0, 0, 0, 255, 0.92 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+
+
+						_DrawRect(0.78 + panelOffsetX, 0.835 + panelOffsetY, 0.033, 0.025, 0, 0, 0, 225, 0)
+						local vehicleLightStage = getVehicleLightStage(currentVehicle)
+
+						if (vehicleLightStage == 1) then
+							_DrawRect(0.78 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+							Draw("S-1", 0, 0, 0, 255, 0.78 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+						else
+							_DrawRect(0.78 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
+							Draw("S-1", 0, 0, 0, 255, 0.78 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 						end
-						panelTypeChanged = false
-					end
 
-					if not panelTypeChecked then
-						for _, v in pairs(allowedPanelTypes) do
-							if v == panelType then
-								allowedPanel = true
-								break
-							end
+						_DrawRect(0.815 + panelOffsetX, 0.835 + panelOffsetY, 0.033, 0.025, 0, 0, 0, 225, 0)
+						if (vehicleLightStage == 2) then
+							_DrawRect(0.815 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+							Draw("S-2", 0, 0, 0, 255, 0.815 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+						else
+							_DrawRect(0.815 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
+							Draw("S-2", 0, 0, 0, 255, 0.815 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 						end
-						panelTypeChecked = true
-					end
 
-					if not allowedPanel then
-						error(string.format("This panel type (%s) is not supported. If you did not do anything to invoke this error, contact the server owner.", panelType))
-					end
-
-					if currentVehicle then
-						local vehicleVCFInfo = getVehicleVCFInfo(currentVehicle)
-						local currentELSInfo = elsVehs[currentVehicle]
-
-						if (panelType == "original") then
-							_DrawRect(0.85 + panelOffsetX, 0.89 + panelOffsetY, 0.26, 0.16, 16, 16, 16, 225, 0)
-
-							_DrawRect(0.85 + panelOffsetX, 0.835 + panelOffsetY, 0.245, 0.035, 0, 0, 0, 225, 0)
-							_DrawRect(0.85 + panelOffsetX, 0.835 + panelOffsetY, 0.24, 0.03, vehicleVCFInfo.interface.headerColor.r, vehicleVCFInfo.interface.headerColor.g, vehicleVCFInfo.interface.headerColor.b, 225, 0)
-							Draw("MAIN", 0, 0, 0, 255, 0.745 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
-							Draw("MRDAGREE SYSTEMS", 0, 0, 0, 255, 0.92 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
-
-
-							_DrawRect(0.78 + panelOffsetX, 0.835 + panelOffsetY, 0.033, 0.025, 0, 0, 0, 225, 0)
-							local vehicleLightStage = getVehicleLightStage(currentVehicle)
-
-							if (vehicleLightStage == 1) then
-								_DrawRect(0.78 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
-								Draw("S-1", 0, 0, 0, 255, 0.78 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
-							else
-								_DrawRect(0.78 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
-								Draw("S-1", 0, 0, 0, 255, 0.78 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
-							end
-
-							_DrawRect(0.815 + panelOffsetX, 0.835 + panelOffsetY, 0.033, 0.025, 0, 0, 0, 225, 0)
-							if (vehicleLightStage == 2) then
-								_DrawRect(0.815 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
-								Draw("S-2", 0, 0, 0, 255, 0.815 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
-							else
-								_DrawRect(0.815 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
-								Draw("S-2", 0, 0, 0, 255, 0.815 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
-							end
-
-							_DrawRect(0.850 + panelOffsetX, 0.835 + panelOffsetY, 0.033, 0.025, 0, 0, 0, 225, 0)
-							if (vehicleLightStage == 3) then
-								_DrawRect(0.850 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
-								Draw("S-3", 0, 0, 0, 255, 0.850 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
-							else
-								_DrawRect(0.850 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
-								Draw("S-3", 0, 0, 0, 255, 0.850 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
-							end
+						_DrawRect(0.850 + panelOffsetX, 0.835 + panelOffsetY, 0.033, 0.025, 0, 0, 0, 225, 0)
+						if (vehicleLightStage == 3) then
+							_DrawRect(0.850 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+							Draw("S-3", 0, 0, 0, 255, 0.850 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+						else
+							_DrawRect(0.850 + panelOffsetX, 0.835 + panelOffsetY, 0.03, 0.02, 186, 186, 186, 225, 0)
+							Draw("S-3", 0, 0, 0, 255, 0.850 + panelOffsetX, 0.825 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+						end
 
 
 
-							_DrawRect(0.742 + panelOffsetX, 0.88 + panelOffsetY, 0.028, 0.045, 0, 0, 0, 225, 0)
-							if currentELSInfo then
-								if currentELSInfo.warning then
-									_DrawRect(0.7421 + panelOffsetX, 0.871 + panelOffsetY, 0.026, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
-									Draw("E-" .. formatPatternNumber(advisorPatternSelectedIndex), vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 255, 0.7423 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
-								else
-									_DrawRect(0.7421 + panelOffsetX, 0.871 + panelOffsetY, 0.026, 0.02, 186, 186, 186, 225, 0)
-									Draw("E-" .. formatPatternNumber(advisorPatternSelectedIndex), 255, 255, 255, 255, 0.7423 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
-								end
+						_DrawRect(0.742 + panelOffsetX, 0.88 + panelOffsetY, 0.028, 0.045, 0, 0, 0, 225, 0)
+						if currentELSInfo then
+							if currentELSInfo.warning then
+								_DrawRect(0.7421 + panelOffsetX, 0.871 + panelOffsetY, 0.026, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+								Draw("E-" .. formatPatternNumber(advisorPatternSelectedIndex), vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 255, 0.7423 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 							else
 								_DrawRect(0.7421 + panelOffsetX, 0.871 + panelOffsetY, 0.026, 0.02, 186, 186, 186, 225, 0)
 								Draw("E-" .. formatPatternNumber(advisorPatternSelectedIndex), 255, 255, 255, 255, 0.7423 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 							end
-							Draw("WRN", 0, 0, 0, 255, 0.7423 + panelOffsetX, 0.86 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+						else
+							_DrawRect(0.7421 + panelOffsetX, 0.871 + panelOffsetY, 0.026, 0.02, 186, 186, 186, 225, 0)
+							Draw("E-" .. formatPatternNumber(advisorPatternSelectedIndex), 255, 255, 255, 255, 0.7423 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+						end
+						Draw("WRN", 0, 0, 0, 255, 0.7423 + panelOffsetX, 0.86 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 
-							_DrawRect(0.774 + panelOffsetX, 0.88 + panelOffsetY, 0.028, 0.045, 0, 0, 0, 225, 0)
-							if currentELSInfo then
-								if currentELSInfo.secondary then
-									_DrawRect(0.774 + panelOffsetX, 0.871 + panelOffsetY, 0.025, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
-									Draw("E-" .. formatPatternNumber(lightPatternSec), vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 255, 0.774 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
-								else
-									_DrawRect(0.774 + panelOffsetX, 0.871 + panelOffsetY, 0.025, 0.02, 186, 186, 186, 225, 0)
-									Draw("E-" .. formatPatternNumber(lightPatternSec), 255, 255, 255, 255, 0.774 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
-								end
+						_DrawRect(0.774 + panelOffsetX, 0.88 + panelOffsetY, 0.028, 0.045, 0, 0, 0, 225, 0)
+						if currentELSInfo then
+							if currentELSInfo.secondary then
+								_DrawRect(0.774 + panelOffsetX, 0.871 + panelOffsetY, 0.025, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+								Draw("E-" .. formatPatternNumber(lightPatternSec), vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 255, 0.774 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 							else
 								_DrawRect(0.774 + panelOffsetX, 0.871 + panelOffsetY, 0.025, 0.02, 186, 186, 186, 225, 0)
 								Draw("E-" .. formatPatternNumber(lightPatternSec), 255, 255, 255, 255, 0.774 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 							end
-							Draw("SEC", 0, 0, 0, 255, 0.774 + panelOffsetX, 0.86 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+						else
+							_DrawRect(0.774 + panelOffsetX, 0.871 + panelOffsetY, 0.025, 0.02, 186, 186, 186, 225, 0)
+							Draw("E-" .. formatPatternNumber(lightPatternSec), 255, 255, 255, 255, 0.774 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+						end
+						Draw("SEC", 0, 0, 0, 255, 0.774 + panelOffsetX, 0.86 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 
-							_DrawRect(0.806 + panelOffsetX, 0.88 + panelOffsetY, 0.028, 0.045, 0, 0, 0, 225, 0)
-							if currentELSInfo then
-								if currentELSInfo.primary then
-									_DrawRect(0.806 + panelOffsetX, 0.871 + panelOffsetY, 0.025, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
-									Draw("E-" .. formatPatternNumber(lightPatternPrim), vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 255, 0.806 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
-								else
-									_DrawRect(0.806 + panelOffsetX, 0.871 + panelOffsetY, 0.025, 0.02, 186, 186, 186, 225, 0)
-									Draw("E-" .. formatPatternNumber(lightPatternPrim), 255, 255, 255, 255, 0.806 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
-								end
+						_DrawRect(0.806 + panelOffsetX, 0.88 + panelOffsetY, 0.028, 0.045, 0, 0, 0, 225, 0)
+						if currentELSInfo then
+							if currentELSInfo.primary then
+								_DrawRect(0.806 + panelOffsetX, 0.871 + panelOffsetY, 0.025, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+								Draw("E-" .. formatPatternNumber(lightPatternPrim), vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 255, 0.806 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 							else
 								_DrawRect(0.806 + panelOffsetX, 0.871 + panelOffsetY, 0.025, 0.02, 186, 186, 186, 225, 0)
 								Draw("E-" .. formatPatternNumber(lightPatternPrim), 255, 255, 255, 255, 0.806 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 							end
-							Draw("PRIM", 0, 0, 0, 255, 0.806 + panelOffsetX, 0.86 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+						else
+							_DrawRect(0.806 + panelOffsetX, 0.871 + panelOffsetY, 0.025, 0.02, 186, 186, 186, 225, 0)
+							Draw("E-" .. formatPatternNumber(lightPatternPrim), 255, 255, 255, 255, 0.806 + panelOffsetX, 0.88 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+						end
+						Draw("PRIM", 0, 0, 0, 255, 0.806 + panelOffsetX, 0.86 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 
-							_DrawRect(0.742 + panelOffsetX, 0.93 + panelOffsetY, 0.028, 0.045, 0, 0, 0, 225, 0)
-							_DrawRect(0.7421 + panelOffsetX, 0.921 + panelOffsetY, 0.026, 0.02, 186, 186, 186, 225, 0)
-							Draw("--", 255, 255, 255, 255, 0.7423 + panelOffsetX, 0.93 + panelOffsetY, 0.25, 0.25, 1, true, 0)
-							Draw("HRN", 0, 0, 0, 255, 0.7423 + panelOffsetX, 0.91 + panelOffsetY, 0.25, 0.25, 1, true, 0)
-
-
-							_DrawRect(0.86 + panelOffsetX, 0.911 + panelOffsetY, 0.06, 0.09, 0, 0, 0, 225, 0)
-
-							if (IsVehicleExtraTurnedOn(currentVehicle, 11)) then
-								_DrawRect(0.853 + panelOffsetX, 0.895 + panelOffsetY, 0.01, 0.005, 255, 255, 255, 225, 0)
-								_DrawRect(0.866 + panelOffsetX, 0.895 + panelOffsetY, 0.01, 0.005, 255, 255, 255, 225, 0)
-							else
-								_DrawRect(0.853 + panelOffsetX, 0.895 + panelOffsetY, 0.01, 0.005, 54, 54, 54, 225, 0)
-								_DrawRect(0.866 + panelOffsetX, 0.895 + panelOffsetY, 0.01, 0.005, 54, 54, 54, 225, 0)
-							end
-
-							_DrawRect(0.8365 + panelOffsetX, 0.9 + panelOffsetY, 0.0029, 0.015, 54, 54, 54, 225, 0)
-
-							_DrawRect(0.882 + panelOffsetX, 0.9 + panelOffsetY, 0.0029, 0.015, 54, 54, 54, 225, 0)
-
-							if(IsVehicleExtraTurnedOn(currentVehicle, 7)) then
-								_DrawRect(0.848 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[7].env_color.r, vehicleVCFInfo.extras[7].env_color.g, vehicleVCFInfo.extras[7].env_color.b, 225, 0)
-							else
-								_DrawRect(0.848 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
-							end
-
-							if vehicleVCFInfo.secl.type == "traf" or vehicleVCFInfo.secl.type == "chp" then
-								if(IsVehicleExtraTurnedOn(currentVehicle, 8)) then
-									_DrawRect(0.8598 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[8].env_color.r, vehicleVCFInfo.extras[8].env_color.g, vehicleVCFInfo.extras[8].env_color.b, 225, 0)
-								else
-									_DrawRect(0.8598 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
-								end
-							end
-
-							if(IsVehicleExtraTurnedOn(currentVehicle, 9)) then
-								_DrawRect(0.872 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[9].env_color.r, vehicleVCFInfo.extras[9].env_color.g, vehicleVCFInfo.extras[9].env_color.b, 225, 0)
-							else
-								_DrawRect(0.872 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
-							end
-
-							if(IsVehicleExtraTurnedOn(currentVehicle, 1)) then
-								_DrawRect(0.84 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[1].env_color.r, vehicleVCFInfo.extras[1].env_color.g, vehicleVCFInfo.extras[1].env_color.b, 225, 0)
-							else
-								_DrawRect(0.84 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
-							end
-
-							if(IsVehicleExtraTurnedOn(currentVehicle, 2)) then
-								_DrawRect(0.853 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[2].env_color.r, vehicleVCFInfo.extras[2].env_color.g, vehicleVCFInfo.extras[2].env_color.b, 225, 0)
-							else
-								_DrawRect(0.853 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
-							end
-
-							if(IsVehicleExtraTurnedOn(currentVehicle, 3)) then
-								_DrawRect(0.866 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[3].env_color.r, vehicleVCFInfo.extras[3].env_color.g, vehicleVCFInfo.extras[3].env_color.b, 225, 0)
-							else
-								_DrawRect(0.866 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
-							end
-
-							if(IsVehicleExtraTurnedOn(currentVehicle, 4)) then
-								_DrawRect(0.879 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[4].env_color.r, vehicleVCFInfo.extras[4].env_color.g, vehicleVCFInfo.extras[4].env_color.b, 225, 0)
-							else
-								_DrawRect(0.879 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
-							end
-
-							if(IsVehicleExtraTurnedOn(currentVehicle, 5)) then
-								_DrawRect(0.853 + panelOffsetX, 0.88 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[5].env_color.r, vehicleVCFInfo.extras[5].env_color.g, vehicleVCFInfo.extras[5].env_color.b, 225, 0)
-							else
-								_DrawRect(0.853 + panelOffsetX, 0.88 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
-							end
-
-							if(IsVehicleExtraTurnedOn(currentVehicle, 6)) then
-								_DrawRect(0.866 + panelOffsetX, 0.88 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[6].env_color.r, vehicleVCFInfo.extras[6].env_color.g, vehicleVCFInfo.extras[6].env_color.b, 225, 0)
-							else
-								_DrawRect(0.866 + panelOffsetX, 0.88 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
-							end
+						_DrawRect(0.742 + panelOffsetX, 0.93 + panelOffsetY, 0.028, 0.045, 0, 0, 0, 225, 0)
+						_DrawRect(0.7421 + panelOffsetX, 0.921 + panelOffsetY, 0.026, 0.02, 186, 186, 186, 225, 0)
+						Draw("--", 255, 255, 255, 255, 0.7423 + panelOffsetX, 0.93 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+						Draw("HRN", 0, 0, 0, 255, 0.7423 + panelOffsetX, 0.91 + panelOffsetY, 0.25, 0.25, 1, true, 0)
 
 
-							_DrawRect(0.91 + panelOffsetX, 0.94 + panelOffsetY, 0.024, 0.023, 0, 0, 0, 225, 0)
-							if currentELSInfo then
-								if currentELSInfo.cruise then
-									_DrawRect(0.91 + panelOffsetX, 0.94 + panelOffsetY, 0.022, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
-								else
-									_DrawRect(0.91 + panelOffsetX, 0.94 + panelOffsetY, 0.022, 0.02, 186, 186, 186, 225, 0)
-								end
-							else
-								_DrawRect(0.91 + panelOffsetX, 0.94 + panelOffsetY, 0.0215, 0.02, 186, 186, 186, 225, 0)
-							end
-							Draw("CRS", 0, 0, 0, 255, 0.91 + panelOffsetX, 0.93 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+						_DrawRect(0.86 + panelOffsetX, 0.911 + panelOffsetY, 0.06, 0.09, 0, 0, 0, 225, 0)
 
-							_DrawRect(0.935 + panelOffsetX, 0.94 + panelOffsetY, 0.024, 0.023, 0, 0, 0, 225, 0)
-							if IsVehicleExtraTurnedOn(currentVehicle, 11) then
-								_DrawRect(0.935 + panelOffsetX, 0.94 + panelOffsetY, 0.022, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
-							else
-								_DrawRect(0.935 + panelOffsetX, 0.94 + panelOffsetY, 0.0215, 0.02, 186, 186, 186, 225, 0)
-							end
-							Draw("TKD", 0, 0, 0, 255, 0.935 + panelOffsetX, 0.93 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+						if (IsVehicleExtraTurnedOn(currentVehicle, 11)) then
+							_DrawRect(0.853 + panelOffsetX, 0.895 + panelOffsetY, 0.01, 0.005, 255, 255, 255, 225, 0)
+							_DrawRect(0.866 + panelOffsetX, 0.895 + panelOffsetY, 0.01, 0.005, 255, 255, 255, 225, 0)
+						else
+							_DrawRect(0.853 + panelOffsetX, 0.895 + panelOffsetY, 0.01, 0.005, 54, 54, 54, 225, 0)
+							_DrawRect(0.866 + panelOffsetX, 0.895 + panelOffsetY, 0.01, 0.005, 54, 54, 54, 225, 0)
+						end
 
-							_DrawRect(0.96 + panelOffsetX, 0.94 + panelOffsetY, 0.024, 0.023, 0, 0, 0, 225, 0)
-							if IsVehicleExtraTurnedOn(currentVehicle, 12) then
-								_DrawRect(0.96 + panelOffsetX, 0.94 + panelOffsetY, 0.022, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
-							else
-								_DrawRect(0.96 + panelOffsetX, 0.94 + panelOffsetY, 0.0215, 0.02, 186, 186, 186, 225, 0)
-							end
-							Draw("SCL", 0, 0, 0, 255, 0.96 + panelOffsetX, 0.93 + panelOffsetY, 0.25, 0.25, 1, true, 0)
-						elseif panelType == "old" then
-							_DrawRect(0.85, 0.91, 0.24, 0.11, 0, 0, 0, 200, 0)
-							local vehicleLightStage = getVehicleLightStage(currentVehicle)
+						_DrawRect(0.8365 + panelOffsetX, 0.9 + panelOffsetY, 0.0029, 0.015, 54, 54, 54, 225, 0)
 
-							if (vehicleLightStage == 1) then
-								_DrawRect(0.75, 0.88, 0.03, 0.02, 173, 0, 0, 225, 0)
-								Draw("1", 0, 0, 0, 255, 0.75, 0.87, 0.25, 0.25, 1, true, 0)
-							else
-								_DrawRect(0.75, 0.88, 0.03, 0.02, 186, 186, 186, 225, 0)
-								Draw("1", 0, 0, 0, 255, 0.75, 0.87, 0.25, 0.25, 1, true, 0)
-							end
+						_DrawRect(0.882 + panelOffsetX, 0.9 + panelOffsetY, 0.0029, 0.015, 54, 54, 54, 225, 0)
 
-							if (vehicleLightStage == 2) then
-								_DrawRect(0.784, 0.88, 0.03, 0.02, 173, 0, 0, 225, 0)
-								Draw("2", 0, 0, 0, 255, 0.784, 0.87, 0.25, 0.25, 1, true, 0)
-							else
-								_DrawRect(0.784, 0.88, 0.03, 0.02, 186, 186, 186, 225, 0)
-								Draw("2", 0, 0, 0, 255, 0.784, 0.87, 0.25, 0.25, 1, true, 0)
-							end
+						if(IsVehicleExtraTurnedOn(currentVehicle, 7)) then
+							_DrawRect(0.848 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[7].env_color.r, vehicleVCFInfo.extras[7].env_color.g, vehicleVCFInfo.extras[7].env_color.b, 225, 0)
+						else
+							_DrawRect(0.848 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
+						end
 
-							if (vehicleLightStage == 3) then
-								_DrawRect(0.817, 0.88, 0.03, 0.02, 173, 0, 0, 225, 0)
-								Draw("3", 0, 0, 0, 255, 0.817, 0.87, 0.25, 0.25, 1, true, 0)
-							else
-								_DrawRect(0.817, 0.88, 0.03, 0.02, 186, 186, 186, 225, 0)
-								Draw("3", 0, 0, 0, 255, 0.817, 0.87, 0.25, 0.25, 1, true, 0)
-							end
-
-							_DrawRect(0.854, 0.88, 0.035, 0.02, 186, 186, 186, 225, 0)
-							Draw("PRIM " .. tostring(lightPatternPrim), 0, 0, 0, 255, 0.854, 0.87, 0.25, 0.25, 1, true, 0)
-
-							_DrawRect(0.854, 0.91, 0.035, 0.02, 186, 186, 186, 225, 0)
-							Draw("SEC " .. tostring(lightPatternSec), 0, 0, 0, 255, 0.854, 0.9, 0.25, 0.25, 1, true, 0)
-
-							if (vehicleVCFInfo.secl.type == "traf" or vehicleVCFInfo.secl.type == "chp") then
-								_DrawRect(0.854, 0.94, 0.035, 0.02, 186, 186, 186, 225, 0)
-								Draw("ADV " .. tostring(advisorPatternSelectedIndex), 0, 0, 0, 255, 0.854, 0.93, 0.25, 0.25, 1, true, 0)
-							end
-
-							if (h_horn_state[currentVehicle] == 1) then
-								_DrawRect(0.75, 0.91, 0.03, 0.02, 0, 173, 0, 225, 0)
-								Draw("HORN", 0, 0, 0, 255, 0.75, 0.9, 0.25, 0.25, 1, true, 0)
-							else
-								_DrawRect(0.75, 0.91, 0.03, 0.02, 186, 186, 186, 225, 0)
-								Draw("HORN", 0, 0, 0, 255, 0.75, 0.9, 0.25, 0.25, 1, true, 0)
-							end
-
-							if (dualEnable[currentVehicle]) then
-								_DrawRect(0.784, 0.91, 0.03, 0.02, 0, 213, 255, 225, 0)
-								Draw("DUAL", 0, 0, 0, 255, 0.784, 0.9, 0.25, 0.25, 1, true, 0)
-							else
-								_DrawRect(0.784, 0.91, 0.03, 0.02, 186, 186, 186, 225, 0)
-								Draw("DUAL", 0, 0, 0, 255, 0.784, 0.9, 0.25, 0.25, 1, true, 0)
-							end
-
-							if (IsVehicleExtraTurnedOn(currentVehicle, 11)) then
-								_DrawRect(0.817, 0.91, 0.03, 0.02, 255, 0, 0, 255, 0)
-								Draw("TKD", 0, 0, 0, 255, 0.817, 0.9, 0.25, 0.25, 1, true, 0)
-							else
-								_DrawRect(0.817, 0.91, 0.03, 0.02, 186, 186, 186, 225, 0)
-								Draw("TKD", 0, 0, 0, 255, 0.817, 0.9, 0.25, 0.25, 1, true, 0)
-							end
-
-							if (m_siren_state[currentVehicle] == 1) then
-								if (d_siren_state[currentVehicle] == 1) then
-									_DrawRect(0.743, 0.94, 0.015, 0.02, 0, 173, 0, 225, 0)
-								else
-									_DrawRect(0.75, 0.94, 0.03, 0.02, 0, 173, 0, 225, 0)
-								end
-							else
-								_DrawRect(0.75, 0.94, 0.03, 0.02, 186, 186, 186, 225, 0)
-							end
-
-							if (d_siren_state[currentVehicle] == 1) then
-								if (m_siren_state[currentVehicle] == 1) then
-									_DrawRect(0.758, 0.94, 0.015, 0.02, 0, 213, 255, 225, 2)
-								else
-									_DrawRect(0.75, 0.94, 0.03, 0.02, 0, 213, 255, 225, 0)
-								end
-							end
-
-							Draw("MAIN", 0, 0, 0, 255, 0.75, 0.93, 0.25, 0.25, 3, true, 0)
-
-							if (m_siren_state[currentVehicle] == 2) then
-								if (d_siren_state[currentVehicle] == 2) then
-									_DrawRect(0.777, 0.94, 0.015, 0.02, 0, 173, 0, 225, 0)
-								else
-									_DrawRect(0.784, 0.94, 0.03, 0.02, 0, 173, 0, 225, 0)
-								end
-							else
-								_DrawRect(0.784, 0.94, 0.03, 0.02, 186, 186, 186, 225, 0)
-							end
-
-							if (d_siren_state[currentVehicle] == 2) then
-								if (m_siren_state[currentVehicle] == 2) then
-									_DrawRect(0.792, 0.94, 0.015, 0.02, 0, 213, 255, 225, 2)
-								else
-									_DrawRect(0.784, 0.94, 0.03, 0.02, 0, 213, 255, 255, 0)
-								end
-							end
-
-							Draw("SEC", 0, 0, 0, 255, 0.784, 0.93, 0.25, 0.25, 3, true, 0)
-
-							if (m_siren_state[currentVehicle] == 3) then
-								if (d_siren_state[currentVehicle] == 3) then
-									_DrawRect(0.81, 0.94, 0.015, 0.02, 0, 173, 0, 225, 0)
-								else
-									_DrawRect(0.817, 0.94, 0.03, 0.02, 0, 173, 0, 225, 0)
-								end
-							else
-								_DrawRect(0.817, 0.94, 0.03, 0.02, 186, 186, 186, 225, 0)
-							end
-
-							if (d_siren_state[currentVehicle] == 3) then
-								if (m_siren_state[currentVehicle] == 3) then
-									_DrawRect(0.823, 0.94, 0.015, 0.02, 0, 213, 255, 225, 2)
-								else
-									_DrawRect(0.817, 0.94, 0.03, 0.02, 0, 213, 255, 255, 0)
-								end
-							end
-
-							Draw("AUX", 0, 0, 0, 255, 0.817, 0.93, 0.25, 0.25, 3, true, 0)
-
-							if(IsVehicleExtraTurnedOn(currentVehicle, 7)) then
-								_DrawRect(0.9, 0.94, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
-							else
-								_DrawRect(0.9, 0.94, 0.015, 0.015, 186, 186, 186, 225, 0)
-							end
-
+						if vehicleVCFInfo.secl.type == "traf" or vehicleVCFInfo.secl.type == "chp" then
 							if(IsVehicleExtraTurnedOn(currentVehicle, 8)) then
-								_DrawRect(0.92, 0.94, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+								_DrawRect(0.8598 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[8].env_color.r, vehicleVCFInfo.extras[8].env_color.g, vehicleVCFInfo.extras[8].env_color.b, 225, 0)
 							else
-								_DrawRect(0.92, 0.94, 0.015, 0.015, 186, 186, 186, 225, 0)
+								_DrawRect(0.8598 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
 							end
-
-							if(IsVehicleExtraTurnedOn(currentVehicle, 9)) then
-								_DrawRect(0.94, 0.94, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
-							else
-								_DrawRect(0.94, 0.94, 0.015, 0.015, 186, 186, 186, 225, 0)
-							end
-
-							if(IsVehicleExtraTurnedOn(currentVehicle, 1)) then
-								_DrawRect(0.89, 0.92, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
-							else
-								_DrawRect(0.89, 0.92, 0.015, 0.015, 186, 186, 186, 225, 0)
-							end
-
-							if(IsVehicleExtraTurnedOn(currentVehicle, 2)) then
-								_DrawRect(0.91, 0.92, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
-							else
-								_DrawRect(0.91, 0.92, 0.015, 0.015, 186, 186, 186, 225, 0)
-							end
-
-							if(IsVehicleExtraTurnedOn(currentVehicle, 3)) then
-								_DrawRect(0.93, 0.92, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
-							else
-								_DrawRect(0.93, 0.92, 0.015, 0.015, 186, 186, 186, 225, 0)
-							end
-
-							if(IsVehicleExtraTurnedOn(currentVehicle, 4)) then
-								_DrawRect(0.95, 0.92, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
-							else
-								_DrawRect(0.95, 0.92, 0.015, 0.015, 186, 186, 186, 225, 0)
-							end
-
-							if(IsVehicleExtraTurnedOn(currentVehicle, 5)) then
-								_DrawRect(0.91, 0.885, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
-							else
-								_DrawRect(0.91, 0.885, 0.015, 0.015, 186, 186, 186, 225, 0)
-							end
-
-							if(IsVehicleExtraTurnedOn(currentVehicle, 6)) then
-								_DrawRect(0.93, 0.885, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
-							else
-								_DrawRect(0.93, 0.885, 0.015, 0.015, 186, 186, 186, 225, 0)
-							end
-						elseif panelType == "fedsigss" then
-							error(string.format("This panel type (%s) is not supported, yet.", panelType))
 						end
+
+						if(IsVehicleExtraTurnedOn(currentVehicle, 9)) then
+							_DrawRect(0.872 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[9].env_color.r, vehicleVCFInfo.extras[9].env_color.g, vehicleVCFInfo.extras[9].env_color.b, 225, 0)
+						else
+							_DrawRect(0.872 + panelOffsetX, 0.94 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
+						end
+
+						if(IsVehicleExtraTurnedOn(currentVehicle, 1)) then
+							_DrawRect(0.84 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[1].env_color.r, vehicleVCFInfo.extras[1].env_color.g, vehicleVCFInfo.extras[1].env_color.b, 225, 0)
+						else
+							_DrawRect(0.84 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
+						end
+
+						if(IsVehicleExtraTurnedOn(currentVehicle, 2)) then
+							_DrawRect(0.853 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[2].env_color.r, vehicleVCFInfo.extras[2].env_color.g, vehicleVCFInfo.extras[2].env_color.b, 225, 0)
+						else
+							_DrawRect(0.853 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
+						end
+
+						if(IsVehicleExtraTurnedOn(currentVehicle, 3)) then
+							_DrawRect(0.866 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[3].env_color.r, vehicleVCFInfo.extras[3].env_color.g, vehicleVCFInfo.extras[3].env_color.b, 225, 0)
+						else
+							_DrawRect(0.866 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
+						end
+
+						if(IsVehicleExtraTurnedOn(currentVehicle, 4)) then
+							_DrawRect(0.879 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[4].env_color.r, vehicleVCFInfo.extras[4].env_color.g, vehicleVCFInfo.extras[4].env_color.b, 225, 0)
+						else
+							_DrawRect(0.879 + panelOffsetX, 0.92 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
+						end
+
+						if(IsVehicleExtraTurnedOn(currentVehicle, 5)) then
+							_DrawRect(0.853 + panelOffsetX, 0.88 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[5].env_color.r, vehicleVCFInfo.extras[5].env_color.g, vehicleVCFInfo.extras[5].env_color.b, 225, 0)
+						else
+							_DrawRect(0.853 + panelOffsetX, 0.88 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
+						end
+
+						if(IsVehicleExtraTurnedOn(currentVehicle, 6)) then
+							_DrawRect(0.866 + panelOffsetX, 0.88 + panelOffsetY, 0.01, 0.015, vehicleVCFInfo.extras[6].env_color.r, vehicleVCFInfo.extras[6].env_color.g, vehicleVCFInfo.extras[6].env_color.b, 225, 0)
+						else
+							_DrawRect(0.866 + panelOffsetX, 0.88 + panelOffsetY, 0.01, 0.015, 54, 54, 54, 225, 0)
+						end
+
+
+						_DrawRect(0.91 + panelOffsetX, 0.94 + panelOffsetY, 0.024, 0.023, 0, 0, 0, 225, 0)
+						if currentELSInfo then
+							if currentELSInfo.cruise then
+								_DrawRect(0.91 + panelOffsetX, 0.94 + panelOffsetY, 0.022, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+							else
+								_DrawRect(0.91 + panelOffsetX, 0.94 + panelOffsetY, 0.022, 0.02, 186, 186, 186, 225, 0)
+							end
+						else
+							_DrawRect(0.91 + panelOffsetX, 0.94 + panelOffsetY, 0.0215, 0.02, 186, 186, 186, 225, 0)
+						end
+						Draw("CRS", 0, 0, 0, 255, 0.91 + panelOffsetX, 0.93 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+
+						_DrawRect(0.935 + panelOffsetX, 0.94 + panelOffsetY, 0.024, 0.023, 0, 0, 0, 225, 0)
+						if IsVehicleExtraTurnedOn(currentVehicle, 11) then
+							_DrawRect(0.935 + panelOffsetX, 0.94 + panelOffsetY, 0.022, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+						else
+							_DrawRect(0.935 + panelOffsetX, 0.94 + panelOffsetY, 0.0215, 0.02, 186, 186, 186, 225, 0)
+						end
+						Draw("TKD", 0, 0, 0, 255, 0.935 + panelOffsetX, 0.93 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+
+						_DrawRect(0.96 + panelOffsetX, 0.94 + panelOffsetY, 0.024, 0.023, 0, 0, 0, 225, 0)
+						if IsVehicleExtraTurnedOn(currentVehicle, 12) then
+							_DrawRect(0.96 + panelOffsetX, 0.94 + panelOffsetY, 0.022, 0.02, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+						else
+							_DrawRect(0.96 + panelOffsetX, 0.94 + panelOffsetY, 0.0215, 0.02, 186, 186, 186, 225, 0)
+						end
+						Draw("SCL", 0, 0, 0, 255, 0.96 + panelOffsetX, 0.93 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+					elseif panelType == "old" then
+						_DrawRect(0.85, 0.91, 0.24, 0.11, 0, 0, 0, 200, 0)
+						local vehicleLightStage = getVehicleLightStage(currentVehicle)
+
+						if (vehicleLightStage == 1) then
+							_DrawRect(0.75, 0.88, 0.03, 0.02, 173, 0, 0, 225, 0)
+							Draw("1", 0, 0, 0, 255, 0.75, 0.87, 0.25, 0.25, 1, true, 0)
+						else
+							_DrawRect(0.75, 0.88, 0.03, 0.02, 186, 186, 186, 225, 0)
+							Draw("1", 0, 0, 0, 255, 0.75, 0.87, 0.25, 0.25, 1, true, 0)
+						end
+
+						if (vehicleLightStage == 2) then
+							_DrawRect(0.784, 0.88, 0.03, 0.02, 173, 0, 0, 225, 0)
+							Draw("2", 0, 0, 0, 255, 0.784, 0.87, 0.25, 0.25, 1, true, 0)
+						else
+							_DrawRect(0.784, 0.88, 0.03, 0.02, 186, 186, 186, 225, 0)
+							Draw("2", 0, 0, 0, 255, 0.784, 0.87, 0.25, 0.25, 1, true, 0)
+						end
+
+						if (vehicleLightStage == 3) then
+							_DrawRect(0.817, 0.88, 0.03, 0.02, 173, 0, 0, 225, 0)
+							Draw("3", 0, 0, 0, 255, 0.817, 0.87, 0.25, 0.25, 1, true, 0)
+						else
+							_DrawRect(0.817, 0.88, 0.03, 0.02, 186, 186, 186, 225, 0)
+							Draw("3", 0, 0, 0, 255, 0.817, 0.87, 0.25, 0.25, 1, true, 0)
+						end
+
+						_DrawRect(0.854, 0.88, 0.035, 0.02, 186, 186, 186, 225, 0)
+						Draw("PRIM " .. tostring(lightPatternPrim), 0, 0, 0, 255, 0.854, 0.87, 0.25, 0.25, 1, true, 0)
+
+						_DrawRect(0.854, 0.91, 0.035, 0.02, 186, 186, 186, 225, 0)
+						Draw("SEC " .. tostring(lightPatternSec), 0, 0, 0, 255, 0.854, 0.9, 0.25, 0.25, 1, true, 0)
+
+						if (vehicleVCFInfo.secl.type == "traf" or vehicleVCFInfo.secl.type == "chp") then
+							_DrawRect(0.854, 0.94, 0.035, 0.02, 186, 186, 186, 225, 0)
+							Draw("ADV " .. tostring(advisorPatternSelectedIndex), 0, 0, 0, 255, 0.854, 0.93, 0.25, 0.25, 1, true, 0)
+						end
+
+						if (h_horn_state[currentVehicle] == 1) then
+							_DrawRect(0.75, 0.91, 0.03, 0.02, 0, 173, 0, 225, 0)
+							Draw("HORN", 0, 0, 0, 255, 0.75, 0.9, 0.25, 0.25, 1, true, 0)
+						else
+							_DrawRect(0.75, 0.91, 0.03, 0.02, 186, 186, 186, 225, 0)
+							Draw("HORN", 0, 0, 0, 255, 0.75, 0.9, 0.25, 0.25, 1, true, 0)
+						end
+
+						if (dualEnable[currentVehicle]) then
+							_DrawRect(0.784, 0.91, 0.03, 0.02, 0, 213, 255, 225, 0)
+							Draw("DUAL", 0, 0, 0, 255, 0.784, 0.9, 0.25, 0.25, 1, true, 0)
+						else
+							_DrawRect(0.784, 0.91, 0.03, 0.02, 186, 186, 186, 225, 0)
+							Draw("DUAL", 0, 0, 0, 255, 0.784, 0.9, 0.25, 0.25, 1, true, 0)
+						end
+
+						if (IsVehicleExtraTurnedOn(currentVehicle, 11)) then
+							_DrawRect(0.817, 0.91, 0.03, 0.02, 255, 0, 0, 255, 0)
+							Draw("TKD", 0, 0, 0, 255, 0.817, 0.9, 0.25, 0.25, 1, true, 0)
+						else
+							_DrawRect(0.817, 0.91, 0.03, 0.02, 186, 186, 186, 225, 0)
+							Draw("TKD", 0, 0, 0, 255, 0.817, 0.9, 0.25, 0.25, 1, true, 0)
+						end
+
+						if (m_siren_state[currentVehicle] == 1) then
+							if (d_siren_state[currentVehicle] == 1) then
+								_DrawRect(0.743, 0.94, 0.015, 0.02, 0, 173, 0, 225, 0)
+							else
+								_DrawRect(0.75, 0.94, 0.03, 0.02, 0, 173, 0, 225, 0)
+							end
+						else
+							_DrawRect(0.75, 0.94, 0.03, 0.02, 186, 186, 186, 225, 0)
+						end
+
+						if (d_siren_state[currentVehicle] == 1) then
+							if (m_siren_state[currentVehicle] == 1) then
+								_DrawRect(0.758, 0.94, 0.015, 0.02, 0, 213, 255, 225, 2)
+							else
+								_DrawRect(0.75, 0.94, 0.03, 0.02, 0, 213, 255, 225, 0)
+							end
+						end
+
+						Draw("MAIN", 0, 0, 0, 255, 0.75, 0.93, 0.25, 0.25, 3, true, 0)
+
+						if (m_siren_state[currentVehicle] == 2) then
+							if (d_siren_state[currentVehicle] == 2) then
+								_DrawRect(0.777, 0.94, 0.015, 0.02, 0, 173, 0, 225, 0)
+							else
+								_DrawRect(0.784, 0.94, 0.03, 0.02, 0, 173, 0, 225, 0)
+							end
+						else
+							_DrawRect(0.784, 0.94, 0.03, 0.02, 186, 186, 186, 225, 0)
+						end
+
+						if (d_siren_state[currentVehicle] == 2) then
+							if (m_siren_state[currentVehicle] == 2) then
+								_DrawRect(0.792, 0.94, 0.015, 0.02, 0, 213, 255, 225, 2)
+							else
+								_DrawRect(0.784, 0.94, 0.03, 0.02, 0, 213, 255, 255, 0)
+							end
+						end
+
+						Draw("SEC", 0, 0, 0, 255, 0.784, 0.93, 0.25, 0.25, 3, true, 0)
+
+						if (m_siren_state[currentVehicle] == 3) then
+							if (d_siren_state[currentVehicle] == 3) then
+								_DrawRect(0.81, 0.94, 0.015, 0.02, 0, 173, 0, 225, 0)
+							else
+								_DrawRect(0.817, 0.94, 0.03, 0.02, 0, 173, 0, 225, 0)
+							end
+						else
+							_DrawRect(0.817, 0.94, 0.03, 0.02, 186, 186, 186, 225, 0)
+						end
+
+						if (d_siren_state[currentVehicle] == 3) then
+							if (m_siren_state[currentVehicle] == 3) then
+								_DrawRect(0.823, 0.94, 0.015, 0.02, 0, 213, 255, 225, 2)
+							else
+								_DrawRect(0.817, 0.94, 0.03, 0.02, 0, 213, 255, 255, 0)
+							end
+						end
+
+						Draw("AUX", 0, 0, 0, 255, 0.817, 0.93, 0.25, 0.25, 3, true, 0)
+
+						if(IsVehicleExtraTurnedOn(currentVehicle, 7)) then
+							_DrawRect(0.9, 0.94, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+						else
+							_DrawRect(0.9, 0.94, 0.015, 0.015, 186, 186, 186, 225, 0)
+						end
+
+						if(IsVehicleExtraTurnedOn(currentVehicle, 8)) then
+							_DrawRect(0.92, 0.94, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+						else
+							_DrawRect(0.92, 0.94, 0.015, 0.015, 186, 186, 186, 225, 0)
+						end
+
+						if(IsVehicleExtraTurnedOn(currentVehicle, 9)) then
+							_DrawRect(0.94, 0.94, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+						else
+							_DrawRect(0.94, 0.94, 0.015, 0.015, 186, 186, 186, 225, 0)
+						end
+
+						if(IsVehicleExtraTurnedOn(currentVehicle, 1)) then
+							_DrawRect(0.89, 0.92, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+						else
+							_DrawRect(0.89, 0.92, 0.015, 0.015, 186, 186, 186, 225, 0)
+						end
+
+						if(IsVehicleExtraTurnedOn(currentVehicle, 2)) then
+							_DrawRect(0.91, 0.92, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+						else
+							_DrawRect(0.91, 0.92, 0.015, 0.015, 186, 186, 186, 225, 0)
+						end
+
+						if(IsVehicleExtraTurnedOn(currentVehicle, 3)) then
+							_DrawRect(0.93, 0.92, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+						else
+							_DrawRect(0.93, 0.92, 0.015, 0.015, 186, 186, 186, 225, 0)
+						end
+
+						if(IsVehicleExtraTurnedOn(currentVehicle, 4)) then
+							_DrawRect(0.95, 0.92, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+						else
+							_DrawRect(0.95, 0.92, 0.015, 0.015, 186, 186, 186, 225, 0)
+						end
+
+						if(IsVehicleExtraTurnedOn(currentVehicle, 5)) then
+							_DrawRect(0.91, 0.885, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+						else
+							_DrawRect(0.91, 0.885, 0.015, 0.015, 186, 186, 186, 225, 0)
+						end
+
+						if(IsVehicleExtraTurnedOn(currentVehicle, 6)) then
+							_DrawRect(0.93, 0.885, 0.015, 0.015, vehicleVCFInfo.interface.buttonColor.r, vehicleVCFInfo.interface.buttonColor.g, vehicleVCFInfo.interface.buttonColor.b, 225, 0)
+						else
+							_DrawRect(0.93, 0.885, 0.015, 0.015, 186, 186, 186, 225, 0)
+						end
+					elseif panelType == "fedsigss" then
+						error(string.format("This panel type (%s) is not supported, yet.", panelType))
 					end
 				end
 			end
+		else
+			Citizen.Wait(500)
 		end
-		Wait(2)
+
+		Citizen.Wait(2)
 	end
 end)
 
 Citizen.CreateThread(function()
 	while true do
+		Citizen.Wait(500)
+
 		for k,v in pairs(elsVehs) do
-			if(DoesEntityExist(k)) then
-				if #(GetEntityCoords(k)-playerCoords) <= vehicleSyncDistance then
-					if v.warning or v.secondary or v.primary then
-						SetVehicleEngineOn(k, true, true, false)
-					end
+			if DoesEntityExist(k) then
+				local distance = #(playerCoords - GetEntityCoords(k))
+				elsVehs[k].isWithinSyncDistance = distance <= vehicleSyncDistance
+			else
+				elsVehs[k] = nil
+			end
+		end
+	end
+end)
 
-					local vehicleIndex = getElsVehicleIndexFromVehicle(k)
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(4)
+		local letSleep = true
 
-					for i=11,12 do
-						if (DoesEntityExist(k) and not IsEntityDead(k)) then
-							if (els_Vehicles[vehicleIndex] == nil or els_Vehicles[vehicleIndex].extras == nil) then
-								debugPrint("Index for current vehicle (".. vehicleIndex .. ") was nil (invalid), returning.", true, true)
-								return
-							end
+		for k,v in pairs(elsVehs) do
+			if DoesEntityExist(k) and v.isWithinSyncDistance then
+				letSleep = false
 
-							if(IsVehicleExtraTurnedOn(k, i)) then
-								local boneIndex = GetEntityBoneIndexByName(k, "extra_" .. i)
-								local coords = GetWorldPositionOfEntityBone(k, boneIndex)
-								local rotX, rotY, rotZ = table.unpack(RotAnglesToVec(GetEntityRotation(k, 2)))
+				if v.warning or v.secondary or v.primary then
+					SetVehicleEngineOn(k, true, true, false)
+				end
 
-								if els_Vehicles[vehicleIndex].extras[i].env_light then
-									if i == 11 then
-										DrawSpotLightWithShadow(coords.x + els_Vehicles[vehicleIndex].extras[11].env_pos.x, coords.y + els_Vehicles[vehicleIndex].extras[11].env_pos.y, coords.z + els_Vehicles[vehicleIndex].extras[11].env_pos.z, rotX, rotY, rotZ, 255, 255, 255, 75.0, 2.0, 10.0, 20.0, 0.0, true)
-									end
-									if i == 12 then
-										DrawLightWithRange(coords.x + els_Vehicles[vehicleIndex].extras[12].env_pos.x, coords.y + els_Vehicles[vehicleIndex].extras[12].env_pos.y, coords.z + els_Vehicles[vehicleIndex].extras[12].env_pos.z, 255, 255, 255, 50.0, envirementLightBrightness)
-									end
-								else
-									if i == 11 then
-										DrawSpotLightWithShadow(coords.x, coords.y, coords.z + 0.2, rotX, rotY, rotZ, 255, 255, 255, 75.0, 2.0, 10.0, 20.0, 0.0, true)
-									end
-									if i == 12 then
-										DrawLightWithRange(coords.x, coords.y, coords.z, 255, 255, 255, 50.0, envirementLightBrightness)
-									end
+				local vehicleIndex = getElsVehicleIndexFromVehicle(k)
+
+				for i=11,12 do
+					if (DoesEntityExist(k) and not IsEntityDead(k)) then
+						if (els_Vehicles[vehicleIndex] == nil or els_Vehicles[vehicleIndex].extras == nil) then
+							debugPrint("Index for current vehicle (".. vehicleIndex .. ") was nil (invalid), returning.", true, true)
+							return
+						end
+
+						if(IsVehicleExtraTurnedOn(k, i)) then
+							local boneIndex = GetEntityBoneIndexByName(k, "extra_" .. i)
+							local coords = GetWorldPositionOfEntityBone(k, boneIndex)
+							local rotX, rotY, rotZ = table.unpack(RotAnglesToVec(GetEntityRotation(k, 2)))
+
+							if els_Vehicles[vehicleIndex].extras[i].env_light then
+								if i == 11 then
+									DrawSpotLightWithShadow(coords.x + els_Vehicles[vehicleIndex].extras[11].env_pos.x, coords.y + els_Vehicles[vehicleIndex].extras[11].env_pos.y, coords.z + els_Vehicles[vehicleIndex].extras[11].env_pos.z, rotX, rotY, rotZ, 255, 255, 255, 75.0, 2.0, 10.0, 20.0, 0.0, true)
+								end
+								if i == 12 then
+									DrawLightWithRange(coords.x + els_Vehicles[vehicleIndex].extras[12].env_pos.x, coords.y + els_Vehicles[vehicleIndex].extras[12].env_pos.y, coords.z + els_Vehicles[vehicleIndex].extras[12].env_pos.z, 255, 255, 255, 50.0, envirementLightBrightness)
+								end
+							else
+								if i == 11 then
+									DrawSpotLightWithShadow(coords.x, coords.y, coords.z + 0.2, rotX, rotY, rotZ, 255, 255, 255, 75.0, 2.0, 10.0, 20.0, 0.0, true)
+								end
+								if i == 12 then
+									DrawLightWithRange(coords.x, coords.y, coords.z, 255, 255, 255, 50.0, envirementLightBrightness)
 								end
 							end
 						end
@@ -840,15 +880,22 @@ Citizen.CreateThread(function()
 				end
 			end
 		end
-		Wait(4)
+
+		if letSleep then
+			Citizen.Wait(500)
+		end
 	end
 end)
 
 
 Citizen.CreateThread(function()
 	while true do
+		Citizen.Wait(0)
+		local letSleep = true
+
 		for k,v in pairs(elsVehs) do
-			if DoesEntityExist(k) and #(GetEntityCoords(k)-playerCoords) <= vehicleSyncDistance then
+			if DoesEntityExist(k) and v.isWithinSyncDistance then
+				letSleep = false
 				SetVehicleAutoRepairDisabled(k, true)
 				local vehicleVCFInfo = getVehicleVCFInfo(k)
 
@@ -878,7 +925,6 @@ Citizen.CreateThread(function()
 					end
 
 				else
-
 					if (v.warning) then
 						if vehicleVCFInfo.wrnl.type == string.lower("leds") and v.advisorPattern <= 53 then
 							runLedPatternWarning(k, v.advisorPattern)
@@ -914,7 +960,10 @@ Citizen.CreateThread(function()
 				end
 			end
 		end
-		Citizen.Wait(0)
+
+		if letSleep then
+			Citizen.Wait(500)
+		end
 	end
 end)
 

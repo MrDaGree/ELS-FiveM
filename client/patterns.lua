@@ -955,7 +955,7 @@ secdFR = 0
 local ledSecondaryReady = {}
 function runLedPatternSecondary(k, pattern)
 	Citizen.CreateThread(function()
-		if (not IsEntityDead(k) and DoesEntityExist(k) and (ledSecondaryReady[k] or ledSecondaryReady[k] == nil)) then
+		if (DoesEntityExist(k) and not IsEntityDead(k) and (ledSecondaryReady[k] or ledSecondaryReady[k] == nil)) then
 			if (GetGameTimer() - trafFR >= GetConvarInt("els_lightDelay", 10)) then
 
 				ledSecondaryReady[k] = false
@@ -967,30 +967,34 @@ function runLedPatternSecondary(k, pattern)
 
 				Citizen.CreateThread(function()
 					for spot = 1, string.len(led_SecondaryPatterns[pattern][7]) do
-						local c = tonumber(string.sub(led_SecondaryPatterns[pattern][7], spot, spot) )
+						if DoesEntityExist(k) then
+							local c = tonumber(string.sub(led_SecondaryPatterns[pattern][7], spot, spot) )
 
-						setExtraState(k, 7, c)
-						if c == 0 then
-							runEnvirementLight(k, 7)
-						end
+							setExtraState(k, 7, c)
+							if c == 0 then
+								runEnvirementLight(k, 7)
+							end
 
-						if elsVehs[k] ~= nil then
-							if elsVehs[k].secPattern ~= pattern then
+							if elsVehs[k] ~= nil then
+								if elsVehs[k].secPattern ~= pattern then
+									done[1] = true
+									ledSecondary = 1
+									break
+								end
+
+								if not elsVehs[k].secondary then
+									done[1] = true
+									break
+								end
+							end
+
+							Wait(GetConvarInt("els_flashDelay", 15))
+
+							if spot == string.len(led_SecondaryPatterns[pattern][7]) then
 								done[1] = true
-								ledSecondary = 1
 								break
 							end
-						end
-
-						if not elsVehs[k].secondary then
-							done[1] = true
-							break
-						end
-
-
-						Wait(GetConvarInt("els_flashDelay", 15))
-
-						if spot == string.len(led_SecondaryPatterns[pattern][7]) then
+						else
 							done[1] = true
 							break
 						end
