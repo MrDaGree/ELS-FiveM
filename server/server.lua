@@ -397,7 +397,7 @@ function parseVehData(xml, fileName)
 						local elem = xml.root.el[i].kids[ex].el[inner]
 
 						a.wrnl.ForcedPatterns[string.lower(elem.name)] = {}
-						if string.lower(elem.attr['Enabled']) == "true" then a.wrnl.ForcedPatterns[string.lower(elem.name)].enabled = true else a.wrnl.ForcedPatterns[string.lower(elem.name)].enabled = false end
+						if string.lower(elem.attr['Enabled'] or "false") == "true" then a.wrnl.ForcedPatterns[string.lower(elem.name)].enabled = true else a.wrnl.ForcedPatterns[string.lower(elem.name)].enabled = false end
 						a.wrnl.ForcedPatterns[string.lower(elem.name)].pattern = tonumber(elem.attr['Pattern'])
 					end
 				end
