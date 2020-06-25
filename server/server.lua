@@ -864,5 +864,5 @@ AddEventHandler("els:catchError", function(data, vehicle)
 	if vehicle and vehicle > 0 then
 		print("VEHICLE MODEL: " .. vehicle)
 	end
-	print("ERROR: " .. data)
+	print("ERROR: " .. data .. "^7")
 end)
