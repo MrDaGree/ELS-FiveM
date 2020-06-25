@@ -673,6 +673,10 @@ function getVehicleVCFInfo(veh)
     return els_Vehicles[checkCarHash(veh)] or false
 end
 
+ped = 0
+current_vehicle = 0
+isVehicleELS = false
+canControlELS = false
 Citizen.CreateThread(function()
     Wait(500)
     while true do
