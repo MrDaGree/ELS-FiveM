@@ -424,6 +424,10 @@ Citizen.CreateThread(function()
                     end
 
                     if vehN ~= 0 then
+                        if EGetConvarBool("els_developer") then
+                            Draw("~o~DEVELOPER MODE", 0, 0, 0, 255, 0.932 + panelOffsetX, 0.856 + panelOffsetY, 0.25, 0.25, 1, true, 0)
+                        end
+
                         if (panelType == "original") then
                             _DrawRect(0.85 + panelOffsetX, 0.89 + panelOffsetY, 0.26, 0.16, 16, 16, 16, 225, 0)
                         
