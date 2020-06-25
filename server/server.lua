@@ -6,10 +6,10 @@ local curVersion = tonumber(json.decode(verFile).version) or 000
 local latestVersion = curVersion
 local resourceName = "ELS-FiveM" .. (GetCurrentResourceName() ~= "ELS-FiveM" and " (" .. GetCurrentResourceName() .. ")" or "")
 local latestVersionPath = "https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/master/version.json"
-local curVerCol = function()
-	if curVersion < latestVersion then
+local curVerCol = function(nextVer)
+	if curVersion < nextVer then
 		return "~r~"
-	elseif curVersion > latestVersion then
+	elseif curVersion > nextVer then
 		return "~o~"
 	end
 	return "~g~"
@@ -26,15 +26,13 @@ function checkVersion()
 			print(resourceName .. " is outdated.\nCurrent Version: " .. data.version .. "\nYour Version: " .. curVersion .. "\nPlease update it from https://github.com/MrDaGree/ELS-FiveM")
 			print("\nUpdate Changelog:\n"..data.changelog)
 			print("\n--------------------------------------------------------------------------")
-			curVerCol = "~r~"
 		elseif curVersion > lVer then
 			print("Your version of " .. resourceName .. " seems to be higher than the current version. Hax bro?")
-			curVerCol = "~o~"
 		else
 			print(resourceName .. " is up to date!")
-			curVerCol = "~g~"
 		end
-		curVerCol = (curVersion < latestVersion and "~r~") or (curVersion > lVer and "~o~") or "~g~"
+
+		
 		latestVersion = tonumber(data.version)
 	end, "GET", "", { version = "this" })
 end
@@ -47,32 +45,39 @@ Citizen.CreateThread(function()
 end)
 
 RegisterCommand('els', function(source, args)
+	local function notify(plr, text)
+		if plr == 0 then
+			return print(text)
+		end
+
+		assert(type(plr) == "number", "Expected type 'number' for parameter #1 in 'notify'.")
+		assert(type(GetPlayerEP(plr)) == "string", "Invalid player passed for parameter #1 in 'notify'.")
+
+		TriggerClientEvent("els:notify", plr, text)
+	end
 	if args[1] == 'version' then
 		PerformHttpRequest(latestVersionPath, function(err, response, headers)
 			local data = json.decode(response)
+			local thisVersion = tonumber(data.version)
 
-			if curVersion ~= data.version and tonumber(curVersion) < tonumber(data.version) then
-				local message = "You are currently running an outdated version of [ " .. GetCurrentResourceName() .. " ]. Your version [ " .. curVersion .. " ]. Newest version: [ " .. data.version .. " ]."
-				if source > 0 then
-					TriggerClientEvent("els:notify", source, "~r~ELS~s~~n~Version " .. curVerCol .. curVersion)
-				else
-					print("ELS-FiveM: You are currently running an outdated version of [ " .. GetCurrentResourceName() .. " ]. Your version [ " .. curVersion .. " ]. Newest version: [ " .. data.version .. " ].")
-				end
-			elseif tonumber(curVersion) > tonumber(data.version) then
-				local message = "Um, what? Your version of ELS-FiveM is higher than the current version. What?"
-				if source > 0 then
-					TriggerClientEvent("els:notify", source, "~r~ELS~s~~n~Version " .. curVerCol .. curVersion)
-				else
-					print("ELS-FiveM: " .. message)
-				end
-			else
-				local message = "Your version of [ " .. GetCurrentResourceName() .. " ] is up to date! Current version: [ " .. curVersion .. " ]."
-				if source > 0 then
-					TriggerClientEvent("els:notify", source, "~r~ELS~s~~n~Version " .. curVerCol .. curVersion)
-				else
-					print("ELS-FiveM: " .. message)
-				end
+			if source > 0 then
+				return notify(source, "~r~ELS~s~~n~Version " .. curVerCol(thisVersion) .. curVersion)
 			end
+
+			local message
+			if curVersion ~= data.version and curVersion < thisVersion then
+				message = "You are currently running an outdated version of [ " .. GetCurrentResourceName() .. " ]. Your version [ " .. curVersion .. " ]. Newest version: [ " .. data.version .. " ]."
+			elseif curVersion > thisVersion then
+				message = "Um, what? Your version of ELS-FiveM is higher than the current version. What?"
+			else
+				message = "Your version of [ " .. GetCurrentResourceName() .. " ] is up to date! Current version: [ " .. curVersion .. " ]."
+			end
+
+			if message then
+				return print("ELS-FiveM (" .. GetCurrentResourceName() .. "): " .. message)
+			end
+
+			return print("ELS-FiveM (" .. GetCurrentResourceName() .. "): Could not find any relationship between the latest version and the version you are running.")
 		end, "GET", "", {version = 'this'})
 	elseif args[1] == 'panel' then
 		if source == 0 then return end
@@ -86,7 +91,7 @@ RegisterCommand('els', function(source, args)
 
 		TriggerClientEvent('els:setPanelType', source, args[2])
 	elseif not args[1] or args[1] == 'help' then
-		TriggerClientEvent("els:notify", source, "~r~ELS~s~~n~Version " .. curVerCol .. curVersion)
+		TriggerClientEvent("els:notify", source, "~r~ELS~s~~n~Version " .. curVerCol(data.version) .. curVersion)
 		TriggerClientEvent("els:notify", source, "~b~Sub-Commands~s~~n~" .. "~p~panel~s~ - Sets the panel type, options: " .. table.concat(allowedPanelTypes, ", ") .. "~n~~p~version~s~ - Shows current version and if the owner should update or not.~n~~p~help~s~ - Displays this notification.")
 	end
 end)
@@ -746,9 +751,12 @@ AddEventHandler('onResourceStart', function(name)
 		patternInfoTable.primarys = {}
 		patternInfoTable.secondarys = {}
 		patternInfoTable.advisors = {}
-		if vcf_files == nil then
-			error("No VCF list found, please have a file called vcf.lua - see vcf.default.lua for example.")
-		end
+
+		local vcfType = type(vcf_files)
+		assert(vcfType == "table", string.format("Expected type 'table' for vcf_files, got %s. %s", vcfType, vcfType == "nil" and 
+			"Please make sure you have a file called 'vcf.lua' in the resource root folder (resources/ELS-FiveM or similar). Copy the contents of 'vcf.default.lua' " ..
+			"and alter accordingly." or "")
+		)
 
 		local loadedFiles = 0
 		for i=1,#vcf_files do
@@ -771,13 +779,6 @@ AddEventHandler('onResourceStart', function(name)
 
 		print("^1[" .. resourceName .. "] ^2Successfully loaded " .. loadedFiles .. "/" .. #vcf_files .. " VCF files!^0")
 
-		-- for i=1,#pattern_files do
-		-- 	local data = LoadResourceFile(GetCurrentResourceName(), "patterns/" .. pattern_files[i])
-
-			--  if data then
-			--      parseObjSet(data, pattern_files[i])
-			--  end
-		-- end
 		configCheck()
 	end
 end)
@@ -857,10 +858,10 @@ end)
 RegisterNetEvent("els:catchError")
 AddEventHandler("els:catchError", function(data, vehicle)
 	local player = source
-	print("\n^1ELS ERROR FROM CLIENT^0")
-	print("PLAYER NAME: " .. GetPlayerName(player))
+	print("\n^1ELS ERROR FROM CLIENT^7")
+	print("PLAYER NAME: " .. GetPlayerName(player) or "^1*Unknown*^7")
 	print("PLAYER ID: " .. player)
-	if vehicle and vehicle ~= 0 then
+	if vehicle and vehicle > 0 then
 		print("VEHICLE MODEL: " .. vehicle)
 	end
 	print("ERROR: " .. data)
