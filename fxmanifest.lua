@@ -5,6 +5,8 @@ author 'MrDaGree'
 description 'ELS FiveM'
 version '1.7.0'
 
+shared_script 'shared/*.lua'
+
 client_script {
     'vcf.lua',
     'config.lua',
@@ -17,7 +19,3 @@ server_script {
     'server/server.lua',
     'server/xml.lua'
 }
-
-shared_script 'shared/*.lua'
-
-
