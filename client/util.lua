@@ -379,6 +379,8 @@ function checkCarHash(car)
             end
         end
     end
+
+    return "CARNOTFOUND"
 end
 
 function vehInTable (tab, val)
