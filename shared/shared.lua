@@ -11,3 +11,19 @@ end
 function EGetConvarBool(convar)
     return GetConvar(tostring(convar), "false") == "true"
 end
+
+function table.includes(tbl, val)
+    assert(type(tbl) == "table", "Expected type 'table', got " .. type(tbl) .. ".")
+
+    if type(val) == "string" and tbl[val] then
+        return true
+    end
+
+    for _, v in pairs(tbl) do
+        if v == val then
+            return true
+        end
+    end
+
+    return false
+end
