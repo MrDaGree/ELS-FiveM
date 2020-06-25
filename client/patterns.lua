@@ -54,27 +54,7 @@ function getNumberOfAdvisorPatterns(veh)
 	return count
 end
 
-function runEnvirementLightWithBrightness(k, extra, brightness)
-	Citizen.CreateThread(function()
-		local vehN = checkCarHash(k)
-
-		if els_Vehicles[vehN].extras[extra] ~= nil then
-			if(els_Vehicles[vehN].extras[extra].env_light) then
-				local boneIndex = GetEntityBoneIndexByName(k, "extra_" .. extra)
-				local coords = GetWorldPositionOfEntityBone(k, boneIndex)
-				
-				for i=1,6 do
-					if(IsVehicleExtraTurnedOn(k, extra) == false) then break end
-					DrawLightWithRangeAndShadow(coords.x + els_Vehicles[vehN].extras[extra].env_pos.x, coords.y + els_Vehicles[vehN].extras[extra].env_pos.y, coords.z + els_Vehicles[vehN].extras[extra].env_pos.z, els_Vehicles[vehN].extras[extra].env_color.r, els_Vehicles[vehN].extras[extra].env_color.g, els_Vehicles[vehN].extras[extra].env_color.b, 50.0, 0.26, 1.0)
-					--DrawLightWithRangeAndShadow(coords.x + els_Vehicles[vehN].extras[extra].env_pos.x, coords.y + els_Vehicles[vehN].extras[extra].env_pos.y, coords.z + els_Vehicles[vehN].extras[extra].env_pos.z, els_Vehicles[vehN].extras[extra].env_color.r, els_Vehicles[vehN].extras[extra].env_color.g, els_Vehicles[vehN].extras[extra].env_color.b, 150 + 0.0, brightness, 1.0)
-					Wait(2)
-				end
-			end
-		end
-	end)
-end
-
-function runEnvirementLight(k, extra)
+function runEnvironmentLight(k, extra)
 	Citizen.CreateThread(function()
 		if not IsEntityDead(k) and k ~= nil then
 			local vehN = checkCarHash(k)
@@ -114,7 +94,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageOne[pattern][1], spot, spot) )
 							setExtraState(k, 1, c)
 							if c == 0 then
-								runEnvirementLight(k, 1)
+								runEnvironmentLight(k, 1)
 							end
 
 							if elsVehs[k].advisorPattern ~= pattern then
@@ -138,7 +118,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageOne[pattern][2], spot, spot) )
 							setExtraState(k, 2, c)
 							if c == 0 then
-								runEnvirementLight(k, 2)
+								runEnvironmentLight(k, 2)
 							end
 
 							if elsVehs[k].advisorPattern ~= pattern then
@@ -162,7 +142,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageOne[pattern][3], spot, spot) )
 							setExtraState(k, 3, c)
 							if c == 0 then
-								runEnvirementLight(k, 3)
+								runEnvironmentLight(k, 3)
 							end
 
 							if elsVehs[k].advisorPattern ~= pattern then
@@ -186,7 +166,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageOne[pattern][4], spot, spot) )
 							setExtraState(k, 4, c)
 							if c == 0 then
-								runEnvirementLight(k, 4)
+								runEnvironmentLight(k, 4)
 							end
 
 							if elsVehs[k].advisorPattern ~= pattern then
@@ -210,7 +190,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageOne[pattern][5], spot, spot) )
 							setExtraState(k, 5, c)
 							if c == 0 then
-								runEnvirementLight(k, 5)
+								runEnvironmentLight(k, 5)
 							end
 
 							if elsVehs[k].advisorPattern ~= pattern then
@@ -234,7 +214,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageOne[pattern][6], spot, spot) )
 							setExtraState(k, 6, c)
 							if c == 0 then
-								runEnvirementLight(k, 6)
+								runEnvironmentLight(k, 6)
 							end
 
 							if elsVehs[k].advisorPattern ~= pattern then
@@ -258,7 +238,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageOne[pattern][7], spot, spot) )
 							setExtraState(k, 7, c)
 							if c == 0 then
-								runEnvirementLight(k, 7)
+								runEnvironmentLight(k, 7)
 							end
 
 							if elsVehs[k].advisorPattern ~= pattern then
@@ -282,7 +262,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageOne[pattern][8], spot, spot) )
 							setExtraState(k, 8, c)
 							if c == 0 then
-								runEnvirementLight(k, 8)
+								runEnvironmentLight(k, 8)
 							end
 
 							if elsVehs[k].advisorPattern ~= pattern then
@@ -306,7 +286,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageOne[pattern][9], spot, spot) )
 							setExtraState(k, 9, c)
 							if c == 0 then
-								runEnvirementLight(k, 9)
+								runEnvironmentLight(k, 9)
 							end
 
 							if elsVehs[k].advisorPattern ~= pattern then
@@ -330,7 +310,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageOne[pattern][10], spot, spot) )
 							setExtraState(k, 10, c)
 							if c == 0 then
-								runEnvirementLight(k, 10)
+								runEnvironmentLight(k, 10)
 							end
 
 							if elsVehs[k].advisorPattern ~= pattern then
@@ -354,7 +334,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageTwo[pattern][1], spot, spot) )
 							setExtraState(k, 1, c)
 							if c == 0 then
-								runEnvirementLight(k, 1)
+								runEnvironmentLight(k, 1)
 							end
 
 							if elsVehs[k].secPattern ~= pattern then
@@ -378,7 +358,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageTwo[pattern][2], spot, spot) )
 							setExtraState(k, 2, c)
 							if c == 0 then
-								runEnvirementLight(k, 2)
+								runEnvironmentLight(k, 2)
 							end
 
 							if elsVehs[k].secPattern ~= pattern then
@@ -402,7 +382,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageTwo[pattern][3], spot, spot) )
 							setExtraState(k, 3, c)
 							if c == 0 then
-								runEnvirementLight(k, 3)
+								runEnvironmentLight(k, 3)
 							end
 
 							if elsVehs[k].secPattern ~= pattern then
@@ -426,7 +406,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageTwo[pattern][4], spot, spot) )
 							setExtraState(k, 4, c)
 							if c == 0 then
-								runEnvirementLight(k, 4)
+								runEnvironmentLight(k, 4)
 							end
 
 							if elsVehs[k].secPattern ~= pattern then
@@ -450,7 +430,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageTwo[pattern][5], spot, spot) )
 							setExtraState(k, 5, c)
 							if c == 0 then
-								runEnvirementLight(k, 5)
+								runEnvironmentLight(k, 5)
 							end
 
 							if elsVehs[k].secPattern ~= pattern then
@@ -474,7 +454,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageTwo[pattern][6], spot, spot) )
 							setExtraState(k, 6, c)
 							if c == 0 then
-								runEnvirementLight(k, 6)
+								runEnvironmentLight(k, 6)
 							end
 
 							if elsVehs[k].secPattern ~= pattern then
@@ -498,7 +478,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageTwo[pattern][7], spot, spot) )
 							setExtraState(k, 7, c)
 							if c == 0 then
-								runEnvirementLight(k, 7)
+								runEnvironmentLight(k, 7)
 							end
 
 							if elsVehs[k].secPattern ~= pattern then
@@ -522,7 +502,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageTwo[pattern][8], spot, spot) )
 							setExtraState(k, 8, c)
 							if c == 0 then
-								runEnvirementLight(k, 8)
+								runEnvironmentLight(k, 8)
 							end
 
 							if elsVehs[k].secPattern ~= pattern then
@@ -546,7 +526,7 @@ function runCHPPattern(k, pattern, stage)
 						local c = tonumber(string.sub(chp_StageTwo[pattern][9], spot, spot) )
 							setExtraState(k, 9, c)
 							if c == 0 then
-								runEnvirementLight(k, 9)
+								runEnvironmentLight(k, 9)
 							end
 
 							if elsVehs[k].secPattern ~= pattern then
@@ -570,7 +550,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageTwo[pattern][10], spot, spot) )
 							setExtraState(k, 10, c)
 							if c == 0 then
-								runEnvirementLight(k, 10)
+								runEnvironmentLight(k, 10)
 							end
 
 							if elsVehs[k].secPattern ~= pattern then
@@ -594,7 +574,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageThree[pattern][1], spot, spot) )
 							setExtraState(k, 1, c)
 							if c == 0 then
-								runEnvirementLight(k, 1)
+								runEnvironmentLight(k, 1)
 							end
 
 							if elsVehs[k].primPattern ~= pattern then
@@ -618,7 +598,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageThree[pattern][2], spot, spot) )
 							setExtraState(k, 2, c)
 							if c == 0 then
-								runEnvirementLight(k, 2)
+								runEnvironmentLight(k, 2)
 							end
 
 							if elsVehs[k].primPattern ~= pattern then
@@ -642,7 +622,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageThree[pattern][3], spot, spot) )
 							setExtraState(k, 3, c)
 							if c == 0 then
-								runEnvirementLight(k, 3)
+								runEnvironmentLight(k, 3)
 							end
 
 							if elsVehs[k].primPattern ~= pattern then
@@ -666,7 +646,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageThree[pattern][4], spot, spot) )
 							setExtraState(k, 4, c)
 							if c == 0 then
-								runEnvirementLight(k, 4)
+								runEnvironmentLight(k, 4)
 							end
 
 							if elsVehs[k].primPattern ~= pattern then
@@ -690,7 +670,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageThree[pattern][5], spot, spot) )
 							setExtraState(k, 5, c)
 							if c == 0 then
-								runEnvirementLight(k, 5)
+								runEnvironmentLight(k, 5)
 							end
 
 							if elsVehs[k].primPattern ~= pattern then
@@ -714,7 +694,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageThree[pattern][6], spot, spot) )
 							setExtraState(k, 6, c)
 							if c == 0 then
-								runEnvirementLight(k, 6)
+								runEnvironmentLight(k, 6)
 							end
 
 							if elsVehs[k].primPattern ~= pattern then
@@ -738,7 +718,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageThree[pattern][7], spot, spot) )
 							setExtraState(k, 7, c)
 							if c == 0 then
-								runEnvirementLight(k, 7)
+								runEnvironmentLight(k, 7)
 							end
 
 							if elsVehs[k].primPattern ~= pattern then
@@ -762,7 +742,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageThree[pattern][8], spot, spot) )
 							setExtraState(k, 8, c)
 							if c == 0 then
-								runEnvirementLight(k, 8)
+								runEnvironmentLight(k, 8)
 							end
 
 							if elsVehs[k].primPattern ~= pattern then
@@ -786,7 +766,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageThree[pattern][9], spot, spot) )
 							setExtraState(k, 9, c)
 							if c == 0 then
-								runEnvirementLight(k, 9)
+								runEnvironmentLight(k, 9)
 							end
 
 							if elsVehs[k].primPattern ~= pattern then
@@ -810,7 +790,7 @@ function runCHPPattern(k, pattern, stage)
 							local c = tonumber(string.sub(chp_StageThree[pattern][10], spot, spot) )
 							setExtraState(k, 10, c)
 							if c == 0 then
-								runEnvirementLight(k, 10)
+								runEnvironmentLight(k, 10)
 							end
 
 							if elsVehs[k].primPattern ~= pattern then
@@ -858,7 +838,7 @@ function runTrafPattern(k, pattern)
 						local c = tonumber(string.sub(traf_Patterns[pattern][7], spot, spot) )
 						setExtraState(k, 7, c)
 						if c == 0 then
-							runEnvirementLight(k, 7)
+							runEnvironmentLight(k, 7)
 						end
 
 						if elsVehs[k].secPattern ~= pattern then
@@ -887,7 +867,7 @@ function runTrafPattern(k, pattern)
 						local c = tonumber(string.sub(traf_Patterns[pattern][8], spot, spot) )
 						setExtraState(k, 8, c)
 						if c == 0 then
-							runEnvirementLight(k, 8)
+							runEnvironmentLight(k, 8)
 						end
 
 						if elsVehs[k].secPattern ~= pattern then
@@ -916,7 +896,7 @@ function runTrafPattern(k, pattern)
 						local c = tonumber(string.sub(traf_Patterns[pattern][9], spot, spot) )
 						setExtraState(k, 9, c)
 						if c == 0 then
-							runEnvirementLight(k, 9)
+							runEnvironmentLight(k, 9)
 						end
 
 						if elsVehs[k].secPattern ~= pattern then
@@ -971,7 +951,7 @@ function runLedPatternSecondary(k, pattern)
 
 						setExtraState(k, 7, c)
 						if c == 0 then
-							runEnvirementLight(k, 7)
+							runEnvironmentLight(k, 7)
 						end
 
 						if elsVehs[k] ~= nil then
@@ -1005,7 +985,7 @@ function runLedPatternSecondary(k, pattern)
 
 						setExtraState(k, 8, c)
 						if c == 0 then
-							runEnvirementLight(k, 8)
+							runEnvironmentLight(k, 8)
 						end
 
 						if elsVehs[k] ~= nil then
@@ -1038,7 +1018,7 @@ function runLedPatternSecondary(k, pattern)
 						local c = tonumber(string.sub(led_SecondaryPatterns[pattern][9], spot, spot) )
 						setExtraState(k, 9, c)
 						if c == 0 then
-							runEnvirementLight(k, 9)
+							runEnvironmentLight(k, 9)
 						end
 
 						if elsVehs[k] ~= nil then
@@ -1095,7 +1075,7 @@ function runLedPatternWarning(k, pattern)
 						local c = tonumber(string.sub(leds_WarningPatterns[pattern][5], spot, spot) )
 						setExtraState(k, 5, c)
 						if c == 0 then
-							runEnvirementLight(k, 5)
+							runEnvironmentLight(k, 5)
 						end
 
 						if elsVehs[k].advisorPattern ~= pattern then
@@ -1125,7 +1105,7 @@ function runLedPatternWarning(k, pattern)
 						local c = tonumber(string.sub(leds_WarningPatterns[pattern][6], spot, spot) )
 						setExtraState(k, 6, c)
 						if c == 0 then
-							runEnvirementLight(k, 6)
+							runEnvironmentLight(k, 6)
 						end
 
 						if elsVehs[k].advisorPattern ~= pattern then
@@ -1178,7 +1158,7 @@ function runLedPatternPrimary(k, pattern)
 						local c = tonumber(string.sub(led_PrimaryPatterns[pattern][1], spot, spot) )
 						setExtraState(k, 1, c)
 						if c == 0 then
-							runEnvirementLight(k, 1)
+							runEnvironmentLight(k, 1)
 						end
 
 						if elsVehs[k].primPattern ~= pattern then
@@ -1208,7 +1188,7 @@ function runLedPatternPrimary(k, pattern)
 						local c = tonumber(string.sub(led_PrimaryPatterns[pattern][2], spot, spot) )
 						setExtraState(k, 2, c)
 						if c == 0 then
-							runEnvirementLight(k, 2)
+							runEnvironmentLight(k, 2)
 						end
 
 						if elsVehs[k].primPattern ~= pattern then
@@ -1237,7 +1217,7 @@ function runLedPatternPrimary(k, pattern)
 						local c = tonumber(string.sub(led_PrimaryPatterns[pattern][3], spot, spot) )
 						setExtraState(k, 3, c)
 						if c == 0 then
-							runEnvirementLight(k, 3)
+							runEnvironmentLight(k, 3)
 						end
 
 						if elsVehs[k].primPattern ~= pattern then
@@ -1266,7 +1246,7 @@ function runLedPatternPrimary(k, pattern)
 						local c = tonumber(string.sub(led_PrimaryPatterns[pattern][4], spot, spot) )
 						setExtraState(k, 4, c)
 						if c == 0 then
-							runEnvirementLight(k, 4)
+							runEnvironmentLight(k, 4)
 						end
 
 						if elsVehs[k].primPattern ~= pattern then
