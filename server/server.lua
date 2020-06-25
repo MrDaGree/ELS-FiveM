@@ -165,17 +165,17 @@ function parseVehData(xml, fileName)
 					a.interface.headerColor['g'] = 40
 					a.interface.headerColor['b'] = 40
 
-					if elem.kids[1].value == string.lower("grey") then
+					if elem.kids[1].value == "grey" then
 						a.interface.headerColor['r'] = 40
 						a.interface.headerColor['g'] = 40
 						a.interface.headerColor['b'] = 40
 					end
-					if elem.kids[1].value == string.lower("white") then
+					if elem.kids[1].value == "white" then
 						a.interface.headerColor['r'] = 255
 						a.interface.headerColor['g'] = 255
 						a.interface.headerColor['b'] = 255
 					end
-					if elem.kids[1].value == string.lower("yellow") then
+					if elem.kids[1].value == "yellow" then
 						a.interface.headerColor['r'] = 242
 						a.interface.headerColor['g'] = 238
 						a.interface.headerColor['b'] = 0
@@ -189,32 +189,32 @@ function parseVehData(xml, fileName)
 					a.interface.buttonColor['g'] = 0
 					a.interface.buttonColor['b'] = 0
 
-					if elem.kids[1].value == string.lower("green") then
+					if elem.kids[1].value == "green" then
 						a.interface.buttonColor['r'] = 0
 						a.interface.buttonColor['g'] = 255
 						a.interface.buttonColor['b'] = 0
 					end
-					if elem.kids[1].value == string.lower("red") then
+					if elem.kids[1].value == "red" then
 						a.interface.buttonColor['r'] = 255
 						a.interface.buttonColor['g'] = 0
 						a.interface.buttonColor['b'] = 0
 					end
-					if elem.kids[1].value == string.lower("blue") then
+					if elem.kids[1].value == "blue" then
 						a.interface.buttonColor['r'] = 0
 						a.interface.buttonColor['g'] = 0
 						a.interface.buttonColor['b'] = 255
 					end
-					if elem.kids[1].value == string.lower("purple") then
+					if elem.kids[1].value == "purple" then
 						a.interface.buttonColor['r'] = 170
 						a.interface.buttonColor['g'] = 0
 						a.interface.buttonColor['b'] = 255
 					end
-					if elem.kids[1].value == string.lower("orange") then
+					if elem.kids[1].value == "orange" then
 						a.interface.buttonColor['r'] = 255
 						a.interface.buttonColor['g'] = 157
 						a.interface.buttonColor['b'] = 0
 					end
-					if elem.kids[1].value == string.lower("yellow") then
+					if elem.kids[1].value == "yellow" then
 						a.interface.buttonColor['r'] = 242
 						a.interface.buttonColor['g'] = 238
 						a.interface.buttonColor['b'] = 0
@@ -225,7 +225,7 @@ function parseVehData(xml, fileName)
 
 		if(xml.root.el[i].name == "EOVERRIDE") then
 			for ex=1,#xml.root.el[i].kids do
-				if(string.upper(string.sub(xml.root.el[i].kids[ex].name, 1, -3)) == "EXTRA") then
+				if(string_upper(string.sub(xml.root.el[i].kids[ex].name, 1, -3)) == "EXTRA") then
 					local elem = xml.root.el[i].kids[ex]
 					local extra = tonumber(string.sub(elem.name, -2))
 					a.extras[extra] = {}
@@ -253,23 +253,23 @@ function parseVehData(xml, fileName)
 						a.extras[extra].env_pos['z'] = tonumber(elem.attr['OffsetZ'])
 						a.extras[extra].env_color = {}
 
-						if string.upper(elem.attr['Color']) == "RED" then
+						if string_upper(elem.attr['Color']) == "RED" then
 							a.extras[extra].env_color['r'] = 255
 							a.extras[extra].env_color['g'] = 0
 							a.extras[extra].env_color['b'] = 0
-						elseif string.upper(elem.attr['Color']) == "BLUE" then
+						elseif string_upper(elem.attr['Color']) == "BLUE" then
 							a.extras[extra].env_color['r'] = 0
 							a.extras[extra].env_color['g'] = 0
 							a.extras[extra].env_color['b'] = 255
-						elseif string.upper(elem.attr['Color']) == "GREEN" then
+						elseif string_upper(elem.attr['Color']) == "GREEN" then
 							a.extras[extra].env_color['r'] = 0
 							a.extras[extra].env_color['g'] = 255
 							a.extras[extra].env_color['b'] = 0
-						elseif string.upper(elem.attr['Color']) == "AMBER" then
+						elseif string_upper(elem.attr['Color']) == "AMBER" then
 							a.extras[extra].env_color['r'] = 255
 							a.extras[extra].env_color['g'] = 194
 							a.extras[extra].env_color['b'] = 0
-						elseif string.upper(elem.attr['Color']) == "WHITE" then
+						elseif string_upper(elem.attr['Color']) == "WHITE" then
 							a.extras[extra].env_color['r'] = 255
 							a.extras[extra].env_color['g'] = 255
 							a.extras[extra].env_color['b'] = 255
@@ -485,7 +485,7 @@ function parsePatternData(xml, fileName)
 			primary.stages = {}
 			primary.speed = tonumber(xml.root.el[i].attr["speed"])
 			for ex=1,#xml.root.el[i].kids do
-				if(string.upper(string.sub(xml.root.el[i].kids[ex].name, 1, -3)) == "STATE") then
+				if(string_upper(string.sub(xml.root.el[i].kids[ex].name, 1, -3)) == "STATE") then
 					local spot = tonumber(string.sub(xml.root.el[i].kids[ex].name, 6))
 					local elem = xml.root.el[i].kids[ex]
 					primary.stages[spot] = {}
@@ -560,7 +560,7 @@ function parsePatternData(xml, fileName)
 			secondary.stages = {}
 			secondary.speed = tonumber(xml.root.el[i].attr["speed"])
 			for ex=1,#xml.root.el[i].kids do
-				if(string.upper(string.sub(xml.root.el[i].kids[ex].name, 1, -3)) == "STATE") then
+				if(string_upper(string.sub(xml.root.el[i].kids[ex].name, 1, -3)) == "STATE") then
 					local spot = tonumber(string.sub(xml.root.el[i].kids[ex].name, 6))
 					local elem = xml.root.el[i].kids[ex]
 					secondary.stages[spot] = {}
@@ -636,7 +636,7 @@ function parsePatternData(xml, fileName)
 			advisor.stages = {}
 			advisor.speed = tonumber(xml.root.el[i].attr["speed"])
 			for ex=1,#xml.root.el[i].kids do
-				if(string.upper(string.sub(xml.root.el[i].kids[ex].name, 1, -3)) == "STATE") then
+				if(string_upper(string.sub(xml.root.el[i].kids[ex].name, 1, -3)) == "STATE") then
 					local spot = tonumber(string.sub(xml.root.el[i].kids[ex].name, 6))
 					local elem = xml.root.el[i].kids[ex]
 

@@ -862,7 +862,7 @@ Citizen.CreateThread(function()
                     return
                 end
 
-                if getVehicleVCFInfo(k).priml.type == string.lower("chp") and getVehicleVCFInfo(k).wrnl.type == string.lower("chp") and getVehicleVCFInfo(k).secl.type == string.lower("chp") then
+                if getVehicleVCFInfo(k).priml.type == "chp" and getVehicleVCFInfo(k).wrnl.type == "chp" and getVehicleVCFInfo(k).secl.type == "chp" then
 
                     if v.stage == 0 then
                         for i=1,10 do
@@ -885,7 +885,7 @@ Citizen.CreateThread(function()
                 else
 
                     if (v.warning) then
-                        if getVehicleVCFInfo(k).wrnl.type == string.lower("leds") and v.advisorPattern <= 53 then
+                        if getVehicleVCFInfo(k).wrnl.type == "leds" and v.advisorPattern <= 53 then
                             runLedPatternWarning(k, v.advisorPattern)
                         end
                     else
@@ -894,9 +894,9 @@ Citizen.CreateThread(function()
                     end
 
                     if (v.secondary) then
-                        if getVehicleVCFInfo(k).secl.type == string.lower("leds") and v.secPattern <= 140 then
+                        if getVehicleVCFInfo(k).secl.type == "leds" and v.secPattern <= 140 then
                             runLedPatternSecondary(k, v.secPattern, function(cb) vehIsReadySecondary[k] = cb end)
-                        elseif getVehicleVCFInfo(k).secl.type == string.lower("traf") and v.secPattern <= 36 then
+                        elseif getVehicleVCFInfo(k).secl.type == "traf" and v.secPattern <= 36 then
                             runTrafPattern(k, v.secPattern)
                         end
                     else
@@ -906,7 +906,7 @@ Citizen.CreateThread(function()
                     end
 
                     if (v.primary) then
-                        if getVehicleVCFInfo(k).priml.type == string.lower("leds") and v.primPattern <= 140 then
+                        if getVehicleVCFInfo(k).priml.type == "leds" and v.primPattern <= 140 then
                             runLedPatternPrimary(k, v.primPattern)
                         end
                     else

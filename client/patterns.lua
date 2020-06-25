@@ -2,13 +2,13 @@ els_patterns = {}
 
 function getNumberOfPrimaryPatterns(veh)
 	local count = 0
-	if getVehicleVCFInfo(veh).priml.type == string.lower("leds") then
+	if getVehicleVCFInfo(veh).priml.type == "leds" then
 		for k,v in pairs(led_PrimaryPatterns) do
 			if (v ~= nil) then
 				count = count + 1
 			end
 		end
-	elseif getVehicleVCFInfo(veh).priml.type == string.lower("chp") then
+	elseif getVehicleVCFInfo(veh).priml.type == "chp" then
 		count = 3
 	end
 
@@ -17,21 +17,21 @@ end
 
 function getNumberOfSecondaryPatterns(veh)
 	local count = 0
-	if getVehicleVCFInfo(veh).secl.type == string.lower("leds") then
+	if getVehicleVCFInfo(veh).secl.type == "leds" then
 		for k,v in pairs(led_SecondaryPatterns) do
 			if (v ~= nil) then
 				count = count + 1
 			end
 		end
 	end
-	if getVehicleVCFInfo(veh).secl.type == string.lower("traf") then
+	if getVehicleVCFInfo(veh).secl.type == "traf" then
 		for k,v in pairs(traf_Patterns) do
 			if (v ~= nil) then
 				count = count + 1
 			end
 		end
 	end
-	if getVehicleVCFInfo(veh).secl.type == string.lower("chp") then
+	if getVehicleVCFInfo(veh).secl.type == "chp" then
 		count = 3
 	end
 
@@ -40,14 +40,14 @@ end
 
 function getNumberOfAdvisorPatterns(veh)
 	local count = 0
-	if getVehicleVCFInfo(veh).wrnl.type == string.lower("leds") then
+	if getVehicleVCFInfo(veh).wrnl.type == "leds" then
 		for k,v in pairs(leds_WarningPatterns) do
 			if (v ~= nil) then
 				count = count + 1
 			end
 		end
 	end
-	if getVehicleVCFInfo(veh).secl.type == string.lower("chp") then
+	if getVehicleVCFInfo(veh).secl.type == "chp" then
 		count = 1
 	end
 	
@@ -86,8 +86,8 @@ function runEnvirementLight(k, extra)
 					
 					for i=1,6 do
 						if(IsVehicleExtraTurnedOn(k, extra) == false) then break end
-						DrawLightWithRangeAndShadow(coords.x + els_Vehicles[vehN].extras[extra].env_pos.x, coords.y + els_Vehicles[vehN].extras[extra].env_pos.y, coords.z + els_Vehicles[vehN].extras[extra].env_pos.z, els_Vehicles[vehN].extras[extra].env_color.r, els_Vehicles[vehN].extras[extra].env_color.g, els_Vehicles[vehN].extras[extra].env_color.b, 50.0, envirementLightBrightness, 5.0)
-						--DrawLightWithRange(coords.x + els_Vehicles[vehN].extras[extra].env_pos.x, coords.y + els_Vehicles[vehN].extras[extra].env_pos.y, coords.z + els_Vehicles[vehN].extras[extra].env_pos.z, els_Vehicles[vehN].extras[extra].env_color.r, els_Vehicles[vehN].extras[extra].env_color.g, els_Vehicles[vehN].extras[extra].env_color.b, 150 + 0.0, envirementLightBrightness)
+						DrawLightWithRangeAndShadow(coords.x + els_Vehicles[vehN].extras[extra].env_pos.x, coords.y + els_Vehicles[vehN].extras[extra].env_pos.y, coords.z + els_Vehicles[vehN].extras[extra].env_pos.z, els_Vehicles[vehN].extras[extra].env_color.r, els_Vehicles[vehN].extras[extra].env_color.g, els_Vehicles[vehN].extras[extra].env_color.b, 50.0, environmentLightBrightness, 5.0)
+						--DrawLightWithRange(coords.x + els_Vehicles[vehN].extras[extra].env_pos.x, coords.y + els_Vehicles[vehN].extras[extra].env_pos.y, coords.z + els_Vehicles[vehN].extras[extra].env_pos.z, els_Vehicles[vehN].extras[extra].env_color.r, els_Vehicles[vehN].extras[extra].env_color.g, els_Vehicles[vehN].extras[extra].env_color.b, 150 + 0.0, environmentLightBrightness)
 						Wait(2)
 					end
 				end
