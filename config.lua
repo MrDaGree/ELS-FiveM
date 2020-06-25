@@ -16,7 +16,7 @@ printDebugInformation = false
 developerMode = false
 
 vehicleSyncDistance = 150
-envirementLightBrightness = 0.006
+environmentLightBrightness = 0.006
 lightDelay = 10 -- Time in MS
 flashDelay = 15
 
