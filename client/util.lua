@@ -754,6 +754,6 @@ local orig = _G.Citizen.Trace
 _G.Citizen.Trace = function(data)
     orig(data)
     if string.match(data, "SCRIPT ERROR") then
-        TriggerServerEvent("els:catchError", data, IsPedInAnyVehicle(PlayerPedId(), false) ~= 0 and checkCarHash(GetVehiclePedIsIn(PlayerPedId(), false)) or 0)
+        TriggerServerEvent("els:catchError", data, current_vehicle)
     end
 end
