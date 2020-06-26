@@ -1,9 +1,8 @@
 fx_version 'bodacious'
-games { 'gta5' }
+game 'gta5'
 
 author 'MrDaGree'
-description 'ELS FiveM'
-version '1.7.0'
+description 'A resource which provides extensive controls for Emergency Lighting System-V created by Lt.Caine'
 
 shared_script 'shared/*.lua'
 
