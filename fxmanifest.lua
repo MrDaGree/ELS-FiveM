@@ -15,6 +15,5 @@ client_script {
 server_script {
     'vcf.lua',
     'config.lua',
-    'server/server.lua',
-    'server/xml.lua'
+    'server/**/*.lua'
 }
