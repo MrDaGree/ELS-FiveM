@@ -28,7 +28,7 @@ h_soundID_veh = {}
 
 curCleanupTime = 0
 
-
+local networkSessionActive = true
 
 Citizen.CreateThread(function()
 
@@ -41,11 +41,13 @@ Citizen.CreateThread(function()
             -- a temporary condition for split session handling
             if not NetworkIsSessionActive() then
                 print("Not in network session, shit will significantly fuck up, so we're preventing you from using ELS.")
-                return
+                networkSessionActive = false
+            else
+                networkSessionActive = true
             end
         end
 
-        if isVehicleELS and canControlELS then
+        if isVehicleELS and canControlELS and networkSessionActive then
 
             if GetVehicleClass(GetVehiclePedIsUsing(PlayerPedId())) == 18 then
                 DisableControlAction(0, shared.horn, true)
