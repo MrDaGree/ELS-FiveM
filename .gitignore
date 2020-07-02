@@ -3,4 +3,4 @@ vcf.lua
 
 node_modules/*
 
-client/dev.lua
+dev.*
