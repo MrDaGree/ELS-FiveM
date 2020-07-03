@@ -18,6 +18,8 @@ local warnOnJoin = true
 
 function checkVersion()
 	PerformHttpRequest(latestVersionPath, function(err, response, headers)
+		if err or not response then return end
+
 		local data = json.decode(response)
 		local lVer = tonumber(data.version) or 000
 
