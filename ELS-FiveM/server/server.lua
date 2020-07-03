@@ -2,7 +2,17 @@ vehicleInfoTable = {}
 patternInfoTable = {}
 
 local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
-local curVersion = tonumber(json.decode(verFile).version) or 000
+local curVersion = 0
+if verFile then
+	local data = json.decode(verFile)
+	if data then
+		curVersion = data.version
+		if tonumber(curVersion:gsub("%.", "")) then
+			curVersion = tonumber(curVersion)
+		end
+	end
+end
+
 local latestVersion = curVersion
 local resourceName = "ELS-FiveM" .. (GetCurrentResourceName() ~= "ELS-FiveM" and " (" .. GetCurrentResourceName() .. ")" or "")
 local latestVersionPath = "https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/master/ELS-FiveM/version.json"
@@ -14,29 +24,40 @@ local curVerCol = function(nextVer)
     end
     return "~g~"
 end
-local warnOnJoin = true
+local warnOnJoin = GetConvar("els_warnOnJoin", "true") == "true"
 
 function checkVersion()
-    PerformHttpRequest(latestVersionPath, function(err, response, headers)
-        if err or not response then return end
+	PerformHttpRequest(latestVersionPath, function(err, response, headers)
+		if err or not response then return end
 
-        local data = json.decode(response)
-        local lVer = tonumber(data.version) or 000
+		local data = json.decode(response)
+		local lVer = tonumber(data.version) or 000
+		local latestVersion = data.version:gsub("%.", "")
+			
+		if curVersion == 0 then
+			return print("^1Could not determine which version of ELS-FiveM you are running.")
+		end
 
-        if curVersion ~= data.version and curVersion < lVer then
-            print("--------------------------------------------------------------------------")
-            print(resourceName .. " is outdated.\nCurrent Version: " .. data.version .. "\nYour Version: " .. curVersion .. "\nPlease update it from https://github.com/MrDaGree/ELS-FiveM")
-            print("\nUpdate Changelog:\n"..data.changelog)
-            print("\n--------------------------------------------------------------------------")
-        elseif curVersion > lVer then
-            print("Your version of " .. resourceName .. " seems to be higher than the current version. Hax bro?")
-        else
-            print(resourceName .. " is up to date!")
-        end
+		-- is beta
+		if latestVersion:sub(-1) == "b" then
+			print("^1--------------------------------------------------------------------------")
+			print("You are currently running a BETA version of " .. resourceName .. ".^7")
+			print("Please report any regressions you find on the GitHub page (^4https://github.com/MrDaGree/ELS-FiveM^1")
+			print("--------------------------------------------------------------------------^7")
+		elseif curVersion ~= data.version and curVersion < lVer then
+			print("--------------------------------------------------------------------------")
+			print(resourceName .. " is outdated.\nCurrent Version: " .. data.version .. "\nYour Version: " .. curVersion .. "\nPlease update it from https://github.com/MrDaGree/ELS-FiveM")
+			print("\nUpdate Changelog:\n"..data.changelog)
+			print("\n--------------------------------------------------------------------------")
+		elseif curVersion > lVer then
+			print("Your version of " .. resourceName .. " seems to be higher than the current version. Hax bro?")
+		else
+			print(resourceName .. " is up to date!")
+		end
 
-        
-        latestVersion = tonumber(data.version)
-    end, "GET", "", { version = "this" })
+		
+		latestVersion = tonumber(data.version)
+	end, "GET", "", { version = "this" })
 end
 
 Citizen.CreateThread(function()
