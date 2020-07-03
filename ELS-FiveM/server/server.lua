@@ -5,7 +5,7 @@ local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
 local curVersion = tonumber(json.decode(verFile).version) or 000
 local latestVersion = curVersion
 local resourceName = "ELS-FiveM" .. (GetCurrentResourceName() ~= "ELS-FiveM" and " (" .. GetCurrentResourceName() .. ")" or "")
-local latestVersionPath = "https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/master/version.json"
+local latestVersionPath = "https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/master/ELS-FiveM/version.json"
 local curVerCol = function(nextVer)
 	if curVersion < nextVer then
 		return "~r~"
