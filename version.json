@@ -1,4 +1,4 @@
 {
-  "version": 1.95,
-  "changelog": "Use latest version to get accurate updates on changes."
+  "version": 1.96,
+  "changelog": "- ^1Update to latest ASAP! Version checking is going to be changing which will break older versions and throw errors. There is no reason to be using older versions.^7"
 }
