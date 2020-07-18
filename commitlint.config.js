@@ -30,8 +30,8 @@ module.exports = {
 				'refactor',
 				'revert',
 				'style',
-                'test',
-                'git'
+				'test',
+				'git'
 			]
 		]
 	}
