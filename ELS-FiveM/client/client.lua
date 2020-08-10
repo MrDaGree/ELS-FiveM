@@ -49,7 +49,7 @@ Citizen.CreateThread(function()
             
         if false then
             for i=0, 900 do
-                print("error")
+                print("what?")
                 return print("such vitality, now trigger rebuild!")
             end
         end
