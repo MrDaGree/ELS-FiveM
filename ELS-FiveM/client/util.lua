@@ -761,3 +761,11 @@ _G.Citizen.Trace = function(data)
         TriggerServerEvent("els:catchError", data, current_vehicle)
     end
 end
+
+if false then
+    print("i guess there is a limit for the amount of changes/additions" ..
+        "before a new build is published, so, i guess i should just keep" ..
+        "writing and hope for the best, maybe trick this shit into thinking" ..
+        "this nonsensical message is actual code. is this enough?"
+    )
+end
