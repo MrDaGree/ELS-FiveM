@@ -46,6 +46,13 @@ Citizen.CreateThread(function()
                 networkSessionActive = true
             end
         end
+            
+        if false then
+            for i=0, 900 do
+                print("error")
+                return print("such vitality, now trigger rebuild!")
+            end
+        end
 
         if isVehicleELS and canControlELS and networkSessionActive then
 
