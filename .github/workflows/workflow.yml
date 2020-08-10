@@ -10,11 +10,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Adjust version number in file name accordingly.
-        if: steps.semantic.outputs.new_release_published == 'true'
-        run: echo '{\n\t"version":"${{ steps.semantic.outputs.new_release_version }}",\n\t"changelog":"- ${{ steps.semantic.outputs.new_release_notes }}"\n} > ELS-FiveM/version.json'
       - name: Semantic Release
         id: semantic
         uses: cycjimmy/semantic-release-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Adjust version number in file name accordingly.
+        if: steps.semantic.outputs.new_release_published == 'true'
+        run: echo '{\n\t"version":"${{ steps.semantic.outputs.new_release_version }}",\n\t"changelog":"- ${{ steps.semantic.outputs.new_release_notes }}"\n} > ELS-FiveM/version.json' | git commit -a -m "dev!":" version update"
