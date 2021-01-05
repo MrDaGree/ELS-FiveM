@@ -3,7 +3,7 @@
     "release": "semantic-release"
   },
   "devDependencies": {
-    "semantic-release": "17.0.8",
+    "semantic-release": "17.2.3",
     "@semantic-release/release-notes-generator": "^9.0.1",
     "commitlint": "8.3.5",
     "@commitlint/cli": "^8.3.5",
