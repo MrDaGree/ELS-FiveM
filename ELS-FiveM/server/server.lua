@@ -6,8 +6,8 @@ local curVersion = 0
 if verFile then
 	local data = json.decode(verFile)
 	if data then
-		curVersion = data.version
-		if tonumber(curVersion:gsub("%.", "")) then
+		curVersion = data.version:gsub("%.", "")
+		if tonumber(curVersion) then
 			curVersion = tonumber(curVersion)
 		end
 	end
