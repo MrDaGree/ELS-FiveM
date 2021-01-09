@@ -5,7 +5,7 @@ local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
 local curVersion = 0
 if verFile then
 	local data = json.decode(verFile)
-	if data then
+	if data?.version then
 		curVersion = data.version:gsub("%.", "")
 		if tonumber(curVersion) then
 			curVersion = tonumber(curVersion)
@@ -17,14 +17,12 @@ local latestVersion = curVersion
 local resourceName = "ELS-FiveM" .. (GetCurrentResourceName() ~= "ELS-FiveM" and " (" .. GetCurrentResourceName() .. ")" or "")
 local latestVersionPath = "https://raw.githubusercontent.com/MrDaGree/ELS-FiveM/master/ELS-FiveM/version.json"
 local curVerCol = function(nextVer)
-    if curVersion < nextVer then
-        return "~r~"
-    elseif curVersion > nextVer then
-        return "~o~"
-    end
-    return "~g~"
+    return
+        (curVersion < nextVer) and "~r~" or
+        (curVersion > nextVer) and "~o~" or
+        "~g~"
 end
-local warnOnJoin = GetConvar("els_warnOnJoin", "true") == "true"
+local warnOnJoin = function() return GetConvar("els_warnOnJoin", "true") == "true" end
 
 function checkVersion()
 	PerformHttpRequest(latestVersionPath, function(err, response, headers)
@@ -121,7 +119,7 @@ end)
 
 RegisterNetEvent("els:playerSpawned")
 AddEventHandler("els:playerSpawned", function()
-    if not warnOnJoin then return end
+    if not warnOnJoin() then return end
 
     if curVersion < latestVersion then
         TriggerClientEvent("els:notify", source, "~r~ELS-FiveM~s~~n~Outdated version! Please update as soon as possible.")
