@@ -29,8 +29,9 @@ function checkVersion()
 		if err or not response then return end
 
 		local data = json.decode(response)
-		local lVer = tonumber(data.version) or 000
-		local latestVersion = data.version:gsub("%.", "")
+        local data_version = data?.version
+		local lVer = tonumber(data_version) or 000
+		local latestVersion = data_version:gsub("%.", "")
 			
 		if curVersion == 0 then
 			return print("^1Could not determine which version of ELS-FiveM you are running.")
@@ -42,9 +43,9 @@ function checkVersion()
 			print("You are currently running a BETA version of " .. resourceName .. ".^7")
 			print("Please report any regressions you find on the GitHub page (^4https://github.com/MrDaGree/ELS-FiveM^1")
 			print("--------------------------------------------------------------------------^7")
-		elseif curVersion ~= data.version and curVersion < lVer then
+		elseif curVersion ~= data_version and curVersion < lVer then
 			print("--------------------------------------------------------------------------")
-			print(resourceName .. " is outdated.\nCurrent Version: " .. data.version .. "\nYour Version: " .. curVersion .. "\nPlease update it from https://github.com/MrDaGree/ELS-FiveM")
+			print(resourceName .. " is outdated.\nCurrent Version: " .. data_version .. "\nYour Version: " .. curVersion .. "\nPlease update it from https://github.com/MrDaGree/ELS-FiveM")
 			print("\nUpdate Changelog:\n"..data.changelog)
 			print("\n--------------------------------------------------------------------------")
 		elseif curVersion > lVer then
@@ -54,7 +55,7 @@ function checkVersion()
 		end
 
 		
-		latestVersion = tonumber(data.version)
+		latestVersion = tonumber(data_version)
 	end, "GET", "", { version = "this" })
 end
 
@@ -67,11 +68,11 @@ end)
 
 RegisterCommand('els', function(source, args)
     local function notify(plr, text)
+        assert(type(plr) == "number", "Expected type 'number' for parameter #1 in 'notify'.")
         if plr == 0 then
             return print(text)
         end
 
-        assert(type(plr) == "number", "Expected type 'number' for parameter #1 in 'notify'.")
         assert(type(GetPlayerEP(plr)) == "string", "Invalid player passed for parameter #1 in 'notify'.")
 
         TriggerClientEvent("els:notify", plr, text)
@@ -79,15 +80,16 @@ RegisterCommand('els', function(source, args)
     if args[1] == 'version' then
         PerformHttpRequest(latestVersionPath, function(err, response, headers)
             local data = json.decode(response)
-            local thisVersion = tonumber(data.version)
+            local data_verson = data?.version
+            local thisVersion = tonumber(data_verson)
 
             if source > 0 then
                 return notify(source, "~r~ELS~s~~n~Version " .. curVerCol(thisVersion) .. curVersion)
             end
 
             local message
-            if curVersion ~= data.version and curVersion < thisVersion then
-                message = "You are currently running an outdated version of [ " .. GetCurrentResourceName() .. " ]. Your version [ " .. curVersion .. " ]. Newest version: [ " .. data.version .. " ]."
+            if curVersion ~= data_verson and curVersion < thisVersion then
+                message = "You are currently running an outdated version of [ " .. GetCurrentResourceName() .. " ]. Your version [ " .. curVersion .. " ]. Newest version: [ " .. data_verson .. " ]."
             elseif curVersion > thisVersion then
                 message = "Um, what? Your version of ELS-FiveM is higher than the current version. What?"
             else
@@ -112,7 +114,7 @@ RegisterCommand('els', function(source, args)
 
         TriggerClientEvent('els:setPanelType', source, args[2])
     elseif not args[1] or args[1] == 'help' then
-        TriggerClientEvent("els:notify", source, "~r~ELS~s~~n~Version " .. curVerCol(data.version) .. curVersion)
+        TriggerClientEvent("els:notify", source, "~r~ELS~s~~n~Version " .. curVerCol(latestVersion) .. curVersion)
         TriggerClientEvent("els:notify", source, "~b~Sub-Commands~s~~n~" .. "~p~panel~s~ - Sets the panel type, options: " .. table.concat(allowedPanelTypes, ", ") .. "~n~~p~version~s~ - Shows current version and if the owner should update or not.~n~~p~help~s~ - Displays this notification.")
     end
 end)
