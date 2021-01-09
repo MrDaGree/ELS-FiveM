@@ -19,4 +19,4 @@ jobs:
         if: steps.semantic.outputs.new_release_published == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: echo '{\n\t"version":"${{ steps.semantic.outputs.new_release_version }}",\n\t"changelog":"- ${{ steps.semantic.outputs.new_release_notes }}"\n} > ELS-FiveM/version.json' | git commit -a -m "dev!":" version update"
+        run: echo '{\n\t"version":"${{ steps.semantic.outputs.new_release_version }}",\n\t"changelog":"- ${{ steps.semantic.outputs.new_release_notes }}"\n} > ELS-FiveM/version.json' | git config user.email "oh_wow@okay.com" | git config user.name "auto push" | git commit -a -m "dev!":" version update"
