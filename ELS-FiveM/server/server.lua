@@ -5,7 +5,7 @@ local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
 local curVersion = 0
 if verFile then
 	local data = json.decode(verFile)
-	if data?.version then
+	if data.version then
 		curVersion = data.version:gsub("%.", "")
 		if tonumber(curVersion) then
 			curVersion = tonumber(curVersion)
